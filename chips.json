@@ -1,1 +1,31 @@
+{
+  "leads": {
+    "title": "📥 קליטת לידים",
+    "description": "איסוף פרטי לקוחות חדשים באופן אוטומטי והעברתם ישירות לעסק.",
+    "image": "leads"
+  },
 
+  "documents": {
+    "title": "📄 ניהול מסמכים",
+    "description": "שליחה, קבלה ועבודה עם מסמכים בצורה מסודרת ומהירה.",
+    "image": "documents"
+  },
+
+  "quotes": {
+    "title": "💰 הצעות מחיר",
+    "description": "הפקת הצעות מחיר אוטומטיות וחיסכון בזמן העבודה.",
+    "image": "quotes"
+  },
+
+  "meetings": {
+    "title": "📅 קביעת פגישות",
+    "description": "תיאום פגישות בצורה אוטומטית ללא שיחות והודעות מיותרות.",
+    "image": "meetings"
+  },
+
+  "ai-assistant": {
+    "title": "🤖 AI Assistant",
+    "description": "עוזר חכם המספק מידע, עונה לשאלות ומלווה את הלקוח.",
+    "image": "ai-assistant"
+  }
+}
