@@ -1,0 +1,13 @@
+{
+  "media_upload": {
+    "enabled": true
+  },
+
+  "notifications": {
+    "enabled": true
+  },
+
+  "gallery": {
+    "enabled": true
+  }
+}
