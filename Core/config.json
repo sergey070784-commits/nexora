@@ -1,1 +1,15 @@
+{
+  "upload_email": "nexoraautomation811@gmail.com",
+  "notify_email": "srgyys8@gmail.com",
 
+  "website_url": "",
+  "telegram_bot": "",
+  "whatsapp_number": "",
+
+  "supabase_url": "",
+  "supabase_key": "",
+
+  "cloudinary_cloud": "",
+  "cloudinary_api_key": "",
+  "cloudinary_api_secret": ""
+}
