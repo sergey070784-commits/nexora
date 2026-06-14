@@ -1,0 +1,13 @@
+{
+  "tracker_worker": {
+    "role": "record_events"
+  },
+
+  "decision_worker": {
+    "role": "extract_meaningful_events"
+  },
+
+  "scenario_worker": {
+    "role": "use_filtered_events"
+  }
+}
