@@ -1,3 +1,4 @@
+console.log("ANALYTICS LOADED");
 if (!localStorage.getItem("session_id")) {
     localStorage.setItem(
         "session_id",
