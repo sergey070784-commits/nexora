@@ -12,7 +12,8 @@ if(
 const SUPABASE_URL =
 "https://lglxpwwccxzfacdtbcbp.supabase.co/rest/v1/analytics_events";
 
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnbHhwd3djY3h6ZmFjZHRiY2JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MDU3MTAsImV4cCI6MjA5NzA4MTcxMH0.ZI2CryDHE9w0WXPLA2E2GYZDFy5_tWlC6CICSzsPWa8";
+const SUPABASE_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnbHhwd3djY3h6ZmFjZHRiY2JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MDU3MTAsImV4cCI6MjA5NzA4MTcxMH0.ZI2CryDHE9w0WXPLA2E2GYZDFy5_tWlC6CICSzsPWa8";
 
 async function trackEvent(
     eventName,
@@ -22,37 +23,43 @@ async function trackEvent(
 
     try{
 
-        await fetch(
-            SUPABASE_URL,
-            {
-                method:"POST",
-                headers:{
-                    "apikey":SUPABASE_KEY,
-                    "Authorization":"Bearer " + SUPABASE_KEY,
-                    "Content-Type":"application/json",
-                    "Prefer":"return=minimal"
-                },
-                body:JSON.stringify({
+        const response =
+            await fetch(
+                SUPABASE_URL,
+                {
+                    method:"POST",
+                    headers:{
+                        "apikey":SUPABASE_KEY,
+                        "Authorization":"Bearer " + SUPABASE_KEY,
+                        "Content-Type":"application/json",
+                        "Prefer":"return=minimal"
+                    },
+                    body:JSON.stringify({
 
-                    session_id:
-                        localStorage.getItem(
-                            "session_id"
-                        ),
+                        session_id:
+                            localStorage.getItem(
+                                "session_id"
+                            ),
 
-                    channel:
-                        "WEB",
+                        channel:
+                            "WEB",
 
-                    user_type:
-                        userType,
+                        user_type:
+                            userType,
 
-                    event_name:
-                        eventName,
+                        event_name:
+                            eventName,
 
-                    event_value:
-                        eventValue
+                        event_value:
+                            eventValue
 
-                })
-            }
+                    })
+                }
+            );
+
+        alert(
+            "STATUS: " +
+            response.status
         );
 
         console.log(
@@ -62,6 +69,10 @@ async function trackEvent(
         );
 
     }catch(error){
+
+        alert(
+            "ERROR"
+        );
 
         console.error(
             "TRACK ERROR",
