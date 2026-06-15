@@ -83,3 +83,8 @@ async function trackEvent(
     }
 
 }
+trackEvent(
+    "MANUAL_TEST",
+    "HELLO",
+    "ADMIN"
+);
