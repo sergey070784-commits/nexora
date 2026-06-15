@@ -1,10 +1,10 @@
-alert("ANALYTICS V1");
-
 if (!localStorage.getItem("session_id")) {
+
     localStorage.setItem(
         "session_id",
         crypto.randomUUID()
     );
+
 }
 
 const API_URL =
@@ -16,7 +16,8 @@ async function trackEvent(
     page = ""
 ){
 
-    const response =
+    try{
+
         await fetch(
             API_URL,
             {
@@ -51,8 +52,13 @@ async function trackEvent(
             }
         );
 
-    alert(
-        "STATUS " +
-        response.status
-    );
+    }catch(error){
+
+        console.error(
+            "TRACK ERROR",
+            error
+        );
+
+    }
+
 }
