@@ -17,9 +17,14 @@ async function trackEvent(
 
     try{
 
-        await fetch(
+        const response =
+            await fetch(
             API_URL,
             {
+            console.log(
+                "SHEETDB STATUS",
+                response.status
+                ); 
                 method:"POST",
                 headers:{
                     "Content-Type":
