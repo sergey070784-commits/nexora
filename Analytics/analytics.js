@@ -1,4 +1,5 @@
 console.log("ANALYTICS LOADED");
+
 if (!localStorage.getItem("session_id")) {
     localStorage.setItem(
         "session_id",
@@ -19,41 +20,50 @@ async function trackEvent(
 
         const response =
             await fetch(
-            API_URL,
-            {
-            console.log(
-                "SHEETDB STATUS",
-                response.status
-                ); 
-                method:"POST",
-                headers:{
-                    "Content-Type":
-                    "application/json"
-                },
-                body:JSON.stringify({
-                    data:[
-                        {
-                            session_id:
-                                localStorage.getItem(
-                                    "session_id"
-                                ),
+                API_URL,
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                        "application/json"
+                    },
+                    body:JSON.stringify({
+                        data:[
+                            {
+                                session_id:
+                                    localStorage.getItem(
+                                        "session_id"
+                                    ),
 
-                            timestamp:
-                                new Date()
-                                .toISOString(),
+                                timestamp:
+                                    new Date()
+                                    .toISOString(),
 
-                            event_name:
-                                eventName,
+                                event_name:
+                                    eventName,
 
-                            event_value:
-                                eventValue,
+                                event_value:
+                                    eventValue,
 
-                            page:
-                                page
-                        }
-                    ]
-                })
-            }
+                                page:
+                                    page
+                            }
+                        ]
+                    })
+                }
+            );
+
+        console.log(
+            "SHEETDB STATUS",
+            response.status
+        );
+
+        const text =
+            await response.text();
+
+        console.log(
+            "SHEETDB RESPONSE",
+            text
         );
 
         console.log(
@@ -64,6 +74,7 @@ async function trackEvent(
     }catch(error){
 
         console.error(
+            "TRACK ERROR",
             error
         );
 
