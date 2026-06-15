@@ -13,7 +13,7 @@ const SUPABASE_URL =
 "https://orvrjxgcohlzkjjotlkn.supabase.co/rest/v1/analytics_events";
 
 const SUPABASE_KEY =
-"";
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ydnJqeGdjb2hsemtqam90bGtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyOTkxNjksImV4cCI6MjA5Njg3NTE2OX0.Sms5dlMvGzxWZFrvjgS3IX0XI1SNesD8PepkQJMzB9A";
 
 async function trackEvent(
     eventName,
@@ -39,6 +39,9 @@ async function trackEvent(
                         localStorage.getItem(
                             "session_id"
                         ),
+
+                    channel:
+                        "WEB",
 
                     user_type:
                         userType,
