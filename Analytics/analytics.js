@@ -1,4 +1,4 @@
-console.log("ANALYTICS LOADED");
+alert("ANALYTICS V1");
 
 if (!localStorage.getItem("session_id")) {
     localStorage.setItem(
@@ -16,68 +16,43 @@ async function trackEvent(
     page = ""
 ){
 
-    try{
+    const response =
+        await fetch(
+            API_URL,
+            {
+                method:"POST",
+                headers:{
+                    "Content-Type":
+                    "application/json"
+                },
+                body:JSON.stringify({
+                    data:[
+                        {
+                            session_id:
+                                localStorage.getItem(
+                                    "session_id"
+                                ),
 
-        const response =
-            await fetch(
-                API_URL,
-                {
-                    method:"POST",
-                    headers:{
-                        "Content-Type":
-                        "application/json"
-                    },
-                    body:JSON.stringify({
-                        data:[
-                            {
-                                session_id:
-                                    localStorage.getItem(
-                                        "session_id"
-                                    ),
+                            timestamp:
+                                new Date()
+                                .toISOString(),
 
-                                timestamp:
-                                    new Date()
-                                    .toISOString(),
+                            event_name:
+                                eventName,
 
-                                event_name:
-                                    eventName,
+                            event_value:
+                                eventValue,
 
-                                event_value:
-                                    eventValue,
-
-                                page:
-                                    page
-                            }
-                        ]
-                    })
-                }
-            );
-
-        console.log(
-            "SHEETDB STATUS",
-            response.status
+                            page:
+                                page
+                        }
+                    ]
+                })
+            }
         );
 
-        const text =
-            await response.text();
-
-        console.log(
-            "SHEETDB RESPONSE",
-            text
-        );
-
-        console.log(
-            "TRACKED",
-            eventName
-        );
-
-    }catch(error){
-
-        console.error(
-            "TRACK ERROR",
-            error
-        );
-
-    }
-
+    alert(
+        "STATUS " +
+        response.status
+    );
 }
