@@ -1,3 +1,4 @@
+alert("ANALYTICS LOADED");
 if(
     !localStorage.getItem(
         "session_id"
