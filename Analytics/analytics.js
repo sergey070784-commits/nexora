@@ -10,9 +10,9 @@ if(
 }
 
 const SUPABASE_URL =
-"https://orvrjxgcohlzkjjotlkn.supabase.co/rest/v1/analytics_events";
+"https://lglxpwwccxzfacdtbcbp.supabase.co/rest/v1/analytics_events";
 
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ydnJqeGdjb2hsemtqam90bGtuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTI5OTE2OSwiZXhwIjoyMDk2ODc1MTY5fQ.e7K8svoztu49w-rk0Byos67xPC1Fz7XutuOtjn5C8Kg";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxnbHhwd3djY3h6ZmFjZHRiY2JwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MDU3MTAsImV4cCI6MjA5NzA4MTcxMH0.ZI2CryDHE9w0WXPLA2E2GYZDFy5_tWlC6CICSzsPWa8";
 
 async function trackEvent(
     eventName,
