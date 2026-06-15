@@ -12,7 +12,7 @@ if(
 const SUPABASE_URL =
 "https://orvrjxgcohlzkjjotlkn.supabase.co/rest/v1/analytics_events";
 
-const SUPABASE_KEY = "1SNesD8PepkQJMzB9A";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9ydnJqeGdjb2hsemtqam90bGtuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTI5OTE2OSwiZXhwIjoyMDk2ODc1MTY5fQ.e7K8svoztu49w-rk0Byos67xPC1Fz7XutuOtjn5C8Kg";
 
 async function trackEvent(
     eventName,
