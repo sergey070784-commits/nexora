@@ -14,6 +14,7 @@ async function trackEvent(
     eventName,
     eventValue = "",
     page = ""
+    channel = "WEB"
 ){
 
     try{
@@ -42,10 +43,12 @@ async function trackEvent(
                                 eventName,
 
                             event_value:
-                                eventValue,
-
+                                eventValue,                            
                             page:
-                                page
+                                page,
+
+                            channel:
+                                channel
                         }
                     ]
                 })
