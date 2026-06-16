@@ -13,7 +13,7 @@ const API_URL =
 async function trackEvent(
     eventName,
     eventValue = "",
-    page = ""
+    page = "",
     channel = "WEB"
 ){
 
