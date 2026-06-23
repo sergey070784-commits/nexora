@@ -8,22 +8,22 @@
 
   "buttons": [
     {
-      "id": "BTN_0031",
+      "id": "BTN_0040",
       "text": "Telegram"
     },
     
     {
-      "id": "BTN_0031",
+      "id": "BTN_0041",
       "text": "WEB"
     },
     
     {
-      "id": "BTN_0031",
+      "id": "BTN_0042",
       "text": "WhatsApp"
     },
     
     {
-      "id": "BTN_0031",
+      "id": "BTN_0043",
       "text": "המשך"
     }
   ]
