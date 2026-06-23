@@ -1,0 +1,30 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781752928/file_0000000087ac71f480e83019dfa4571b_u5keu2.png",
+
+
+  "messages": [
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_0031",
+      "text": "Telegram"
+    },
+    
+    {
+      "id": "BTN_0031",
+      "text": "WEB"
+    },
+    
+    {
+      "id": "BTN_0031",
+      "text": "WhatsApp"
+    },
+    
+    {
+      "id": "BTN_0031",
+      "text": "המשך"
+    }
+  ]
+}
