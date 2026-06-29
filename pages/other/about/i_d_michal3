@@ -1,0 +1,24 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782776622/i_d_michal3_g6wnp3.jpg",
+
+  "messages": [
+      "קובעים שיחה ומתכננים כמו שצריך", 
+      "שיחת היכרות ללא עלות"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_0043",
+      "text": "קצת עליי"
+    },
+    {
+      "id": "BTN_0007",
+      "text": "פרויקטים אחרונים"
+    },
+    {
+      "id": "BTN_0007",
+      "text": "איך זה עובד?"
+    }
+  ]
+  }
