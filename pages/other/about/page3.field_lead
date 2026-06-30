@@ -3,17 +3,18 @@
   "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/v1782200078/file_00000000151c7243942a06dfa2d0500b_rm57ij.png",
 
   "messages": [
-      " "
+      "קובעים שיחה ומתכננים כמו שצריך",
+      "שיחת היכרות ללא עלות
   ],
 
   "buttons": [
     {
       "id": "BTN_0043",
-      "text": "המשך"
+      "text": "פרויקטים אחרונים"
     },
     {
       "id": "BTN_0007",
-      "text": "לאוטומציות נוספות"
+      "text": "איך זה עובד?"
     }
   ]
   }
