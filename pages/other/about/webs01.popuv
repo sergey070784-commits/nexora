@@ -3,14 +3,15 @@
   "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782894779/0002_oxzuus.png",
 
   "messages": [
-      "קובעים ",
-      "שיחת"
+      "לשרתותכם צאטבוטים, אוטומציות עובדות יחד כמערכת אחד",
+      "Telegram WhatsApp ערוצים נוספים",
+      "לאפשר ללקוחות שלך לקבל כל מידע רצויה ולחסוך זמנך"
   ],
 
   "buttons": [
     {
       "id": "BTN_0021",
-      "text": "פרויקטים אחרונים"
+      "text": "נסו, תראו כלי אוטומציה"
     },
     {
       "id": "BTN_0022",
