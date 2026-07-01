@@ -1,20 +1,21 @@
 {
   "title": "Nexora",
-  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/v1782200078/file_00000000151c7243942a06dfa2d0500b_rm57ij.png",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781829655/file_00000000c4a471f494a77aaf300f7d89_micfgy.png",
 
   "messages": [
-      "קובעים שיחה ומתכננים כמו שצריך",
-      "שיחת היכרות ללא עלות
+      "מוזמנים להכנס לצור קשר",
+      "לקבל חוויה מלאה מה רואה לקוח שלך",
+      "עידכון ופירוט המגיע אליךבתור בעל העסק"
   ],
 
   "buttons": [
     {
       "id": "BTN_0043",
-      "text": "פרויקטים אחרונים"
+      "text": "צור קשר להדמיה"
     },
     {
       "id": "BTN_0007",
-      "text": "איך זה עובד?"
+      "text": "גלו עוד אוטומציות"
     }
   ]
   }
