@@ -1,21 +1,16 @@
 {
   "title": "Nexora",
-  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781829655/file_00000000c4a471f494a77aaf300f7d89_micfgy.png",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781820558/file_0000000076e87246a91f991352562327_segatm.png",
 
   "messages": [
-    "בסקירה תוכלו לראות במה התעניין הפונה",
-    "הכרות מקדימה בלי שדיברתם עוזרת לכם",
-    "להבין ולהתכונן לשיחה  הראשונה שלכם"
+    "המתעניין משאיר פרטים בצור קשר",
+    "הופך ללקוח פוטנציאלי שלכם"
   ],
 
   "buttons": [
     {
-      "id": "BTN_0006",
-      "text": "המשך"
-    },
-    {  
-      "id": "BTN_0007",
-      "text": "לאוטומציות נוספות"
+      "id": "BTN_0030",
+      "text": "התראה ליד חדש 1"
     }
   ]
 }
