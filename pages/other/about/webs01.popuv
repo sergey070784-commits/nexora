@@ -1,0 +1,20 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782894779/0002_oxzuus.png",
+
+  "messages": [
+      "קובעים ",
+      "שיחת"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_0021",
+      "text": "פרויקטים אחרונים"
+    },
+    {
+      "id": "BTN_0022",
+      "text": "איך זה עובד?"
+    }
+  ]
+  }
