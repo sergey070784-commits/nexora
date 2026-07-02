@@ -1,5 +1,5 @@
 {
-  "bot": "telegram_bot1",
-  "pair": "telegram_bot2",
+  "bot": "telegram_bot2",
+  "pair": "telegram_bot1",
   "channel": "telegram"
 }
