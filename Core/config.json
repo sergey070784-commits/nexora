@@ -6,8 +6,8 @@
   "telegram_bot": "",
   "whatsapp_number": "",
 
-  "supabase_url": "",
-  "supabase_key": "",
+  "supabase_url": "https://mwhslhfyworlxjxfbeou.supabase.co",
+  "supabase_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im13aHNsaGZ5d29ybHhqeGZiZW91Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTg5MzE3MywiZXhwIjoyMDk3NDY5MTczfQ.ylpR4j8ROSU1LtQ1NnHnFSceOJyq-fTn76YKb7Sp_mk",
 
   "cloudinary_cloud": "",
   "cloudinary_api_key": "",
