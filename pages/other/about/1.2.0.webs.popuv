@@ -1,0 +1,16 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782901298/0003_dwjffg.png",
+
+  "messages": [
+      "שליטה מלאה, לא מפספסים שום מתעניין",
+      "מאגרי מידע, נתונים הכל במקום אחת"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00017",
+      "text": "מדיבורים להגשמה"
+    }
+  ]
+  }
