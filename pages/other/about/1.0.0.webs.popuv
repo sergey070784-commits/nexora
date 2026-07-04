@@ -1,0 +1,17 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782868224/0001_ftoeko.png",
+
+  "messages": [
+    "מתחברים לדפי נחיתות/אתרים/ערוצים קיימים או בונים",
+    "המטרה היא לאפשר למתעניינים להכיר בשירות שלכם",
+    "תמשיכו ותראו מה עוד  נוכל להציע"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00015",
+      "text": "המשך"
+    }
+  ]
+}
