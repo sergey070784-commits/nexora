@@ -1,16 +1,19 @@
 {
   "title": "Nexora",
-  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782901298/0003_dwjffg.png",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783379639/00007_ezlcln.png",
 
   "messages": [
-      "שליטה מלאה, לא מפספסים שום מתעניין",
-      "מאגרי מידע, נתונים הכל במקום אחת"
+      "מענה 24/7"
   ],
 
   "buttons": [
     {
       "id": "BTN_00017",
-      "text": "מדיבורים להגשמה"
+      "text": "צפיה בדוגמאות"
+    },
+    {
+      "id": "BTN_00017",
+      "text": "מעבר לשאר נושאים"
     }
   ]
   }
