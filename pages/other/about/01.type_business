@@ -1,0 +1,39 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781820558/file_0000000076e87246a91f991352562327_segatm.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_0013",
+      "text": "מנהלי סושיאל"
+    },
+    {
+      "id": "BTN_00011",
+      "text": "יוצרי תוכן"
+    },
+    {
+      "id": "BTN_00011",
+      "text": "צלמים"
+    },
+    {
+      "id": "BTN_00011",
+      "text": "עורכי וידאו"
+    },
+    {
+      "id": "BTN_00011",
+      "text": "מנהלי קמפיינים"
+    },
+    {
+      "id": "BTN_00011",
+      "text": "מעצבים גרפיים"
+    },
+    {
+      "id": "BTN_00011",
+      "text": "קופירייטרים"
+    }
+  ]
+}
