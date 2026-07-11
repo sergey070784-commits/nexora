@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+
+<html lang="he" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Nexora Gateway</title>
+
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+:root{
+
+    --bg:#0b1020;
+    --card:#141b32;
+    --card2:#1c2746;
+
+    --border:rgba(255,255,255,.08);
+
+    --text:#ffffff;
+    --sub:#b8c1d8;
+
+    --blue:#4b7cff;
+    --purple:#7b5cff;
+
+}
+
+body{
+
+    background:
+        radial-gradient(circle at top,#1b2950 0%,#0b1020 60%);
+
+    color:var(--text);
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    min-height:100vh;
+
+}
+
+.container{
+
+    width:100%;
+    max-width:900px;
+
+    margin:auto;
+
+    padding:28px 18px 40px;
+
+}
+
+.banner{
+
+    width:100%;
+
+    aspect-ratio:16/9;
+
+    border-radius:22px;
+
+    overflow:hidden;
+
+    background:#202b50;
+
+    border:1px solid var(--border);
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    margin-bottom:26px;
+
+    position:relative;
+
+}
+
+.banner img{
+
+    width:100%;
+
+    height:100%;
+
+    object-fit:cover;
+
+    display:block;
+
+}
+
+.logo{
+
+    text-align:center;
+
+    font-size:42px;
+
+    font-weight:700;
+
+    letter-spacing:2px;
+
+    margin-bottom:10px;
+
+}
+
+.title{
+
+    text-align:center;
+
+    font-size:34px;
+
+    font-weight:700;
+
+    margin-bottom:12px;
+
+}
+
+.subtitle{
+
+    text-align:center;
+
+    color:var(--sub);
+
+    font-size:18px;
+
+    line-height:1.8;
+
+    margin-bottom:35px;
+
+}
+
+.channels{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.channel{
+
+    background:linear-gradient(
+        180deg,
+        rgba(255,255,255,.05),
+        rgba(255,255,255,.03)
+    );
+
+    border:1px solid var(--border);
+
+    border-radius:20px;
+
+    padding:24px;
+
+    transition:.25s;
+
+    backdrop-filter:blur(14px);
+
+}
+
+.channel:hover{
+
+    transform:translateY(-3px);
+
+    border-color:
+
+    rgba(123,92,255,.45);
+
+    box-shadow:
+
+    0 15px 35px
+
+    rgba(0,0,0,.25);
+
+}
+
+.channelTitle{
+
+    font-size:26px;
+
+    font-weight:700;
+
+    margin-bottom:8px;
+
+}
+
+.channelText{
+
+    color:var(--sub);
+
+    line-height:1.7;
+
+    margin-bottom:20px;
+
+}
+
+.btn{
+
+    width:100%;
+
+    border:none;
+
+    border-radius:14px;
+
+    padding:16px;
+
+    cursor:pointer;
+
+    font-size:18px;
+
+    font-weight:700;
+
+    color:white;
+
+    background:
+
+    linear-gradient(
+        90deg,
+        var(--blue),
+        var(--purple)
+    );
+
+    transition:.25s;
+
+}
+
+.btn:hover{
+
+    transform:scale(1.02);
+
+}
+
+.info{
+
+    margin-top:34px;
+
+    background:
+
+    rgba(255,255,255,.04);
+
+    border-radius:18px;
+
+    border:1px solid var(--border);
+
+    padding:20px;
+
+}
+
+.info ul{
+
+    list-style:none;
+
+}
+
+.info li{
+
+    margin:10px 0;
+
+    color:var(--sub);
+
+    font-size:17px;
+
+}
+
+.footer{
+
+    text-align:center;
+
+    margin-top:28px;
+
+    color:#7c89ab;
+
+    font-size:14px;
+
+}
+
+.loader{
+
+    position:fixed;
+
+    inset:0;
+
+    background:#0b1020;
+
+    display:none;
+
+    align-items:center;
+
+    justify-content:center;
+
+    flex-direction:column;
+
+    z-index:999;
+
+}
+
+.loader.show{
+
+    display:flex;
+
+}
+
+.loader h2{
+
+    margin-top:22px;
+
+    font-size:28px;
+
+}
+
+.loader p{
+
+    color:#9ca7c5;
+
+    margin-top:8px;
+
+}
+
+.spinner{
+
+    width:70px;
+
+    height:70px;
+
+    border-radius:50%;
+
+    border:5px solid
+
+    rgba(255,255,255,.12);
+
+    border-top-color:#7b5cff;
+
+    animation:spin 1s linear infinite;
+
+}
+
+@keyframes spin{
+
+    to{
+
+        transform:rotate(360deg);
+
+    }
+
+}
+
+@media(max-width:700px){
+
+.title{
+
+    font-size:28px;
+
+}
+
+.subtitle{
+
+    font-size:16px;
+
+}
+
+.channelTitle{
+
+    font-size:22px;
+
+}
+
+.btn{
+
+    font-size:17px;
+
+}
+
+}
+
+</style>
+</head>
+
+<body>
+<div class="loader" id="loader">
+
+    <div class="spinner"></div>
+
+    <h2>NEXORA</h2>
+
+    <p>Preparing your experience...</p>
+
+</div>
+
+
+<div class="container">
+
+    <div class="banner">
+
+        <!-- Позже сюда вставим нашу картинку -->
+
+        <img
+            id="bannerImage"
+            src=""
+            alt="Nexora Banner"
+        >
+
+    </div>
+
+
+    <div class="logo">
+
+        בחרו את ערוץ ההדגמה
+    </div>
+
+    <div class="title">
+        כל הערוצים מציגים את אותה מערכת.
+        אפשר לעבור ביניהם בכל רגע.
+    </div>
+
+    <div class="channels">
+
+
+
+        <div class="channel">
+
+            <div class="channelTitle">
+
+                🌐 WEB
+
+            </div>
+
+            <div class="channelText">
+
+                הדגמה מלאה בדפדפן.
+
+
+
+            </div>
+
+            <button
+
+                class="btn"
+
+                onclick="goChannel('web')"
+
+            >
+
+                התחל ב-WEB
+
+            </button>
+
+        </div>
+
+
+
+
+        <div class="channel">
+
+            <div class="channelTitle">
+
+                📲 Telegram
+
+            </div>
+
+            <div class="channelText">
+
+                אותה הדגמה,
+
+                בתוך Telegram.
+
+                <br>
+
+                אפשר לעבור אחר כך
+                לכל ערוץ אחר.
+
+            </div>
+
+            <button
+
+                class="btn"
+
+                onclick="goChannel('telegram')"
+
+            >
+
+                התחל ב-Telegram
+
+            </button>
+
+        </div>
+
+
+
+
+
+        <div class="channel">
+
+            <div class="channelTitle">
+
+                💬 WhatsApp
+
+            </div>
+
+            <div class="channelText">
+
+                הדגמה מתוך WhatsApp
+                כאילו הייתם לקוח אמיתי.
+
+            </div>
+
+            <button
+
+                class="btn"
+
+                onclick="goChannel('whatsapp')"
+
+            >
+
+                התחל ב-WhatsApp
+
+            </button>
+
+        </div>
+
+
+
+    </div>
+
+
+
+    <div class="info">
+
+        <ul>
+
+            <li>
+
+                ✅ כל הערוצים מסונכרנים ביניהם.
+
+            </li>
+
+            <li>
+
+                ✅ אפשר לעבור ביניהם בכל שלב.
+
+            </li>
+
+            <li>
+
+                ✅ ההתקדמות שלכם נשמרת.
+
+            </li>
+
+        </ul>
+
+    </div>
+
+
+
+    <div class="footer">
+
+        © Nexora Platform
+
+    </div>
+
+</div>
+<script>
+
+/* ===========================================
+   Nexora Gateway
+=========================================== */
+
+
+/* ------------ LINKS ---------------- */
+
+const CHANNELS = {
+
+    web:
+    "https://YOUR-WEB-DEMO",
+
+    telegram:
+    "https://t.me/YOUR_BOT",
+
+    whatsapp:
+    "https://wa.me/YOUR_NUMBER"
+
+};
+
+
+/* ------------ BANNER ---------------- */
+
+const banner =
+"https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783554515/start_menu_w72f1i.png";
+
+if (banner !== "") {
+
+    document
+        .getElementById("bannerImage")
+        .src = banner;
+
+}
+
+
+/* ------------ SESSION ---------------- */
+
+let session =
+localStorage.getItem(
+    "nexora_session"
+);
+
+if (!session) {
+
+    session =
+    crypto.randomUUID();
+
+    localStorage.setItem(
+        "nexora_session",
+        session
+    );
+
+}
+
+
+/* ------------ SAVE ---------------- */
+
+function saveChannel(channel){
+
+    localStorage.setItem(
+
+        "nexora_channel",
+
+        channel
+
+    );
+
+}
+
+
+/* ------------ OPEN ---------------- */
+
+function goChannel(channel){
+
+    saveChannel(channel);
+
+    document
+        .getElementById("loader")
+        .classList
+        .add("show");
+
+    setTimeout(()=>{
+
+        window.location.href =
+        CHANNELS[channel];
+
+    },700);
+
+}
+
+
+/* ------------ FUTURE ----------------
+
+здесь позже:
+
+analytics()
+
+supabase()
+
+workers()
+
+notifications()
+
+history()
+
+------------------------------------- */
+
+</script>
+</body>
+
+</html>
