@@ -1,698 +1,694 @@
-<!-- TEST -->
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexora</title>
+
+<meta name="viewport"
+
+content="width=device-width, initial-scale=1.0">
+
+<title>Nexora Demo</title>
 
 <style>
 
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
 body{
-    background:#0d0d12;
-    color:#fff;
+
+    margin:0;
+
+    background:#0f172a;
+
+    color:#ffffff;
+
     font-family:Arial,sans-serif;
-}
 
-/* HEADER */
+    direction:rtl;
 
-.header{
-    position:fixed;
-    top:0;
-    right:0;
-    width:100%;
-    height:70px;
-    background:rgba(13,13,18,.95);
-    backdrop-filter:blur(10px);
     display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 20px;
-    z-index:1000;
-    border-bottom:1px solid #222;
-}
 
-.logo{
-    font-size:28px;
-    font-weight:bold;
-    color:#c48cff;
-}
-
-.menu-btn{
-    background:none;
-    border:none;
-    color:white;
-    font-size:28px;
-    cursor:pointer;
-}
-
-/* DRAWER */
-
-.drawer{
-    position:fixed;
-    top:0;
-    right:-300px;
-    width:280px;
-    height:100%;
-    background:#16161f;
-    transition:.3s;
-    z-index:1100;
-    padding:90px 25px;
-}
-.overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.55);
-    opacity:0;
-    visibility:hidden;
-    transition:.3s;
-    z-index:1050;
-}
-
-.overlay.show{
-    opacity:1;
-    visibility:visible;
-}
-
-.drawer-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:30px;
-}
-
-.drawer-logo{
-    color:#c48cff;
-    font-size:24px;
-    font-weight:bold;
-}
-
-.close-btn{
-    background:none;
-    border:none;
-    color:white;
-    font-size:24px;
-    cursor:pointer;
-}
-.drawer.open{
-    right:0;
-}
-
-.drawer a{
-    display:block;
-    color:white;
-    text-decoration:none;
-    padding:15px 0;
-    border-bottom:1px solid #272737;
-}
-
-/* HERO */
-
-.hero{
-    min-height:auto;
-    display:flex;
-    flex-direction:column;
     justify-content:center;
+
     align-items:center;
-    text-align:center;
-    padding:90px 20px 30px;
+
+    min-height:100vh;
 }
 
-.hero h1{
-    font-size:72px;
-    background:linear-gradient(90deg,#ffffff,#c48cff);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
+.container{
 
-.subtitle{
-    margin-top:15px;
-    color:#c48cff;
-    font-size:20px;
-}
+    width:92%;
 
-.hero-features{
-    margin-top:30px;
-}
+    max-width:650px;
 
-
-
-.contact-btn{
-    margin-top:40px;
-    padding:16px 32px;
-    border:none;
-    border-radius:15px;
-    background:#9b5cff;
-    color:white;
-    cursor:pointer;
-    font-size:18px;
-}
-.feature-item{
-    font-size:28px;
-    margin:10px 0;
-    opacity:0;
-    transform:translateY(20px);
-    animation:fadeUp .8s ease forwards;
-}
-
-.feature-item:nth-child(1){
-    animation-delay:.3s;
-}
-
-.feature-item:nth-child(2){
-    animation-delay:.8s;
-}
-
-.feature-item:nth-child(3){
-    animation-delay:1.3s;
-}
-.feature-item:nth-child(4){
-    animation-delay:1.8s;
-}
-
-@keyframes fadeUp{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-/* SECTIONS */
-
-.section{
-    max-width:1100px;
-    margin:auto;
-    padding:80px 20px;
-}
-
-.question{
-    background:#181820;
-    border:1px solid #292936;
-    border-radius:20px;
-    margin-bottom:25px;
-    overflow:hidden;
-}
-
-.question-title{
-    padding:25px;
-    font-size:24px;
-    cursor:pointer;
-}
-
-.question-content{
-    max-height:0;
-    opacity:0;
-    overflow:hidden;
-
-    padding:0 25px;
-
-    color:#ddd;
-    line-height:2;
-
-    transition:
-        max-height .8s ease .25s,
-        opacity .8s ease .25s;
-}
-
-.question.show .question-content{
-    max-height:1000px;
-    opacity:1;
-
-    padding:0 25px 25px;
-}
-.reveal{
-    opacity:0;
-    transform:translateY(25px);
-    transition:.8s ease;
-}
-
-.reveal.show{
-    opacity:1;
-    transform:translateY(0);
-}
-/* CHIPS */
-
-.chips{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-    margin-top:15px;
-}
-
-.chip{
-    background:#222232;
-    border:1px solid #34344b;
-    padding:8px 14px;
-    border-radius:30px;
-    white-space:nowrap;
-
-    cursor:pointer;
-
-    transition:.25s ease;
-}
-
-.chip:hover{
-    transform:translateY(-2px);
-
-    border-color:#c48cff;
-
-    box-shadow:
-        0 0 15px rgba(196,140,255,.15);
-}
-
-/* CATEGORIES */
-
-.section-title{
-    text-align:center;
-    font-size:36px;
-    margin-bottom:40px;
-}
-
-.categories{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-    gap:20px;
-}
-
-.category{
-    position:relative;
-
-    background:#222436;
-
-    border:1px solid rgba(196,140,255,.28);
+    background:#1e293b;
 
     border-radius:24px;
 
-    padding:30px 20px;
+    padding:28px;
+
+    box-sizing:border-box;
+}
+
+h1{
+
+    text-align:center;
+
+    margin:0 0 24px 0;
+
+    font-size:32px;
+
+    font-weight:bold;
+}
+
+.message{
+
+    font-size:18px;
+
+    line-height:1.8;
+
+    text-align:center;
+
+    margin-bottom:24px;
+}
+
+.input-box{
+
+    width:100%;
+
+    height:42px;
+
+    padding:12px 16px;
+
+    margin-bottom:18px;
+
+    border:none;
+
+    border-radius:16px;
+
+    box-sizing:border-box;
+
+    background:#0f172a;
+
+    color:#ffffff;
+
+    font-size:18px;
+}
+.input-wrapper{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:8px;
+
+    margin-bottom:18px;
+
+}
+
+.input-box{
+
+    flex:1;
+
+    height:42px;
+
+    padding:12px 16px;
+
+    border:none;
+
+    border-radius:16px;
+
+    box-sizing:border-box;
+
+    background:#0f172a;
+
+    color:#ffffff;
+
+    font-size:18px;
+
+}
+
+.send-button{
+
+    width:42px;
+
+    height:42px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:#2563eb;
+
+    color:white;
+
+    font-size:18px;
+
+    cursor:pointer;
+
+    flex-shrink:0;
+
+}
+.button{
+
+    width:100%;
+
+    height:38px;
+
+    margin-top:8px;
+
+    border:none;
+
+    border-radius:16px;
+
+    background:#475569;
+
+    color:#ffffff;
+
+    font-size:16px;
+
+    font-weight:bold;
 
     text-align:center;
 
     cursor:pointer;
-
-    transition:.25s ease;
-
-    overflow:hidden;
-}
-.category::after{
-    content:"";
-
-    position:absolute;
-
-    inset:0;
-
-    background:linear-gradient(
-        90deg,
-        rgba(196,140,255,0),
-        rgba(196,140,255,.08),
-        rgba(196,140,255,0)
-    );
-
-    opacity:0;
-
-    transition:.3s;
-}
-.category:hover{
-
-    transform:translateY(-3px);
-
-    border-color:#c48cff;
-
-    box-shadow:
-        0 0 20px rgba(196,140,255,.18);
-
 }
 
-.category:hover::after{
+.menu-button{
 
-    opacity:1;
-
-}
-.category:active{
-
-    transform:scale(.98);
-
-}
-.hint-pulse{
-    text-align:center;
-    color:#c48cff;
-    font-size:18px;
-
-    margin-top:-10px;
-    margin-bottom:25px;
-
-    opacity:0;
-
-    transition:.4s;
-}
-/* FOOTER */
-
-.footer{
-    text-align:center;
-    padding:60px 20px;
-    color:#888;
-}
-#chipPreview{
-    position:relative;
-    margin-bottom:20px;
-    top:auto;
-    left:auto;
-
-    transform:
-    transform:scale(.95);
-    width:90%;
-    max-width:380px;
-
-    background:#181820;
-
-    border:1px solid rgba(196,140,255,.25);
-
-    border-radius:20px;
-
-    padding:15px;
-
-    box-shadow:
-        0 0 40px rgba(0,0,0,.45);
-
-    opacity:0;
-
-    visibility:hidden;
-
-    transition:.25s ease;
-
-    z-index:9999;
-}
-
-#chipPreview.show{
-    opacity:1;
-
-    visibility:visible;
-
-    transform:
-    transform:scale(1);}
-
-#chipPreview img{
     width:100%;
 
-    border-radius:12px;
+    height:38px;
 
-    margin-bottom:12px;
-}
-#chipPreview img{
-    width:100%;
+    margin-top:8px;
+
+    border:none;
+
     border-radius:16px;
-    margin-bottom:18px;
-    display:block;
-}
-#chipPreview h3{
-    margin:0 0 12px;
-    color:#fff;
-    font-size:28px;
-}
-#chipPreview p{
-    color:#ddd;
 
-    line-height:1.7;
+    background:#64748b;
 
-    font-size:14px;
+    color:#ffffff;
+
+    font-size:16px;
+
+    font-weight:bold;
+
+    cursor:pointer;
 }
+
 </style>
+
 </head>
 
 <body>
 
-<header class="header">
+<div class="container">
 
-<button class="menu-btn" onclick="toggleMenu()">☰</button>
+<h1 id="title"></h1>
 
-<div class="logo">Nexora</div>
+<div id="messages"></div>
 
-</header>
-<div class="overlay" id="overlay" onclick="closeMenu()"></div>
-<div class="drawer" id="drawer">
-<div class="drawer-header">
+<div id="aboutModal"
+     style="
+     display:none;
+     position:fixed;
+     top:0;
+     left:0;
+     width:100%;
+     height:100%;
+     background:#07152f;
+     z-index:9999;
+     overflow:auto;
+     padding:20px;
+     box-sizing:border-box;
+">
 
-    <div class="drawer-logo">
-        Nexora
-    </div>
+    <div
+        style="
+        max-width:700px;
+        margin:auto;
+        text-align:center;
+        color:white;
+    ">
+<img
+    id="aboutImage"
+    style="
+    width:100%;
+    max-height:44vh;
+    object-fit:cover;
+    border-radius:20px;
+    margin-bottom:12px;
+">
 
-    <button class="close-btn" onclick="closeMenu()">
-        ✕
+<h1
+    id="aboutTitle"
+    style="
+    margin:10px 0;
+    font-size:28px;
+"
+></h1>
+
+<div
+    id="aboutText"
+    style="
+    font-size:18px;
+    line-height:1.5;
+    margin-top:10px;
+"
+></div>
+<div
+    id="aboutButtons"
+    style="
+        margin-top:20px;
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+    "
+></div>
+
+</div>
+</div>
+
+<div class="input-wrapper">
+
+    <input
+        id="chatInput"
+        class="input-box"
+        type="text"
+        placeholder="שאלו את ה-AI"
+    >
+
+    <button
+        id="sendButton"
+        class="send-button"
+    >
+        ➤
     </button>
 
 </div>
-<a href="#">🏠 ראשי</a>
 
-<a href="#">🚀 פתרונות Nexora</a>
+<div id="buttons"></div>
 
-<a href="#">⚖️ תחומי פעילות</a>
+<button class="menu-button">
+    ☰ תפריט
+</button>
 
-<a href="#">ℹ️ אודות</a>
-
-<a href="#">📞 צור קשר</a>
 
 </div>
-
-<section class="hero">
-
-<h1>Nexora</h1>
-
-<div class="subtitle">
-מערכת חכמה לצמיחה וניהול העסק
-</div>
-
-
-<div class="hero-features">
-
-    <div class="feature-item">בואו נגיע יחד ל:</div>
-    <div class="feature-item">📈 יותר לקוחות</div>
-    <div class="feature-item">⏱️ חיסכון בזמן</div>
-    <div class="feature-item">🚀 הגדלת היעילות העסקית</div>
-
-</div>
-
-
-</section>
-
-<section class="section">
-
-<div class="question reveal">
-<div class="question-title">
-באמצעות הכלים הבאים:
-</div>
-
-<div class="question-content">
-
-<div id="chipPreview"></div>
-
-<div class="chips">
-
-<div class="chip" data-chip="leads">
-📥 קליטת לידים
-</div>
-
-<div class="chip" data-chip="documents">
-📄 ניהול מסמכים
-</div>
-
-<div class="chip" data-chip="quotes">
-💰 הצעות מחיר
-</div>
-
-<div class="chip" data-chip="meetings">
-📅 קביעת פגישות
-</div>
-
-<div class="chip" data-chip="ai-assistant">
-🤖 AI Assistant
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-</section>
-
-<section class="section">
-
-<h2 class="section-title">
-👇 בחרו תחום פעילות
-</h2>
-
-<div class="hint-pulse">
-💜 לתחום שלך?
-</div>
-
-<div class="categories">
-
-<div class="category">⚖️ שירותים משפטיים</div>
-
-<div class="category">💼 הנהלת חשבונות</div>
-
-<div class="category">🏥 מרפאות ורפואה</div>
-
-<div class="category">🏢 נדל״ן</div>
-
-<div class="category">🎓 מוסדות לימוד</div>
-
-<div class="category">➕ תחומים נוספים</div>
-
-</div>
-
-</section>
-
-<footer class="footer">
-
-💜 Nexora
-
-</footer>
-
 <script>
-let chipsData = {};
 
-fetch("https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/chips.json")
-.then(response => response.json())
-.then(data => {
+let currentPage = "";
 
-    chipsData = data;
+let routes = {};
 
-    console.log("Chips loaded", chipsData);
+let pages = {};
 
-});
-const drawer =
-document.getElementById("drawer");
+let popupRoutes = {};
 
-const overlay =
-document.getElementById("overlay");
+async function loadNavigation(){
 
-function toggleMenu(){
+    routes = await fetch(
+        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/routes.json"
+    ).then(
+        r => r.json()
+    );
 
-    drawer.classList.toggle("open");
-    overlay.classList.toggle("show");
+    pages = await fetch(
+        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/pages.json"
+    ).then(
+        r => r.json()
+    );
+
+    popupRoutes = await fetch(
+        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/popup_routes.json"
+    ).then(
+        r => r.json()
+    );
 
 }
+function trackEvent(
+    event,
+    value
+){
 
-function closeMenu(){
+    let sessionId =
+        localStorage.getItem(
+            "session_id"
+        );
 
-    drawer.classList.remove("open");
-    overlay.classList.remove("show");
+    if(
+        !sessionId
+    ){
+
+        sessionId =
+            crypto.randomUUID();
+
+        localStorage.setItem(
+            "session_id",
+            sessionId
+        );
+
+    }
+
+    fetch(
+        "https://royal-shape-a489.sergey070784.workers.dev",
+        {
+            method:"POST",
+            headers:{
+                "Content-Type":
+                    "application/json"
+            },
+            body:JSON.stringify({
+
+                session_id:
+                    sessionId,
+
+                timestamp:
+                    new Date()
+                    .toISOString(),
+
+                channel:
+                    "web",
+
+                event:
+                    event,
+
+                value:
+                    value
+
+            })
+        }
+    );
 
 }
+function showPopup(
+    popupFile
+){
+                fetch(
+                    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
+                    + popupFile
+                )            
+                .then(
+                    r => r.json()
+                )
+                .then(
+                    data => {
 
-const reveals = document.querySelectorAll('.reveal');
+                        document.getElementById(
+                            "aboutImage"
+                        ).src =
+                            data.image;
 
-const observer = new IntersectionObserver((entries)=>{
+                        document.getElementById(
+                            "aboutTitle"
+                        ).innerText =
+                            data.title;
 
-    entries.forEach(entry=>{
+                        document.getElementById(
+                            "aboutText"
+                        ).innerHTML =
+                            data.messages.join(
+                                "<br><br>"
+                            );
+                            const aboutButtons =
+                                document.getElementById(
+                                    "aboutButtons"
+                                );
 
-        if(entry.isIntersecting){
+                            aboutButtons.innerHTML = "";
 
-            setTimeout(()=>{
+                            (data.buttons || []).forEach(
+                                btn => {
 
-                entry.target.classList.add('show');
+                                    const button =
+                                        document.createElement(
+                                            "button"
+                                        );
 
-            },200);
+                                    button.className =
+                                        "button";
 
-        }else{
+                                    button.innerText =
+                                        btn.text;
 
-            entry.target.classList.remove('show');
+                                    button.onclick =
+                                        () => {
+
+                                            document.getElementById(
+                                                "aboutModal"
+                                            ).style.display =
+                                                "none";
+
+                                            trackEvent(
+                                                "button_click",
+                                                btn.id
+                                            );
+
+                                            if (
+                                                popupRoutes[btn.id]
+                                            ) {
+
+                                                trackEvent(
+                                                    "popup_open",
+                                                     popupRoutes[btn.id]
+                                                );
+
+                                                showPopup(
+                                                    popupRoutes[btn.id]
+                                                );
+
+                                                return;
+
+                                            }
+
+                                            if (
+                                                routes[btn.id]
+                                            ) {
+
+                                                const pageId =
+                                                    routes[btn.id];
+
+                                                const pageName =
+                                                    pages[pageId];
+
+                                                loadPage(
+                                                    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
+                                                    + pageName
+                                                );
+
+                                            }
+
+                                        };
+
+                                    aboutButtons.appendChild(
+                                        button
+                                    );
+
+                                }
+                            );;  
+                                                    document.getElementById(
+                                    "aboutModal"
+                        ).style.display =
+                            "block";
+
+                        }
+                    );
+                }
+async function loadPage(url){
+    currentPage = url;
+
+    trackEvent(
+        "page_open",
+        url.split("/").pop()
+    );
+
+    const response =
+        await fetch(url);
+    const data =
+        await response.json();
+    document.getElementById(
+        "title"
+    ).innerText =
+        data.title;
+
+    const messages =
+        document.getElementById(
+            "messages"
+        );
+
+    messages.innerHTML = "";
+
+    data.messages.forEach(msg => {
+
+        const div =
+            document.createElement(
+                "div"
+            );
+
+        div.className =
+            "message";
+
+        div.innerText =
+            msg;
+
+        messages.appendChild(
+            div
+        );
+
+    });
+
+    const buttons =
+        document.getElementById(
+            "buttons"
+        );
+
+    buttons.innerHTML = "";
+
+    data.buttons.forEach(btn => {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+        button.className =
+            "button";
+
+        button.innerText =
+            btn.text;
+
+        button.onclick =
+            () => {
+            trackEvent(
+                "button_click",
+                btn.id
+            );
+            if (
+                popupRoutes[btn.id]
+            ){
+                trackEvent(
+                    "popup_open",
+                    popupRoutes[btn.id]
+                );
+                showPopup(
+                    popupRoutes[btn.id]
+                );
+
+                    return;
+                }
+
+        if (
+            routes[btn.id]
+        ) {
+
+            const pageId =
+                routes[btn.id];
+
+            const pageName =
+                pages[pageId];
+
+            loadPage(
+                "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
+                + pageName
+            );
+
+            return;
+        }
+        };
+        buttons.appendChild(
+            button
+        );
+
+    });
+
+}
+(async () => {
+
+    await loadNavigation();
+
+loadPage(
+    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/page.tools"
+);
+
+})();
+
+const input =
+    document.getElementById("chatInput");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+async function sendMessage(){
+
+    const text =
+        input.value.trim();
+
+    if(!text)
+        return;
+
+    try{
+
+        const response =
+            await fetch(
+                "https://message.sergey070784.workers.dev/",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body:JSON.stringify({
+
+                        session_id:
+                            localStorage.getItem("session_id"),
+
+                        channel:
+                            "web",
+
+                        message:
+                            text
+
+                    })
+
+                }
+            );
+
+        if(!response.ok){
+
+            throw new Error("Send failed");
 
         }
 
-    });
+        input.value = "";
 
-},{
-    threshold:0.25
-});
-
-reveals.forEach(item=>{
-
-    observer.observe(item);
-
-});
-
-const hint =
-document.querySelector('.hint-pulse');
-
-setInterval(()=>{
-
-    hint.style.opacity = '1';
-
-    setTimeout(()=>{
-
-        hint.style.opacity = '0';
-
-    },2000);
-
-},7000);
-const chipPreview =
-document.getElementById('chipPreview');
-
-const chipData = {
-
-    leads:{
-        description:'איסוף פרטי לקוחות חדשים באופן אוטומטי והעברתם ישירות לעסק.'
-    },
-
-    documents:{
-        description:'שליחה, קבלה ועבודה עם מסמכים בצורה מסודרת ומהירה.'
-    },
-
-    quotes:{
-        description:'הפקת הצעות מחיר אוטומטיות וחיסכון בזמן העבודה.'
-    },
-
-    meetings:{
-        description:'תיאום פגישות בצורה אוטומטית ללא שיחות והודעות מיותרות.'
-    },
-
-    "ai-assistant":{
-        description:'עוזר חכם המספק מידע, עונה לשאלות ומלווה את הלקוח.'
     }
 
-};
+    catch(err){
 
-document.querySelectorAll('.chip')
-.forEach(chip=>{
+        console.error(err);
 
-    chip.addEventListener('click',()=>{
+    }
 
-        const id = chip.dataset.chip;
+}
 
-        if(!chipsData[id]) return;
+sendButton.onclick =
+    sendMessage;
 
-chipPreview.innerHTML = `
-    <img src="https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/${chipsData[id].image}.jpg">
+input.addEventListener(
+    "keydown",
+    e => {
 
-    <h3>${chipsData[id].title}</h3>
+        if(e.key === "Enter")
+            sendMessage();
 
-    <p>${chipsData[id].description}</p>
-`;
+    }
+);
 
-chipPreview.classList.add('show');
-    });
 
-});
+
 </script>
-
 </body>
-</html>
 
+</html>
