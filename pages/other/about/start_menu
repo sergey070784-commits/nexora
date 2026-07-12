@@ -1,0 +1,23 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783554515/start_menu_w72f1i.png",
+
+  "messages": [
+      ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_000100",
+      "text": "WEB version"
+    },
+    {
+      "id": "BTN_000101",
+      "text": "Telegram"
+    },
+    {
+      "id": "BTN_000102",
+      "text": "WhatsApp"
+    }
+  ]
+  }

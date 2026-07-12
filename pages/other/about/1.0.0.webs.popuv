@@ -1,0 +1,16 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783377986/00005_lfozrz.png",
+
+  "messages": [
+    "אנחנו מביאים לקוחות"
+  
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00016",
+      "text": "המשך"
+    }
+  ]
+}

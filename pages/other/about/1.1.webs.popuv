@@ -1,0 +1,21 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782894779/0002_oxzuus.png",
+
+  "messages": [
+      "כמערכת אחד WhatsApp אתר Telegram",
+      "לא חייבים את כולם, כל אחד מסוגל לתת ליווי ללקוח",
+      "צרו דרכים ללקוחות שלך להגיע אליך"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00006",
+      "text": "נסו, תראו כלי אוטומציה"
+    },
+    {
+      "id": "BTN_00007",
+      "text": "איך זה עובד?"
+    }
+  ]
+  }

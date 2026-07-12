@@ -1,0 +1,24 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1782764793/i_d_michal1_zce3ca.jpg",
+
+  "messages": [
+      "אני כאן כדי לתת לכם שקט, שליטה", 
+      "ובחירות שמתאימות באמת לצרכים שלכם"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00004",
+      "text": "מה שירות כולל"
+    },
+    {
+      "id": "BTN_00005",
+      "text": "פרויקטים אחרונים"
+    },
+    {
+      "id": "BTN_00006",
+      "text": "אי זה עובד?"
+    }
+  ]
+  }

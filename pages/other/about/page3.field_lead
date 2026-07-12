@@ -1,0 +1,21 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781829655/file_00000000c4a471f494a77aaf300f7d89_micfgy.png",
+
+  "messages": [
+      "מוזמנים להכנס לצור קשר",
+      "לקבל חוויה מלאה מה רואה לקוח שלך",
+      "עידכון ופירוט המגיע אליך בתור בעל העסק"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_0012",
+      "text": "צור קשר להדמיה"
+    },
+    {
+      "id": "BTN_0011",
+      "text": "גלו עוד אוטומציות"
+    }
+  ]
+  }

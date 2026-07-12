@@ -1,0 +1,19 @@
+{
+  "email": {
+    "enabled": true,
+    "sender": "nexoraautomation811@gmail.com",
+    "notify": "srgyys8@gmail.com"
+  },
+
+  "telegram": {
+    "enabled": true
+  },
+
+  "whatsapp": {
+    "enabled": true
+  },
+
+  "web": {
+    "enabled": true
+  }
+}

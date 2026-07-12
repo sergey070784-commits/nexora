@@ -1,0 +1,15 @@
+{
+  "tracked_events": [
+    "landing_enter",
+    "category_selected",
+    "profession_entered",
+    "tool_opened",
+    "channel_selected",
+    "file_uploaded",
+    "gallery_opened",
+    "document_opened",
+    "quote_opened",
+    "scenario_completed",
+    "exit"
+  ]
+}

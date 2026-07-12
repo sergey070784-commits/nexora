@@ -1,0 +1,15 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783378580/0006_cl7waf.png",
+
+  "messages": [
+      "אנחנו מייעלים תהליכים"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00018",
+      "text": "תראו גם"
+    }
+  ]
+  }

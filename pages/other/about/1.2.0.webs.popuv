@@ -1,0 +1,19 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783379639/00007_ezlcln.png",
+
+  "messages": [
+      "מענה 24/7"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00017",
+      "text": "צפיה בדוגמאות"
+    },
+    {
+      "id": "BTN_00019",
+      "text": "נושאים נוספים"
+    }
+  ]
+  }

@@ -1,0 +1,47 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1781820558/file_0000000076e87246a91f991352562327_segatm.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00054",
+      "text": "משרדי עורכי דין"
+    },
+    {
+      "id": "BTN_00055",
+      "text": "נוטריונים"
+    },
+    {
+      "id": "BTN_00056",
+      "text": "מגשרים"
+    },
+    {
+      "id": "BTN_00057",
+      "text": "יועצי מס"
+    },
+    {
+      "id": "BTN_00058",
+      "text": "רואי חשבון"
+    },
+    {
+      "id": "BTN_00059",
+      "text": "מנהלי חשבונות"
+    },
+    {
+      "id": "BTN_00060",
+      "text": "יועצי משכנתאות"
+    },
+    {
+      "id": "BTN_00061",
+      "text": "סוכני ביטוח"
+    },
+    {
+      "id": "BTN_00062",
+      "text": "יועצים פיננסיים"
+    }
+  ]
+}
