@@ -1,0 +1,24 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1783554515/start_menu_w72f1i.png",
+
+  "messages": [
+    "טקסט בהמשך הפיתוח"
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00001",
+      "text": "WEB"
+    },
+    {
+      "id": "BTN_00002",
+      "text": "Telegram"
+    },
+    {
+      "id": "BTN_00003",
+      "text": "WhatsApp"
+    }
+   
+  ]
+}
