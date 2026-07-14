@@ -1,10 +1,11 @@
 {
   "BTN_00000": "other/about/1.0",
   "BTN_00100": "other/about/1.1",
-  "BTN_00007": "other/about/1.2.webs.popuv",
-  "BTN_00016": "other/about/1.1.0.webs.popuv",
-  "BTN_00018": "other/about/1.2.0.webs.popuv",
-  "BTN_00041": "other/about/01.type_business",
-  "BTN_00042": "other/about/02.type_business",
-  "BTN_00002": "other/about/start_menu"
+  "BTN_00004": "other/about/1.2.1",
+  "BTN_00005": "other/about/1.2.2",
+  "BTN_00006": "other/about/1.2.3",
+  "BTN_00007": "other/about/1.2.4",
+  "BTN_00008": "other/about/1.2.5",
+  "BTN_00009": "other/about/1.2.6",
+  "BTN_00010": "other/about/1.2.7"
 }
