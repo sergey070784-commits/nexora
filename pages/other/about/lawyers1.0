@@ -1,0 +1,20 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1784495687/123_hcomqt.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_000101",
+      "text": "נסו איך זה עובד"
+    },
+    {
+      "id": "BTN_000102",
+      "text": "לרשימת השירותים שלנו"
+    }
+   
+  ]
+}
