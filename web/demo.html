@@ -1,205 +1,591 @@
+<!-- TEST -->
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nexora Website</title>
+<title>Nexora</title>
 
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
 }
 
 body{
-
-background:linear-gradient(
-180deg,
-#050816,
-#071026,
-#0b1733
-);
-
-min-height:100vh;
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-padding:20px;
-
-color:white;
-
+    background:#0d0d12;
+    color:#fff;
+    font-family:Arial,sans-serif;
 }
 
-.container{
+/* HEADER */
 
-width:100%;
-max-width:500px;
-
-background:rgba(255,255,255,.03);
-
-border:1px solid rgba(255,255,255,.08);
-
-border-radius:30px;
-
-padding:40px 25px;
-
-backdrop-filter:blur(15px);
-
+.header{
+    position:fixed;
+    top:0;
+    right:0;
+    width:100%;
+    height:60px;
+    background:rgba(13,13,18,.95);
+    backdrop-filter:blur(10px);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 20px;
+    z-index:1000;
+    border-bottom:1px solid #222;
 }
 
 .logo{
+    font-size:28px;
+    font-weight:bold;
+    color:#c48cff;
+}
 
-font-size:72px;
-font-weight:800;
+.menu-btn{
+    background:none;
+    border:none;
+    color:white;
+    font-size:28px;
+    cursor:pointer;
+}
 
-text-align:center;
+/* DRAWER */
 
-margin-bottom:20px;
+.drawer{
+    position:fixed;
+    top:0;
+    right:-300px;
+    width:280px;
+    height:100%;
+    background:#16161f;
+    transition:.3s;
+    z-index:1100;
+    padding:90px 25px;
+}
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    opacity:0;
+    visibility:hidden;
+    transition:.3s;
+    z-index:1050;
+}
 
+.overlay.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.drawer-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:30px;
+}
+
+.drawer-logo{
+    color:#c48cff;
+    font-size:24px;
+    font-weight:bold;
+}
+
+.close-btn{
+    background:none;
+    border:none;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+}
+.drawer.open{
+    right:0;
+}
+
+.drawer a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px 0;
+    border-bottom:1px solid #272737;
+}
+
+/* HERO */
+
+.hero{
+    min-height:auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:90px 20px 30px;
+}
+.hero-body{
+
+    display:flex;
+    flex-direction:row-reverse;
+    align-items:center;
+
+    justify-content:center;
+
+    gap:310px;
+
+    margin-top:20px;
+
+}
+.hero h1{
+    font-size:52px;
+    background:linear-gradient(90deg,#ffffff,#c48cff);
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    -webkit-text-fill-color:transparent;
 }
 
 .subtitle{
+    margin-top:10px;
+    color:#c48cff;
+    font-size:20px;
+}
 
-text-align:center;
+.hero-features{
+    margin-top:10px;
+}
 
-font-size:24px;
+.feature-item{
+    font-size:28px;
+    margin:10px 0;
+    opacity:0;
+    transform:translateY(20px);
+    animation:fadeUp .8s ease forwards;
+}
 
-color:#aab4d0;
+.feature-item:nth-child(1){
+    animation-delay:.3s;
+}
 
-margin-bottom:40px;
+.feature-item:nth-child(2){
+    animation-delay:.8s;
+}
+
+.feature-item:nth-child(3){
+    animation-delay:1.3s;
+}
+.feature-item:nth-child(4){
+    animation-delay:1.8s;
+}
+.feature-item:nth-child(5){
+    animation-delay:2.3s;
+}
+
+@keyframes fadeUp{
+    from{
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+
+.categories{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    width:400px;
+
+    margin-right:auto;
+ 
+    margin-left:80px;
+
+    font-size:20px;
+    
+}
+
+.row{
+
+    display:flex;
+
+    flex-direction:row;
+
+    align-items:center;
+
+    justify-content:flex-start;
+
+    gap:12px;
+
+    width:100%;
 
 }
 
-.card{
+.row .category{
 
-background:rgba(255,255,255,.04);
-
-border:1px solid rgba(255,255,255,.06);
-
-border-radius:24px;
-
-padding:28px;
-
-margin-bottom:18px;
+    flex:1;
 
 }
 
-.card h3{
+.row .count{
 
-font-size:34px;
+    flex:0 0 70px;
 
-margin-bottom:15px;
+    width:70px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:#c48cff;
+
+    font-size:22px;
+
+    font-weight:700;
+
+}
+.category{
+    position:relative;
+
+    background:#222436;
+
+    border:1px solid rgba(196,140,255,.28);
+
+    border-radius:24px;
+
+    padding:30px 20px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+
+    overflow:hidden;
+}
+.category::after{
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:linear-gradient(
+        90deg,
+        rgba(196,140,255,0),
+        rgba(196,140,255,.08),
+        rgba(196,140,255,0)
+    );
+
+    opacity:0;
+
+    transition:.3s;
+}
+.category:hover{
+
+    transform:translateY(-3px);
+
+    border-color:#c48cff;
+
+    box-shadow:
+        0 0 20px rgba(196,140,255,.18);
 
 }
 
-.card p{
+.category:hover::after{
 
-font-size:22px;
+    opacity:1;
 
-color:#c8d1e8;
+}
+.category:active{
 
-line-height:1.6;
+    transform:scale(.98);
 
 }
 
-.button{
 
-display:block;
+.footer{
+    text-align:center;
+    padding:60px 20px;
+    color:#888;
+}
+/* TOOLS */
 
-width:100%;
+.tools{
 
-margin-top:30px;
+    display:flex;
 
-padding:24px;
+    flex-direction:column;
 
-background:#2563eb;
+    justify-content:flex-start;
 
-color:white;
+    align-items:flex-start;
 
-text-decoration:none;
+    gap:12px;
 
-text-align:center;
+    width:420px;
 
-font-size:32px;
+    margin-top:0px;
 
-font-weight:700;
+    margin-left:0;
 
-border-radius:20px;
+    margin-right:auto;
 
 }
 
+.tool{
+
+    width:200px;
+
+    padding:14px 16px;
+
+    background:#222436;
+
+    border:1px solid rgba(196,140,255,.28);
+
+    border-radius:16px;
+
+    text-align:center;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.tool:hover{
+
+    border-color:#c48cff;
+
+    transform:translateY(-2px);
+
+}
+.hero-action{
+
+    margin-top:0px;
+
+    display:flex;
+
+    justify-content:center;
+    margin-left:auto;
+ 
+    margin-right:400px;
+}
+
+.cta-btn{
+
+    min-width:360px;
+
+    padding:18px 32px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:linear-gradient(135deg,#b57cff,#8d5cff);
+
+    color:#fff;
+
+    font-size:20px;
+
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:.25s ease;
+
+    box-shadow:0 12px 28px rgba(141,92,255,.28);
+
+}
+
+.cta-btn:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 18px 40px rgba(141,92,255,.45);
+
+}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<header class="header">
 
-<div class="logo">
-Nexora
-</div>
+<button class="menu-btn" onclick="toggleMenu()">☰</button>
 
-<div class="subtitle">
-⚖️ מערכת חכמה לעורכי דין
-</div>
+<div class="logo">Nexora</div>
 
-<div class="card">
+</header>
+<div class="overlay" id="overlay" onclick="closeMenu()"></div>
+<div class="drawer" id="drawer">
+<div class="drawer-header">
 
-<h3>🌐 אתר מקצועי</h3>
+    <div class="drawer-logo">
+        Nexora
+    </div>
 
-<p>
-לקוחות יכולים להתחיל
-את התהליך מכל מקום
-</p>
-
-</div>
-
-<div class="card">
-
-<h3>📄 טפסים חכמים</h3>
-
-<p>
-קליטת פניות ומסמכים
-בצורה אוטומטית
-</p>
+    <button class="close-btn" onclick="closeMenu()">
+        ✕
+    </button>
 
 </div>
+<a href="#">🏠 ראשי</a>
 
-<div class="card">
+<a href="#">🚀 פתרונות Nexora</a>
 
-<h3>📁 איסוף מסמכים</h3>
+<a href="#">⚖️ תחומי פעילות</a>
 
-<p>
-העלאת קבצים ישירות
-למערכת
-</p>
+<a href="#">ℹ️ אודות</a>
+
+<a href="#">📞 צור קשר</a>
 
 </div>
 
-<div class="card">
+<section class="hero">
 
-<h3>⚡ יצירת קשר מהירה</h3>
+    <h1>ברוך הבא למשרד שלך</h1>
 
-<p>
-הלקוח שולח פנייה
-ומתחיל תהליך מיד
-</p>
+    <div class="subtitle">
+        מערכת ניהול חכמה לעסק שלך
+    </div>
+
+    <div class="hero-body">
+
+        <div class="categories">
+
+            <div class="row">
+                <div class="category">פניות חדשות</div>
+                <div class="category count"  id="leads-count">2</div>
+            </div>
+
+            <div class="row">
+                <div class="category">מסמכים שהתקבלו</div>
+                <div class="category count" id="docs-count">4</div>
+            </div>
+
+            <div class="row">
+                <div class="category">פגישות להיום</div>
+                <div class="category count">1</div>
+            </div>
+
+            <div class="row">
+                <div class="category">משימות פתוחות</div>
+                <div class="category count">3</div>
+            </div>
+
+        </div>
+
+        <div class="hero-features">
+
+            <div class="feature-item">
+                כך נראה משרד שבו כל הפניות
+            </div>
+
+            <div class="feature-item">
+                 כל המסמכים
+            </div>
+
+            <div class="feature-item">
+                 הפגישות
+            </div>
+            <div class="feature-item">
+                 המשימות
+            </div>
+            <div class="feature-item">
+                מרוכזים במקום אחד
+            </div>
+        </div>
+
+    </div>
+<div class="hero-action">
+
+    <button class="cta-btn">
+
+       נסדר הכל בהתאם לעסק שלכם
+
+    </button>
+
+</div>
+    <div class="tools">
+
+    <div class="tool">
+        👥 מאגר לקוחות
+    </div>
+
+    <div class="tool">
+        🖼️ גלריה
+    </div>
+
+    <div class="tool">
+        📅 יומן
+    </div>
 
 </div>
 
-<a href="#" class="button">
 
-⚖️ קבלו ייעוץ משפטי
+</section>
 
-</a>
+<footer class="footer">
 
-</div>
+💜 Nexora
+
+</footer>
+
+<script>
+
+const drawer =
+document.getElementById("drawer");
+
+const overlay =
+document.getElementById("overlay");
+
+function toggleMenu(){
+
+    drawer.classList.toggle("open");
+    overlay.classList.toggle("show");
+
+}
+
+function closeMenu(){
+
+    drawer.classList.remove("open");
+    overlay.classList.remove("show");
+
+}
+setTimeout(() => {
+
+    const leads = document.getElementById("leads-count");
+
+    leads.textContent = parseInt(leads.textContent, 10) + 1;
+
+}, 7000);
+
+setTimeout(() => {
+
+    const leads = document.getElementById("docs-count");
+
+    leads.textContent = parseInt(leads.textContent, 10) + 2;
+
+}, 17000);
+
+</script>
 
 </body>
 </html>
+
