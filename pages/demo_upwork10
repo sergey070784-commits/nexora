@@ -2,7 +2,7 @@
   "title": "🔔 Workflow Notification",
 
   "messages": [
-    "A new qualified lead has entered"
+    "A new qualified lead has entered",
     "the automation flow.",
     "Current status:",
     "✅ Lead Registered"
