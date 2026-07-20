@@ -1,8 +1,8 @@
 {
-  "title": "",
+  "title": "1",
 
   "messages": [
-    "",
+    "1"
 
   ],
   "buttons": [
@@ -10,6 +10,5 @@
     "id": "BTN_00501",
     "text": "AI Lead Qualification & Business Automation"
   }
-
 ]
 }
