@@ -204,13 +204,6 @@ def show_page(chat_id, page):
             }
         )
 
-    buttons.append(
-        {
-            "buttonId": "menu",
-            "buttonText": "תפריט"
-        }
-    )
-
     send_reply_buttons(
         chat_id,
         buttons

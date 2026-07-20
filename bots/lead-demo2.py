@@ -137,12 +137,6 @@ def show_page(chat_id, page):
             )
         )
 
-    keyboard.add(
-        types.KeyboardButton(
-            "תפריט"
-        )
-    )
-
     text = data["title"]
 
     for msg in data["messages"]:
