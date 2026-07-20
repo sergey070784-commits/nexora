@@ -1,0 +1,25 @@
+{
+  "title": "Approximately how many new inquiries",
+
+  "messages": [
+    "do you receive each month?"
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00504",
+    "text": "1–20"
+  },
+  {
+    "id": "BTN_00505",
+    "text": "20–100"
+  },
+  {
+    "id": "BTN_00506",
+    "text": "100–500"
+  },
+  {
+    "id": "BTN_00507",
+    "text": "500+"
+  }
+]
+}
