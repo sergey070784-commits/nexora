@@ -1,0 +1,18 @@
+{
+  "title": "AI Analysis",
+
+  "messages": [
+    "🤖 Analyzing your responses...",
+    "✓ Recommended workflow generated",
+    "✓ Lead potential evaluated",
+    "✓ Automation requirements analyzed",
+    "✓ Business type identified"
+
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00522",
+    "text": "Continie"
+  }
+]
+}
