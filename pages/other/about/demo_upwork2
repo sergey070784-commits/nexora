@@ -1,0 +1,16 @@
+{
+  "title": "Nexora",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/q_auto/f_auto/upload/v1784507375/1234_ugmbdd.png",
+
+  "messages": [
+    "Let's begin."
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00503",
+      "text": "Continue"
+    }
+  
+  ]
+}
