@@ -1,0 +1,14 @@
+{
+  "title": "📅 Appointment Automation",
+
+  "messages": [
+    "The system is ready to schedule",
+    "a meeting with the client."
+  ],
+  "buttons": [
+    {
+    "id": "BTN_00525",
+    "text": "Schedule Meeting"
+    }
+]
+}
