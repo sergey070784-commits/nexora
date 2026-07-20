@@ -1,0 +1,18 @@
+{
+  "title": "🤖 Welcome",
+
+  "messages": [
+    "AI Lead Qualification & Business Automation",
+    "Experience how AI can qualify new leads",
+    "identify high-value prospects",
+    "and automatically launch business workflows.",
+    "Demo time: Less than 1 minute"
+
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00502",
+    "text": "▶ Start Demo"
+  }
+]
+}

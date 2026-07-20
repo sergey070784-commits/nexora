@@ -1,0 +1,15 @@
+{
+  "title": "Let's begin",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1784509870/1234_1654x951_bcplgg.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00503",
+      "text": "Continue"
+    }
+  ]
+}
