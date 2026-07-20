@@ -1,0 +1,51 @@
+{
+  "BTN_00504": {
+    "field": "business",
+    "value": "Agency"
+  },
+
+  "BTN_00505": {
+    "field": "business",
+    "value": "Law Firm"
+  },
+
+  "BTN_00506": {
+    "field": "business",
+    "value": "Healthcare"
+  },
+
+  "BTN_00507": {
+    "field": "business",
+    "value": "Real Estate"
+  },
+
+  "BTN_00508": {
+    "field": "business",
+    "value": "E-commerce"
+  },
+
+  "BTN_00509": {
+    "field": "solution",
+    "value": "AI Lead Qualification"
+  },
+
+  "BTN_00510": {
+    "field": "solution",
+    "value": "Appointment Booking"
+  },
+
+  "BTN_00511": {
+    "field": "solution",
+    "value": "Document Collection"
+  },
+
+  "BTN_00512": {
+    "field": "solution",
+    "value": "Customer Support"
+  },
+
+  "BTN_00513": {
+    "field": "solution",
+    "value": "Complete Business Automation"
+  }
+}
