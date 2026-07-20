@@ -1,0 +1,25 @@
+{
+  "title": "When are you planning",
+
+  "messages": [
+    "to implement automation?"
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00518",
+    "text": "Immediately"
+  },
+  {
+    "id": "BTN_00519",
+    "text": "Within 30 days"
+  },
+  {
+    "id": "BTN_00520",
+    "text": "Within 3 months"
+  },
+  {
+    "id": "BTN_00521",
+    "text": "Just exploring"
+  }
+]
+}
