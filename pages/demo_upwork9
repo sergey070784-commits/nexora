@@ -1,0 +1,12 @@
+{
+  "title": "Business Automation",
+
+  "messages": [
+    "Starting automated workflow...",
+    "🟢 Lead Created",
+    "🟢 Client Profile Generated",
+    "🟢 Workflow Started"
+  ],
+  "buttons": [
+]
+}
