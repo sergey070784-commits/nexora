@@ -1,0 +1,29 @@
+{
+  "title": "What would you like to automate?",
+
+  "messages": [
+    "Choose your primary goal."
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00509",
+    "text": "🎯 Lead Qualification"
+  },
+  {
+    "id": "BTN_00510",
+    "text": "📅 Appointment Booking"
+  },
+  {
+    "id": "BTN_00511",
+    "text": "📄 Document Collection"
+  },
+  {
+    "id": "BTN_00512",
+    "text": "🤖 Customer Support"
+  },
+  {
+    "id": "BTN_00513",
+    "text": "Complete Business Automation"
+  }
+]
+}
