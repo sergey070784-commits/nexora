@@ -1,0 +1,15 @@
+{
+  "title": "✅ Meeting Request Created",
+
+  "messages": [
+    "he appointment request",
+    "has been added to the workflow.",
+    "Your team can now continue the conversation."
+  ],
+  "buttons": [
+    {
+    "id": "BTN_00525",
+    "text": "Continie"
+    }
+]
+}
