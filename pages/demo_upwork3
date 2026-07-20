@@ -1,0 +1,32 @@
+{
+  "title": "What type of business do you have?",
+
+  "messages": [
+    "Choose the option",
+     "that best describes your company."
+
+
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00504",
+    "text": "🏢 Agency"
+  },
+  {
+    "id": "BTN_00505",
+    "text": "⚖ Law Firm"
+  },
+  {
+    "id": "BTN_00506",
+    "text": "🏥 Healthcare"
+  },
+  {
+    "id": "BTN_00507",
+    "text": "🏠 Real Estate"
+  },
+  {
+    "id": "BTN_00508",
+    "text": "🛍 E-commerce"
+  }
+]
+}
