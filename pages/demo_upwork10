@@ -8,5 +8,9 @@
     "✅ Lead Registered"
   ],
   "buttons": [
+    {
+    "id": "BTN_00522",
+    "text": "Continie"
+    }
 ]
 }
