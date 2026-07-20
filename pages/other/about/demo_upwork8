@@ -1,0 +1,15 @@
+{
+  "title": "AI Assessment Complete",
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1784536674/ChatGPT_Image_Jul_20_2026_11_35_31_AM_nqmwf0.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00523",
+      "text": "Launch Automation"
+    }
+  ]
+}
