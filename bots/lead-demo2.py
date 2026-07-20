@@ -25,6 +25,11 @@ popup_routes = requests.get(
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/navigation/popup_routes.json"
 ).json()
+
+entry_points = requests.get(
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/navigation/entry_points.json"
+).json()
 bot_config = requests.get(
     "https://raw.githubusercontent.com/sergey070784-commits/nexora/main/Core/bot2_config.json"
 ).json()
@@ -191,12 +196,42 @@ def show_popup(chat_id, popup):
         text,
         reply_markup=keyboard
     )
-@bot.message_handler(commands=['lead'])
-def lead_demo(message):
+@bot.message_handler(commands=list(entry_points.keys()))
+def entry(message):
+
+    command = message.text.split()[0][1:].lower()
+
+    page = entry_points.get(command)
+
+    if page:
+
+        show_page(
+            message.chat.id,
+            page
+        )
+@bot.message_handler(commands=['start'])
+def start(message):
+
+    parts = message.text.split(maxsplit=1)
+
+    if len(parts) > 1:
+
+        key = parts[1].lower()
+
+        page = entry_points.get(key)
+
+        if page:
+
+            show_page(
+                message.chat.id,
+                page
+            )
+
+            return
 
     show_page(
         message.chat.id,
-        "page.tools"
+        entry_points["lead"]
     )
 
 @bot.message_handler(func=lambda message: True)
