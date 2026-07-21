@@ -190,6 +190,105 @@ def show_popup(chat_id, popup):
         text,
         reply_markup=keyboard
     )
+def show_lead(chat_id, page):
+
+    response = requests.get(
+
+        f"{SUPABASE_URL}/rest/v1/leads",
+
+        headers={
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        },
+
+        params={
+
+            "session_id": f"eq.{chat_id}",
+
+            "select": "lead_json",
+
+            "limit": 1
+
+        },
+
+        timeout=10
+
+    )
+
+    if response.status_code != 200:
+
+        bot.send_message(
+            chat_id,
+            "Lead loading error."
+        )
+
+        return
+
+    rows = response.json()
+
+    if not rows:
+
+        bot.send_message(
+            chat_id,
+            "Lead not found."
+        )
+
+        return
+
+    lead = rows[0]["lead_json"]
+
+
+    data = load_page(page)
+    
+    title = data.get("title", "")
+
+    keyboard = types.ReplyKeyboardMarkup(
+        resize_keyboard=True
+    )
+
+    for button in data["buttons"]:
+
+        keyboard.add(
+            types.KeyboardButton(
+                button["text"]
+            )
+        )
+
+
+    user_data[chat_id] = {
+
+        "page": page,
+
+        "buttons": {
+
+            button["text"]: button["id"]
+
+            for button in data["buttons"]
+
+        }
+
+    }
+
+
+    text = ""
+
+    if title:
+        text += title + "\n\n"
+
+    for key, value in lead.items():
+
+        text += f"{key}: {value}\n"
+
+
+    bot.send_message(
+
+        chat_id,
+
+        text,
+
+        reply_markup=keyboard
+
+    )
 @bot.message_handler(commands=list(entry_points.keys()))
 def entry(message):
 
@@ -273,6 +372,19 @@ def handle_buttons(message):
         page_id = routes[button_id]
 
         page = pages[page_id]
+
+        data = load_page(page)
+        
+        page_type = data.get("type")
+
+        if page_type == "lead":
+
+            show_lead(
+                message.chat.id,
+                page
+            )
+
+            return
 
         show_page(
             message.chat.id,
