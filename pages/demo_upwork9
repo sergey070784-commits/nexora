@@ -8,5 +8,9 @@
     "🟢 Workflow Started"
   ],
   "buttons": [
+{
+    "id": "BTN_00524",
+    "text": "Continue"
+  }
 ]
 }
