@@ -1,0 +1,10 @@
+{
+  "title": "Business Dashboard",
+
+  "buttons": [
+    {
+      "text": "Continue",
+      "id": "BTN_00600"
+    }
+  ]
+}
