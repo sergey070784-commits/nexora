@@ -441,11 +441,7 @@ function showPopup(
                                                 popupRoutes[btn.id]
                                             ) {
 
-                                                trackEvent(
-                                                    "popup_open",
-                                                     popupRoutes[btn.id]
-                                                );
-
+                                               
                                                 showPopup(
                                                     popupRoutes[btn.id]
                                                 );
@@ -489,11 +485,6 @@ function showPopup(
                 }
 async function loadPage(url){
     currentPage = url;
-
-    trackEvent(
-        "page_open",
-        url.split("/").pop()
-    );
 
     const response =
         await fetch(url);

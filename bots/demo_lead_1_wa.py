@@ -27,6 +27,16 @@ popup_routes = requests.get(
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/navigation/popup_routes.json"
 ).json()
+config = requests.get(
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/Core/config.json"
+).json()
+entry_points = requests.get(
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/navigation/entry_points.json"
+).json()
+SUPABASE_URL = config["supabase_url"]
+SUPABASE_KEY = config["supabase_key"]
 def send_message(chat_id, text):
 
     url = f"{API_URL}/sendMessage/{API_TOKEN}"
@@ -166,13 +176,6 @@ def show_page(chat_id, page):
 
     data = load_page(page)
 
-    track_event(
-        chat_id,
-        "page_open",
-        page,
-        "whatsapp"
-    )
-
     text = data["title"]
 
     for msg in data["messages"]:
@@ -251,6 +254,92 @@ def show_popup(chat_id, popup):
 
                 "buttonText":
                     button["text"]
+            }
+        )
+
+    send_reply_buttons(
+        chat_id,
+        buttons
+    )
+def show_lead(chat_id, page):
+
+    response = requests.get(
+
+        f"{SUPABASE_URL}/rest/v1/leads",
+
+        headers={
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        },
+
+        params={
+
+            "session_id": f"eq.{chat_id}",
+
+            "select": "lead_json",
+
+            "limit": 1
+
+        },
+
+        timeout=10
+
+    )
+
+    if response.status_code != 200:
+
+        send_message(
+            chat_id,
+            "Lead loading error."
+        )
+
+        return
+
+    rows = response.json()
+
+    if not rows:
+
+        send_message(
+            chat_id,
+            "Lead not found."
+        )
+
+        return
+
+    lead = rows[0]["lead_json"]
+
+    data = load_page(page)
+
+    title = data.get("title", "")
+
+    user_data[chat_id] = {
+        "page": page,
+        "buttons": {}
+    }
+
+    text = ""
+
+    if title:
+        text += title + "\n\n"
+
+    for key, value in lead.items():
+        text += f"{key}: {value}\n"
+
+    send_message(
+        chat_id,
+        text
+    )
+
+    buttons = []
+
+    for button in data["buttons"]:
+
+        user_data[chat_id]["buttons"][button["text"]] = button["id"]
+
+        buttons.append(
+            {
+                "buttonId": button["id"],
+                "buttonText": button["text"]
             }
         )
 
@@ -352,21 +441,36 @@ while True:
                     "incomingMessageReceived"
         ):
 
-                if text.lower() in [
-                    "lead",
-                    "start",
-                    "menu"
-                ]:
+                text_key = text.lower()
+
+                if text_key in entry_points:
 
                     log_message(
-                    sender,
+                        sender,
                         text
                     )
 
-                    show_page(
-                        sender,
-                        "page.tools"
-                    )
+                    page_id = entry_points[text_key]
+
+                    page = pages[page_id]
+
+                    data = load_page(page)
+
+                    page_type = data.get("type")
+
+                    if page_type == "lead":
+
+                        show_lead(
+                            sender,
+                            page
+                        )
+
+                    else:
+
+                        show_page(
+                            sender,
+                            page
+                         )
 
                 elif sender in user_data:
 
@@ -384,7 +488,12 @@ while True:
                         )
 
                     elif button_id in routes:
-
+                        track_event(
+                            sender,
+                            "button_click",
+                            button_id,
+                            "whatsapp"
+                        )
                         page_id = routes[
                             button_id
                         ]
@@ -393,17 +502,23 @@ while True:
                             page_id
                         ]
 
-                        show_page(
-                            sender,
-                            page
-                        )
+                        data = load_page(page)
 
-                    else:
+                        page_type = data.get("type")
+                       
+                        if page_type == "lead":
 
-                        log_message(
-                            sender,
-                            text
-                        )
+                            show_lead(
+                                sender,
+                                page
+                            )
+
+                        else:
+  
+                            show_page(
+                                sender,
+                                page
+                            )
 
         delete_notification(
             receipt_id

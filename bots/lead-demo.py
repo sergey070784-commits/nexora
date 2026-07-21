@@ -112,11 +112,7 @@ def log_message(chat_id, text):
 def show_page(chat_id, page):
 
     data = load_page(page)
-    track_event(
-        chat_id,
-        "page_open",
-        page
-    )
+
     user_data[chat_id] = {
         "page": page,
         "buttons": {
