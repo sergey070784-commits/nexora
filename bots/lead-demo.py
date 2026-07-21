@@ -239,7 +239,8 @@ def show_lead(chat_id, page):
 
 
     data = load_page(page)
-
+    
+    title = data.get("title", "")
 
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True
@@ -270,6 +271,9 @@ def show_lead(chat_id, page):
 
 
     text = ""
+
+    if title:
+        text += title + "\n\n"
 
     for key, value in lead.items():
 
@@ -371,8 +375,6 @@ def handle_buttons(message):
 
         data = load_page(page)
         
-        title = data.get("title", "")
-
         page_type = data.get("type")
 
         if page_type == "lead":
