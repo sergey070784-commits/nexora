@@ -550,10 +550,7 @@ async function loadPage(url){
             if (
                 popupRoutes[btn.id]
             ){
-                trackEvent(
-                    "popup_open",
-                    popupRoutes[btn.id]
-                );
+                
                 showPopup(
                     popupRoutes[btn.id]
                 );
