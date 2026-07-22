@@ -298,6 +298,8 @@ let pages = {};
 
 let popupRoutes = {};
 
+let entryPoints = {};
+
 async function loadNavigation(){
 
     routes = await fetch(
@@ -317,7 +319,11 @@ async function loadNavigation(){
     ).then(
         r => r.json()
     );
-
+    entryPoints = await fetch(
+    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/entry_points.json"
+    ).then(
+        r => r.json()
+    );
 }
 function trackEvent(
     event,
@@ -587,9 +593,32 @@ async function loadPage(url){
 
     await loadNavigation();
 
-loadPage(
-    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/page.tools"
-);
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const start =
+        params.get("start") || "lead";
+
+    const pageId =
+        entryPoints[start];
+
+    if (!pageId) {
+
+        alert("Entry point not found");
+
+        return;
+
+    }
+
+    const pageName =
+        pages[pageId];
+
+    loadPage(
+        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
+        + pageName
+    );
 
 })();
 
