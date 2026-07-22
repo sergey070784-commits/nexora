@@ -81,6 +81,9 @@ def get_notification():
 
     response = requests.get(url)
 
+    if not response.text.strip():
+        return None
+
     return response.json()
 
 #===== DELETE NOTIFICATION =====

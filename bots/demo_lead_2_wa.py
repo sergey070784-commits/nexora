@@ -72,6 +72,7 @@ def send_image(chat_id, image_url):
     )
 
     return response.json()
+
 def get_notification():
 
     url = (
@@ -80,6 +81,9 @@ def get_notification():
     )
 
     response = requests.get(url)
+
+    if not response.text.strip():
+        return None
 
     return response.json()
 
