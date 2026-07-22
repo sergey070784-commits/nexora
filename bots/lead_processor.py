@@ -71,7 +71,7 @@ def load_btn_dictionary():
 
     now = time.time()
 
-    if now - last_dictionary_update < 300:
+    if now - last_dictionary_update < 1800:
         return
 
     try:
