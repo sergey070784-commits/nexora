@@ -91,7 +91,20 @@ def show_popup(chat_id, popup):
         reply_markup=keyboard
     )
 
+@bot.message_handler(commands=["start"])
+def start(message):
 
+    parts = message.text.split(maxsplit=1)
+
+    if len(parts) != 2:
+        return
+
+    entry_key = parts[1]
+
+    show_page(
+        message.chat.id,
+        entry_key
+    )
 while True:
 
     try:
