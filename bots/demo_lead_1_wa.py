@@ -35,6 +35,10 @@ entry_points = requests.get(
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/navigation/entry_points.json"
 ).json()
+bot_config = requests.get(
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/Core/whatsapp_bot1_config.json"
+).json()
 SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
 def send_message(chat_id, text):
@@ -122,7 +126,7 @@ def track_event(
     session_id,
     event,
     value,
-    channel="whatsapp"
+    channel=bot_config["channel"]
 ):
 
     requests.post(
@@ -157,7 +161,7 @@ def log_message(session_id, text):
 
                 "session_id": str(session_id),
 
-                "channel": "whatsapp",
+                "channel": bot_config["channel"],
 
                 "message": text
 
@@ -366,14 +370,88 @@ def send_reply_buttons(chat_id, buttons):
         url,
         json=payload
     )
+def check_commands():
 
+    try:
+
+        response = requests.get(
+
+            f"{SUPABASE_URL}/rest/v1/commands",
+
+            headers={
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}"
+            },
+
+            params={
+                "select": "*",
+                "target_bot": f"eq.{bot_config['bot']}",
+                "status": "eq.new",
+                "order": "id.asc"
+            },
+
+            timeout=10
+
+        )
+
+        if response.status_code != 200:
+            return
+
+        commands = response.json()
+
+        for command in commands:
+
+            print("\n===== NEW COMMAND =====")
+            print(command)
+            print("=======================\n")
+
+            data = load_page(
+                command["page"]
+            )
+
+            page_type = data.get("type")
+
+            if page_type == "lead":
+
+                show_lead(
+                    command["session_id"],
+                    command["page"]
+                )
+
+            else:
+
+                show_page(
+                    command["session_id"],
+                    command["page"]
+                )
+
+            requests.patch(
+
+                f"{SUPABASE_URL}/rest/v1/commands?id=eq.{command['id']}",
+
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}",
+                    "Content-Type": "application/json"
+                },
+
+                json={
+                    "status": "done"
+                }
+
+            )
+
+    except Exception as e:
+
+        print("COMMAND ERROR:", e)
 #===== MAIN LOOP =====
 print("🟢 Nexora Leads 1 Engine Running...")
 
 while True:
 
     try:
-
+        check_commands()
+        
         notification = get_notification()
 
         if not notification:

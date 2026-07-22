@@ -307,21 +307,38 @@ def start(message):
 
         key = parts[1].lower()
 
-        page = entry_points.get(key)
+        page_id = entry_points.get(key)
 
-        if page:
+        if page_id:
 
-            show_page(
-                message.chat.id,
-                page
-            )
+            page = pages[page_id]
+
+            data = load_page(page)
+
+            page_type = data.get("type")
+
+            if page_type == "lead":
+
+                show_lead(
+                    message.chat.id,
+                    page
+                )
+
+            else:
+
+                show_page(
+                    message.chat.id,
+                    page
+                )
 
             return
 
+    page = pages[entry_points["lead"]]
+
     show_page(
         message.chat.id,
-        entry_points["lead"]
-    )        
+        page
+    )
 
 @bot.message_handler(func=lambda message: True)
 def handle_buttons(message):
