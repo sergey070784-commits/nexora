@@ -47,5 +47,44 @@
   "BTN_00513": {
     "field": "solution",
     "value": "Complete Business Automation"
+  },
+   "BTN_00514": {
+    "field": "Inquiries",
+    "value": "1–20"
+  },
+
+  "BTN_00515": {
+    "field": "Inquiries",
+    "value": "20–100"
+  },
+
+  "BTN_00516": {
+    "field": "Inquiries",
+    "value": "100–500"
+  },
+
+  "BTN_00517": {
+    "field": "Inquiries",
+    "value": "500+"
+  },
+
+  "BTN_00518": {
+    "field": "Planning to implement",
+    "value": "Immediately"
+  },
+
+  "BTN_00519": {
+    "field": "Planning to implement",
+    "value": "Within 30 days"
+  },
+
+  "BTN_005120": {
+    "field": "Planning to implement",
+    "value": "Within 3 months"
+  },
+
+  "BTN_00521": {
+    "field": "Planning to implement",
+    "value": "Just exploring"
   }
 }
