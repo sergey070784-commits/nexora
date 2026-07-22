@@ -29,6 +29,6 @@ def get_page(entry_key):
         return None
 
     return requests.get(
-        BASE + "Pages/" + page_file,
+        BASE + "pages/" + page_file,
         timeout=10
     ).json()
