@@ -10,15 +10,23 @@ entry_points = requests.get(
     timeout=10
 ).json()
 
+routes = requests.get(
+    BASE + "navigation/routes.json",
+    timeout=10
+).json()
+
 pages = requests.get(
     BASE + "navigation/pages.json",
     timeout=10
 ).json()
 
 
-def get_page(entry_key):
+def get_page(key):
 
-    page_id = entry_points.get(entry_key)
+    page_id = entry_points.get(key)
+
+    if not page_id:
+        page_id = routes.get(key)
 
     if not page_id:
         return None

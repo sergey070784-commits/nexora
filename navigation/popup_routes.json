@@ -1,15 +1,3 @@
 {
-  "BTN_00000": "other/about/1.0",
-  "BTN_00100": "other/about/1.1",
-  "BTN_00004": "other/about/1.2.1",
-  "BTN_00005": "other/about/1.2.2",
-  "BTN_00006": "other/about/1.2.3",
-  "BTN_00007": "other/about/1.2.4",
-  "BTN_00008": "other/about/1.2.5",
-  "BTN_00009": "other/about/1.2.6",
-  "BTN_00010": "other/about/1.2.7",
-  "BTN_00011": "other/about/1.2.1.1",
-  "BTN_00400": "other/about/lawyers1.0",
-  "BTN_00502": "other/about/demo_upwork2",
-  "BTN_00522": "other/about/demo_upwork8"
+  "BTN_00004": "PAGE_00004"
 }

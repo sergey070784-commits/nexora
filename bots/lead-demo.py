@@ -5,6 +5,7 @@ from datetime import datetime
 import time
 import threading
 from Core.page_engine import get_page
+from Core.popup_engine import get_popup
 TOKEN = "8650712967:AAExKALGNNjVKBxr_W99s4U9uCpgEv4V1Fg"
 
 bot = telebot.TeleBot(TOKEN)
@@ -13,12 +14,12 @@ ADMIN_ID = 560661314
 
 user_data = {}
 
-def show_page(chat_id, page):
+def show_page(chat_id, key):
 
-    data = get_page(page)
+    data = get_page(key)
 
     user_data[chat_id] = {
-        "page": page,
+        "page": key,
         "buttons": {
             button["text"]: button["id"]
             for button in data["buttons"]
@@ -48,18 +49,14 @@ def show_page(chat_id, page):
         text,
         reply_markup=keyboard
     )
-def show_popup(chat_id, popup):
-
-    data = load_popup(popup)
+def show_popup(chat_id, data):
 
     user_data[chat_id] = {
-        "popup": popup,
-        "buttons": {
+            "buttons": {
             button["text"]: button["id"]
             for button in data["buttons"]
+            }
         }
-    }
-
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True
     )
@@ -104,6 +101,31 @@ def start(message):
     show_page(
         message.chat.id,
         entry_key
+    )
+@bot.message_handler(func=lambda message: True)
+def handle_message(message):
+
+    state = user_data.get(message.chat.id)
+
+    if not state:
+        return
+
+    btn_id = state["buttons"].get(message.text)
+
+    if not btn_id:
+        return
+    popup = get_popup(btn_id)
+
+    if popup:
+        show_popup(
+            message.chat.id,
+            popup
+        )
+        return
+
+    show_page(
+        message.chat.id,
+        btn_id
     )
 while True:
 
