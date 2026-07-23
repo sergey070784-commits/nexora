@@ -17,16 +17,12 @@ pages = requests.get(
 
 def get_popup(key):
 
-    print("KEY:", key)
-
     popup_id = popup_routes.get(key)
-    print("POPUP_ID:", popup_id)
 
     if not popup_id:
         return None
 
     popup_file = pages.get(popup_id)
-    print("POPUP_FILE:", popup_file)
 
     if not popup_file:
         return None
