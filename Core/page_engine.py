@@ -23,15 +23,21 @@ pages = requests.get(
 
 def get_page(key):
 
+    print("KEY:", key)
+
     page_id = entry_points.get(key)
 
     if not page_id:
         page_id = routes.get(key)
 
+    print("PAGE_ID:", page_id)
+
     if not page_id:
         return None
 
     page_file = pages.get(page_id)
+
+    print("PAGE_FILE:", page_file)
 
     if not page_file:
         return None
