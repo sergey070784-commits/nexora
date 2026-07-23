@@ -155,7 +155,7 @@ def show_page(chat_id, key):
 def show_popup(chat_id, data):
 
     user_data[chat_id] = {
-        
+
         "buttons": {}
     }
 
@@ -228,6 +228,109 @@ while True:
 
     try:
 
+        notification = get_notification()
+
+        if not notification:
+
+            time.sleep(1)
+
+            continue
+
+        receipt_id = notification.get(
+            "receiptId"
+        )
+
+        body = notification.get(
+            "body"
+        ) or {}
+
+        webhook_type = body.get(
+            "typeWebhook"
+        )
+
+        sender = (
+            body.get(
+                "senderData"
+            ) or {}
+        ).get("chatId")
+
+        message_data = (
+            body.get(
+                "messageData"
+            ) or {}
+        )
+
+        text = (
+            (
+                message_data.get(
+                    "textMessageData"
+                ) or {}
+            ).get("textMessage")
+            or
+            (
+                message_data.get(
+                    "extendedTextMessageData"
+                ) or {}
+            ).get("text")
+        )
+
+        if message_data.get(
+            "typeMessage"
+        ) == "interactiveButtonsResponse":
+
+            text = (
+                (
+                    message_data.get(
+                        "interactiveButtonsResponse"
+                    ) or {}
+                ).get("selectedId")
+                or
+                (
+                    message_data.get(
+                        "interactiveButtonsResponse"
+                    ) or {}
+                ).get("selectedDisplayText")
+            )
+
+        if (
+            sender
+            and text
+            and webhook_type == "incomingMessageReceived"
+        ):
+
+            entry = get_page(
+                text.lower()
+            )
+
+            if entry:
+
+                show_page(
+                    sender,
+                    text.lower()
+                )
+            elif sender in user_data:
+
+                popup = get_popup(text)
+
+                if popup:
+
+                    show_popup(
+                        sender,
+                        popup
+                    )
+
+                else:
+
+                    show_page(
+                        sender,
+                        text
+                    )
+                   
+        delete_notification(
+            receipt_id
+        )
+
+        time.sleep(1)
 
     except Exception as e:
 
