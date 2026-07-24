@@ -290,7 +290,7 @@ h1{
 </div>
 <script>
 
-let currentPage = "";
+let entryPoints = {};
 
 let routes = {};
 
@@ -298,204 +298,188 @@ let pages = {};
 
 let popupRoutes = {};
 
-let entryPoints = {};
 
-async function loadNavigation(){
+async function getPage(key){
 
-    routes = await fetch(
-        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/routes.json"
-    ).then(
-        r => r.json()
-    );
+    let pageId =
+        entryPoints[key];
 
-    pages = await fetch(
-        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/pages.json"
-    ).then(
-        r => r.json()
-    );
+    if(!pageId){
 
-    popupRoutes = await fetch(
-        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/popup_routes.json"
-    ).then(
-        r => r.json()
-    );
-    entryPoints = await fetch(
-    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/navigation/entry_points.json"
-    ).then(
-        r => r.json()
-    );
-}
-function trackEvent(
-    event,
-    value
-){
-
-    let sessionId =
-        localStorage.getItem(
-            "session_id"
-        );
-
-    if(
-        !sessionId
-    ){
-
-        sessionId =
-            crypto.randomUUID();
-
-        localStorage.setItem(
-            "session_id",
-            sessionId
-        );
+        pageId =
+            routes[key];
 
     }
 
-    fetch(
-        "https://royal-shape-a489.sergey070784.workers.dev",
-        {
-            method:"POST",
-            headers:{
-                "Content-Type":
-                    "application/json"
-            },
-            body:JSON.stringify({
+    if(!pageId){
 
-                session_id:
-                    sessionId,
+        return null;
 
-                timestamp:
-                    new Date()
-                    .toISOString(),
+    }
 
-                channel:
-                    "web",
+    const pageFile =
+        pages[pageId];
 
-                event:
-                    event,
+    if(!pageFile){
 
-                value:
-                    value
+        return null;
 
-            })
-        }
-    );
-
-}
-function showPopup(
-    popupFile
-){
-                fetch(
-                    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
-                    + popupFile
-                )            
-                .then(
-                    r => r.json()
-                )
-                .then(
-                    data => {
-
-                        document.getElementById(
-                            "aboutImage"
-                        ).src =
-                            data.image;
-
-                        document.getElementById(
-                            "aboutTitle"
-                        ).innerText =
-                            data.title;
-
-                        document.getElementById(
-                            "aboutText"
-                        ).innerHTML =
-                            data.messages.join(
-                                "<br><br>"
-                            );
-                            const aboutButtons =
-                                document.getElementById(
-                                    "aboutButtons"
-                                );
-
-                            aboutButtons.innerHTML = "";
-
-                            (data.buttons || []).forEach(
-                                btn => {
-
-                                    const button =
-                                        document.createElement(
-                                            "button"
-                                        );
-
-                                    button.className =
-                                        "button";
-
-                                    button.innerText =
-                                        btn.text;
-
-                                    button.onclick =
-                                        () => {
-
-                                            document.getElementById(
-                                                "aboutModal"
-                                            ).style.display =
-                                                "none";
-
-                                            trackEvent(
-                                                "button_click",
-                                                btn.id
-                                            );
-
-                                            if (
-                                                popupRoutes[btn.id]
-                                            ) {
-
-                                               
-                                                showPopup(
-                                                    popupRoutes[btn.id]
-                                                );
-
-                                                return;
-
-                                            }
-
-                                            if (
-                                                routes[btn.id]
-                                            ) {
-
-                                                const pageId =
-                                                    routes[btn.id];
-
-                                                const pageName =
-                                                    pages[pageId];
-
-                                                loadPage(
-                                                    "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
-                                                    + pageName
-                                                );
-
-                                            }
-
-                                        };
-
-                                    aboutButtons.appendChild(
-                                        button
-                                    );
-
-                                }
-                            );;  
-                                                    document.getElementById(
-                                    "aboutModal"
-                        ).style.display =
-                            "block";
-
-                        }
-                    );
-                }
-async function loadPage(url){
-    currentPage = url;
+    }
 
     const response =
-        await fetch(url);
+        await fetch(
+            BASE + "pages/" + pageFile
+        );
+
+    return await response.json();
+
+}
+
+async function loadNavigation(){
+
+    entryPoints =
+        await fetch(
+            BASE + "navigation/entry_points.json"
+        ).then(r => r.json());
+
+    routes =
+        await fetch(
+            BASE + "navigation/routes.json"
+        ).then(r => r.json());
+
+    pages =
+        await fetch(
+            BASE + "navigation/pages.json"
+        ).then(r => r.json());
+
+    popupRoutes =
+        await fetch(
+            BASE + "navigation/popup_routes.json"
+        ).then(r => r.json());
+
+}
+
+async function getPopup(key){
+
+    const popupId =
+        popupRoutes[key];
+
+    if(!popupId){
+
+        return null;
+
+    }
+
+    const popupFile =
+        pages[popupId];
+
+    if(!popupFile){
+
+        return null;
+
+    }
+
+    const response =
+        await fetch(
+            BASE + "pages/" + popupFile
+        );
+
+    return await response.json();
+
+}
+async function showPage(key){
+
     const data =
-        await response.json();
+        await getPage(key);
+
+    if(!data){
+
+        console.error(
+            "Page not found:",
+            key
+        );
+
+        return;
+
+    }
+
+    renderPage(data);
+
+}
+function showPopup(data){
+
+    document.getElementById(
+        "aboutImage"
+    ).src =
+        data.image || "";
+
+    document.getElementById(
+        "aboutTitle"
+    ).innerText =
+        data.title || "";
+
+    document.getElementById(
+        "aboutText"
+    ).innerHTML =
+        (data.messages || []).join("<br><br>");
+
+    const aboutButtons =
+        document.getElementById(
+            "aboutButtons"
+        );
+
+    aboutButtons.innerHTML = "";
+
+    (data.buttons || []).forEach(btn => {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+        button.className =
+            "button";
+
+        button.innerText =
+            btn.text;
+
+        button.onclick = async () => {
+
+            document.getElementById(
+                "aboutModal"
+            ).style.display =
+                "none";
+
+            const popup =
+                await getPopup(btn.id);
+
+            if(popup){
+
+                showPopup(popup);
+
+                return;
+
+            }
+
+            await showPage(btn.id);
+
+        };
+
+        aboutButtons.appendChild(
+            button
+        );
+
+    });
+
+    document.getElementById(
+        "aboutModal"
+    ).style.display =
+        "block";
+
+}
+
+function renderPage(data){
+
     document.getElementById(
         "title"
     ).innerText =
@@ -547,80 +531,31 @@ async function loadPage(url){
         button.innerText =
             btn.text;
 
-        button.onclick =
-            () => {
-            trackEvent(
-                "button_click",
-                btn.id
-            );
-            if (
-                popupRoutes[btn.id]
-            ){
-                
-                showPopup(
-                    popupRoutes[btn.id]
-                );
+        button.onclick = async () => {
 
-                    return;
-                }
+            const popup =
+                await getPopup(btn.id);
 
-        if (
-            routes[btn.id]
-        ) {
+            if(popup){
 
-            const pageId =
-                routes[btn.id];
+                showPopup(popup);
 
-            const pageName =
-                pages[pageId];
+                return;
 
-            loadPage(
-                "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
-                + pageName
-            );
+            }
 
-            return;
-        }
+            await showPage(btn.id);
+
         };
+
         buttons.appendChild(
             button
         );
 
     });
-
 }
-(async () => {
-
-    await loadNavigation();
-
-    const params =
-        new URLSearchParams(
-            window.location.search
-        );
-
-    const start =
-        params.get("start") || "lead";
-
-    const pageId =
-        entryPoints[start];
-
-    if (!pageId) {
-
-        alert("Entry point not found");
-
-        return;
-
-    }
-
-    const pageName =
-        pages[pageId];
-
-    loadPage(
-        "https://raw.githubusercontent.com/sergey070784-commits/nexora/refs/heads/main/pages/"
-        + pageName
-    );
-
-})();
+const BASE =
+    "https://raw.githubusercontent.com/sergey070784-commits/nexora/main/";
 
 const input =
     document.getElementById("chatInput");
@@ -696,7 +631,21 @@ input.addEventListener(
     }
 );
 
+(async () => {
 
+    await loadNavigation();
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const start =
+        params.get("start") || "nx_menu";
+
+    await showPage(start);
+
+})();
 
 </script>
 </body>
