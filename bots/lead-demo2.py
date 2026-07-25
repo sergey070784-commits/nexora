@@ -6,6 +6,7 @@ import time
 import threading
 from Core.page_engine import get_page
 from Core.popup_engine import get_popup
+from Core.event_logger import send_event
 TOKEN = "8826512307:AAG5TzfQEDIC1Q5W8YSiS-GWDI95wucnunY"
 
 bot = telebot.TeleBot(TOKEN)
