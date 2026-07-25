@@ -13,6 +13,15 @@ bot = telebot.TeleBot(TOKEN)
 ADMIN_ID = 8700197324
 
 user_data = {}
+BASE = (
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/"
+)
+
+bot_config = requests.get(
+    BASE + "Core/bot2_config.json",
+    timeout=10
+).json()
 
 def show_page(chat_id, key):
 
@@ -114,7 +123,19 @@ def handle_message(message):
     btn_id = state["buttons"].get(message.text)
 
     if not btn_id:
+
+        send_event(
+            bot_config,
+            message.chat.id,
+            message=message.text
+        )
+
         return
+    send_event(
+        bot_config,
+        message.chat.id,
+        value=btn_id
+    )
     popup = get_popup(btn_id)
 
     if popup:

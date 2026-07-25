@@ -6,6 +6,7 @@ import time
 import threading
 from Core.page_engine import get_page
 from Core.popup_engine import get_popup
+from Core.event_logger import send_event
 TOKEN = "8650712967:AAExKALGNNjVKBxr_W99s4U9uCpgEv4V1Fg"
 
 bot = telebot.TeleBot(TOKEN)
@@ -13,6 +14,16 @@ bot = telebot.TeleBot(TOKEN)
 ADMIN_ID = 560661314
 
 user_data = {}
+
+BASE = (
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/"
+)
+
+bot_config = requests.get(
+    BASE + "Core/bot1_config.json",
+    timeout=10
+).json()
 
 def show_page(chat_id, key):
 
@@ -113,7 +124,27 @@ def handle_message(message):
     btn_id = state["buttons"].get(message.text)
 
     if not btn_id:
+
+        send_event(
+
+            bot_config,
+
+            message.chat.id,
+
+            message=message.text
+
+        )
+
         return
+    send_event(
+
+        bot_config,
+
+        message.chat.id,
+
+        value=btn_id
+
+    )
     popup = get_popup(btn_id)
 
     if popup:
