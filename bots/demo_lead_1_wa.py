@@ -4,6 +4,7 @@ import json
 import time
 from Core.page_engine import get_page
 from Core.popup_engine import get_popup
+from Core.event_logger import send_event
 #===== GREEN API =====
 
 ID_INSTANCE = "7107624116"
@@ -16,6 +17,16 @@ API_URL = (
 #===== USER DATA =====
 
 user_data = {}
+ignore_messages = {}
+BASE = (
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/"
+)
+
+bot_config = requests.get(
+    BASE + "Core/whatsapp_bot2_config.json",
+    timeout=10
+).json()
 
 #===== SEND MESSAGE =====
 
@@ -35,25 +46,7 @@ def send_message(chat_id, text):
 
     return response.json()
 
-#===== GET NOTIFICATION =====
-def send_image(chat_id, image_url):
 
-    url = (
-        f"{API_URL}/sendFileByUrl/{API_TOKEN}"
-    )
-
-    payload = {
-        "chatId": chat_id,
-        "urlFile": image_url,
-        "fileName": "image.png"
-    }
-
-    response = requests.post(
-        url,
-        json=payload
-    )
-
-    return response.json()
 #===== get NOTIFICATION =====
 
 def get_notification():
@@ -127,6 +120,7 @@ def show_page(chat_id, key):
         chat_id,
         text
     )
+    ignore_messages[chat_id] = text
 
     buttons = []
 
@@ -175,6 +169,7 @@ def show_popup(chat_id, data):
         chat_id,
         text
     )
+    ignore_messages[chat_id] = text
 
     buttons = []
 
@@ -274,57 +269,56 @@ while True:
             ).get("text")
         )
 
-        if message_data.get(
-            "typeMessage"
-        ) == "interactiveButtonsResponse":
-
-            text = (
-                (
-                    message_data.get(
-                        "interactiveButtonsResponse"
-                    ) or {}
-                ).get("selectedId")
-                or
-                (
-                    message_data.get(
-                        "interactiveButtonsResponse"
-                    ) or {}
-                ).get("selectedDisplayText")
-            )
-
         if (
             sender
             and text
             and webhook_type == "incomingMessageReceived"
         ):
-
-            entry = get_page(
-                text.lower()
-            )
+            entry = get_page(text.lower())
 
             if entry:
 
+                send_event(
+                    bot_config,
+                    sender,
+                    value=text.lower()
+                )
                 show_page(
                     sender,
                     text.lower()
                 )
-            elif sender in user_data:
+
+                delete_notification(receipt_id)
+
+                continue
+
+                if sender not in user_data:
+                    continue
 
                 popup = get_popup(text)
 
-                if popup:
+                if not popup:
 
-                    show_popup(
+                    send_event(
+                        bot_config,
                         sender,
-                        popup
+                        message=text
                     )
 
-                else:
+                    continue
 
-                    show_page(
-                        sender,
-                        text
-                    )
+                send_event(
+                    bot_config,
+                    sender,
+                    value=text
+                )
+
+                show_popup(
+                    sender,
+                    popup
+                )
+
+                continue
                    
         delete_notification(
             receipt_id

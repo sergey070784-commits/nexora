@@ -4,6 +4,7 @@ import json
 import time
 from Core.page_engine import get_page
 from Core.popup_engine import get_popup
+from Core.event_logger import send_event
 #===== GREEN API =====
 
 ID_INSTANCE = "710722689636"
@@ -16,6 +17,15 @@ API_URL = (
 #===== USER DATA =====
 
 user_data = {}
+BASE = (
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/"
+)
+
+bot_config = requests.get(
+    BASE + "Core/whatsapp_bot2_config.json",
+    timeout=10
+).json()
 
 #===== SEND MESSAGE =====
 
@@ -303,28 +313,39 @@ while True:
             )
 
             if entry:
+                send_event(
+                    bot_config,
+                    sender,
+                    value=text.lower()
+                )
 
                 show_page(
                     sender,
                     text.lower()
                 )
+               
             elif sender in user_data:
-
+                             
                 popup = get_popup(text)
 
                 if popup:
+                    send_event(
+                        bot_config,
+                        sender,
+                        value=text
+                    )
 
                     show_popup(
                         sender,
                         popup
                     )
-
+                    
                 else:
 
                     show_page(
                         sender,
                         text
-                    )
+                )
                    
         delete_notification(
             receipt_id
