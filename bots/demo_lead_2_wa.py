@@ -339,8 +339,13 @@ while True:
                         sender,
                         popup
                     )
-                    
+
                 else:
+                    send_event(
+                        bot_config,
+                        sender,
+                        value=text
+                    )
 
                     show_page(
                         sender,

@@ -107,6 +107,14 @@ def start(message):
         return
 
     entry_key = parts[1]
+    send_event(
+
+        bot_config,
+
+        message.chat.id,
+
+       value=message.text
+    )
 
     show_page(
         message.chat.id,

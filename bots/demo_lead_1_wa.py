@@ -46,7 +46,25 @@ def send_message(chat_id, text):
 
     return response.json()
 
+#===== GET NOTIFICATION =====
+def send_image(chat_id, image_url):
 
+    url = (
+        f"{API_URL}/sendFileByUrl/{API_TOKEN}"
+    )
+
+    payload = {
+        "chatId": chat_id,
+        "urlFile": image_url,
+        "fileName": "image.png"
+    }
+
+    response = requests.post(
+        url,
+        json=payload
+    )
+
+    return response.json()
 #===== get NOTIFICATION =====
 
 def get_notification():
@@ -120,7 +138,7 @@ def show_page(chat_id, key):
         chat_id,
         text
     )
-    ignore_messages[chat_id] = text
+
 
     buttons = []
 
@@ -169,7 +187,7 @@ def show_popup(chat_id, data):
         chat_id,
         text
     )
-    ignore_messages[chat_id] = text
+
 
     buttons = []
 
@@ -269,12 +287,33 @@ while True:
             ).get("text")
         )
 
+        if message_data.get(
+            "typeMessage"
+        ) == "interactiveButtonsResponse":
+
+            text = (
+                (
+                    message_data.get(
+                        "interactiveButtonsResponse"
+                    ) or {}
+                ).get("selectedId")
+                or
+                (
+                    message_data.get(
+                        "interactiveButtonsResponse"
+                    ) or {}
+                ).get("selectedDisplayText")
+            )
+
         if (
             sender
             and text
             and webhook_type == "incomingMessageReceived"
         ):
-            entry = get_page(text.lower())
+
+            entry = get_page(
+                text.lower()
+            )
 
             if entry:
 
@@ -283,42 +322,40 @@ while True:
                     sender,
                     value=text.lower()
                 )
+
                 show_page(
                     sender,
                     text.lower()
                 )
-
-                delete_notification(receipt_id)
-
-                continue
-
-                if sender not in user_data:
-                    continue
-
+               
+            elif sender in user_data:
+                             
                 popup = get_popup(text)
 
-                if not popup:
-
+                if popup:
                     send_event(
                         bot_config,
                         sender,
-                        message=text
+                        value=text
                     )
 
-                    continue
+                    show_popup(
+                        sender,
+                        popup
+                    )
+                    
+                else:
+                    send_event(
+                        bot_config,
+                        sender,
+                        value=text
+                    )
 
-                send_event(
-                    bot_config,
-                    sender,
-                    value=text
+                    show_page(
+                        sender,
+                        text
                 )
-
-                show_popup(
-                    sender,
-                    popup
-                )
-
-                continue
+                
                    
         delete_notification(
             receipt_id
