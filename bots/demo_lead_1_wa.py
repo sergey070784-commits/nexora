@@ -24,7 +24,7 @@ BASE = (
 )
 
 bot_config = requests.get(
-    BASE + "Core/whatsapp_bot2_config.json",
+    BASE + "Core/whatsapp_bot1_config.json",
     timeout=10
 ).json()
 
