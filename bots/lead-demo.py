@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 import threading
 from Core.page_engine import get_page
-from Core.popup_engine import get_popup
+
 from Core.event_logger import send_event
 TOKEN = "8650712967:AAExKALGNNjVKBxr_W99s4U9uCpgEv4V1Fg"
 
@@ -25,12 +25,10 @@ bot_config = requests.get(
     timeout=10
 ).json()
 
-def show_page(chat_id, key):
-
-    data = get_page(key)
+def show_page(chat_id, data):
 
     user_data[chat_id] = {
-        "page": key,
+        "page": data.get("id"),
         "buttons": {
             button["text"]: button["id"]
             for button in data["buttons"]
@@ -62,18 +60,21 @@ def show_page(chat_id, key):
     )
 def show_popup(chat_id, data):
 
+    print(data)
+
     user_data[chat_id] = {
-            "buttons": {
+        "buttons": {
             button["text"]: button["id"]
             for button in data["buttons"]
-            }
         }
+    }
+
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True
     )
 
     for button in data["buttons"]:
-
+        
         keyboard.add(
             types.KeyboardButton(
                 button["text"]
@@ -86,12 +87,22 @@ def show_popup(chat_id, data):
 
         text += "\n\n" + msg
 
-    if data.get("image"):
+    print("IMAGE =", data.get("image"))
 
-        bot.send_photo(
-            chat_id,
-            data["image"]
-        )
+    try:
+
+        if data.get("image"):
+
+            bot.send_photo(
+                chat_id,
+                data["image"]
+            )
+
+            print("PHOTO OK")
+
+    except Exception as e:
+
+        print("PHOTO ERROR:", e)
 
     bot.send_message(
         chat_id,
@@ -117,10 +128,16 @@ def start(message):
        value=message.text
     )
  
+    data = get_page(entry_key)
+
+    if not data:
+        return
+
     show_page(
         message.chat.id,
-        entry_key
+        data
     )
+
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
 
@@ -144,6 +161,7 @@ def handle_message(message):
         )
 
         return
+
     send_event(
 
         bot_config,
@@ -153,18 +171,26 @@ def handle_message(message):
         value=btn_id
 
     )
-    popup = get_popup(btn_id)
 
-    if popup:
+    data = get_page(btn_id)
+
+    if not data:
+        return
+
+    engine = data.get("engine", "page")
+
+    if engine == "popup":
+
         show_popup(
             message.chat.id,
-            popup
+            data
         )
+
         return
 
     show_page(
         message.chat.id,
-        btn_id
+        data
     )
 while True:
 

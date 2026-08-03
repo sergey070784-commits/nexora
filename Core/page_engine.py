@@ -15,6 +15,11 @@ routes = requests.get(
     timeout=10
 ).json()
 
+popup_routes = requests.get(
+    BASE + "navigation/popup_routes.json",
+    timeout=10
+).json()
+
 pages = requests.get(
     BASE + "navigation/pages.json",
     timeout=10
@@ -27,6 +32,9 @@ def get_page(key):
 
     if not page_id:
         page_id = routes.get(key)
+
+    if not page_id:
+        page_id = popup_routes.get(key)
 
     if not page_id:
         return None
