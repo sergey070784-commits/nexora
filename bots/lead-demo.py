@@ -60,8 +60,6 @@ def show_page(chat_id, data):
     )
 def show_popup(chat_id, data):
 
-    print(data)
-
     user_data[chat_id] = {
         "buttons": {
             button["text"]: button["id"]
@@ -74,7 +72,7 @@ def show_popup(chat_id, data):
     )
 
     for button in data["buttons"]:
-        
+
         keyboard.add(
             types.KeyboardButton(
                 button["text"]
@@ -87,8 +85,6 @@ def show_popup(chat_id, data):
 
         text += "\n\n" + msg
 
-    print("IMAGE =", data.get("image"))
-
     try:
 
         if data.get("image"):
@@ -97,8 +93,6 @@ def show_popup(chat_id, data):
                 chat_id,
                 data["image"]
             )
-
-            print("PHOTO OK")
 
     except Exception as e:
 
@@ -173,6 +167,7 @@ def handle_message(message):
     )
 
     data = get_page(btn_id)
+    
 
     if not data:
         return
