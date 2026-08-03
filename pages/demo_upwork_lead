@@ -1,5 +1,6 @@
 {
-  "type": "lead",
+  "engine": "lead",
+  
   "title": "Business Dashboard",
 
   "buttons": [
