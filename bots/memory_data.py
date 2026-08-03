@@ -26,8 +26,8 @@ config = requests.get(
 SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
 
-TABLE = "user_journal"
-LEADS_TABLE = "leads"
+TABLE = "events"
+MEMORY_TABLE = "user_memory"
 HEADERS = {
     "apikey": SUPABASE_KEY,
     "Authorization": f"Bearer {SUPABASE_KEY}"
@@ -100,7 +100,7 @@ def load_btn_dictionary():
         print("Lead Processor started...\n")
 
 init_last_id()
-def save_lead(session_id, channel, lead):
+def save_memory(session_id, channel, lead):
 
     response = requests.get(
 
@@ -127,7 +127,7 @@ def save_lead(session_id, channel, lead):
     data = {
         "session_id": session_id,
         "channel": channel,
-        "lead_json": lead
+        "memory_json": memory
     }
 
     if rows:
@@ -151,7 +151,7 @@ def save_lead(session_id, channel, lead):
         )
 
         if response.status_code in (200, 204):
-            print("Lead updated")
+            print("memory updated")
 
         else:
             print("Update failed:", response.text)
@@ -175,7 +175,7 @@ def save_lead(session_id, channel, lead):
         )
 
         if response.status_code in (200, 201):
-            print("Lead created")
+            print("memory created")
 
         else:
             print("Insert failed:", response.text)
@@ -212,14 +212,13 @@ while True:
                 print(
                     f"ID={row['id']}  Session={row['session_id']}"
                 )
-                lead = {}
+                memory = {}
 
-                actions = row.get("actions", [])
+                actions = json.loads(
+                    row.get("actions", "[]")
+                )
 
                 for action in actions:
-
-                    if action.get("event") != "button_click":
-                        continue
 
                     button = action.get("value")
 
