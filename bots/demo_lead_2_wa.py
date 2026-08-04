@@ -3,8 +3,9 @@ from datetime import datetime
 import json
 import time
 from Core.page_engine import get_page
-from Core.popup_engine import get_popup
 from Core.event_logger import send_event
+import threading
+from Core.check_commands import check_commands
 #===== GREEN API =====
 
 ID_INSTANCE = "710722689636"
@@ -17,6 +18,7 @@ API_URL = (
 #===== USER DATA =====
 
 user_data = {}
+ignore_messages = {}
 BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
@@ -118,14 +120,13 @@ def log_message(session_id, text):
     except Exception as e:
 
         print(e)
-def show_page(chat_id, key):
 
+def show_page(chat_id, data):
+   
     user_data[chat_id] = {
-        "page": key,
+        "page": data.get("id"),
         "buttons": {}
     }
-
-    data = get_page(key)
 
     text = data["title"]
 
@@ -142,19 +143,14 @@ def show_page(chat_id, key):
 
     for button in data["buttons"]:
 
-        user_data[chat_id][
-            "buttons"
-        ][
+        user_data[chat_id]["buttons"][
             button["text"]
         ] = button["id"]
 
         buttons.append(
             {
-                "buttonId":
-                    button["id"],
-
-                "buttonText":
-                    button["text"]
+                "buttonId": button["id"],
+                "buttonText": button["text"]
             }
         )
 
@@ -162,10 +158,11 @@ def show_page(chat_id, key):
         chat_id,
         buttons
     )
+    
 def show_popup(chat_id, data):
 
     user_data[chat_id] = {
-
+        "page": data.get("id"),
         "buttons": {}
     }
 
@@ -185,6 +182,7 @@ def show_popup(chat_id, data):
         chat_id,
         text
     )
+
 
     buttons = []
 
@@ -228,18 +226,40 @@ def send_reply_buttons(chat_id, buttons):
         json=payload
     )
 
+def show_command(chat_id, data):
 
+    print("SHOW COMMAND")
+
+    show_page(
+        chat_id,
+        data
+    )
+    
 print("🟢 wa demo_lead 2  Running...")
 
 #===== MAIN LOOP =====
+threading.Thread(
 
+    target=check_commands,
+
+    args=(
+        
+        bot_config,
+        show_page,
+        show_popup,
+        show_command
+    ),
+
+    daemon=True
+
+).start()
 
 while True:
 
     try:
 
         notification = get_notification()
-
+          
         if not notification:
 
             time.sleep(1)
@@ -257,6 +277,12 @@ while True:
         webhook_type = body.get(
             "typeWebhook"
         )
+
+        if webhook_type != "incomingMessageReceived":
+
+            delete_notification(receipt_id)
+
+            continue
 
         sender = (
             body.get(
@@ -307,51 +333,77 @@ while True:
             and text
             and webhook_type == "incomingMessageReceived"
         ):
-
-            entry = get_page(
+           
+            data = get_page(
                 text.lower()
             )
 
-            if entry:
+            if data:
+
                 send_event(
                     bot_config,
                     sender,
                     value=text.lower()
                 )
 
-                show_page(
-                    sender,
-                    text.lower()
-                )
-               
-            elif sender in user_data:
-                             
-                popup = get_popup(text)
+                engine = data.get("engine", "page")
 
-                if popup:
-                    send_event(
-                        bot_config,
-                        sender,
-                        value=text
-                    )
+                if engine == "popup":
 
                     show_popup(
                         sender,
-                        popup
+                        data
                     )
 
                 else:
-                    send_event(
-                        bot_config,
-                        sender,
-                        value=text
-                    )
 
                     show_page(
                         sender,
-                        text
-                )
-                   
+                        data
+                    )
+               
+            elif sender in user_data:
+
+                state = user_data.get(sender)
+
+                btn_id = state["buttons"].get(text, text)
+               
+                if not btn_id:
+
+                    send_event(
+                        bot_config,
+                        sender,
+                        message=text
+                    )
+
+                else:
+
+                    send_event(
+                        bot_config,
+                        sender,
+                        value=btn_id
+                    )
+
+                    data = get_page(btn_id)
+
+                    if data:
+                    
+                        engine = data.get("engine", "page")
+
+                        if engine == "popup":
+
+                            show_popup(
+                                sender,
+                                data
+                            )
+
+                        else:
+
+                            show_page(
+                                sender,
+                                data
+                            )
+                          
         delete_notification(
             receipt_id
         )
@@ -364,4 +416,3 @@ while True:
             "🔴 Error:",
             e
         )
-

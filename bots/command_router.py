@@ -204,7 +204,15 @@ while True:
             last_id = row["id"]
 
             button = row.get("value")
-            print("BTN:", button)
+
+            print(
+                "EVENT:",
+                row.get("bot"),
+                "ROUTER:",
+                bot_config["bot"],
+                "BTN:",
+                button
+            )
 
             if row.get("bot") != bot_config["bot"]:
                 continue

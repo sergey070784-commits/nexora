@@ -5,9 +5,9 @@
 
   "messages": [
     "🤖 Analyzing your responses...",
-    "✓ Recommended workflow generated",
+    "✅ Recommended workflow generated",
     "✓ Lead potential evaluated",
-    "✓ Automation requirements analyzed",
+    "✅ Automation requirements analyzed",
     "✓ Business type identified"
 
   ],

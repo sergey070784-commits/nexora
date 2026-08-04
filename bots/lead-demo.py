@@ -202,7 +202,7 @@ threading.Thread(
     target=check_commands,
 
     args=(
-        bot,
+        
         bot_config,
         show_page,
         show_popup,
