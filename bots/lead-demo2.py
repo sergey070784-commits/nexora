@@ -103,7 +103,7 @@ def show_popup(chat_id, data):
         text,
         reply_markup=keyboard
     )
-
+    
 def show_command(chat_id, data):
 
     print("SHOW COMMAND")
@@ -112,7 +112,7 @@ def show_command(chat_id, data):
         chat_id,
         data
     )
-    
+
 @bot.message_handler(commands=["start"])
 def start(message):
 

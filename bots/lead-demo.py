@@ -7,7 +7,7 @@ import threading
 from Core.page_engine import get_page
 from Core.check_commands import check_commands
 from Core.event_logger import send_event
-TOKEN = "8650712967:AAExKALGNNjVKBxr_W99s4U9uCpgEv4V1Fg"
+TOKEN = "8159696699:AAGOVnHtLK6ELCY32ctYxXFoH8qX6EvZbhc"
 
 bot = telebot.TeleBot(TOKEN)
 
