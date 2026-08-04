@@ -14,10 +14,18 @@ CONFIG_URL = (
     "Core/config.json"
 )
 
+import sys
+
+CONFIG_NAME = (
+    sys.argv[1]
+    if len(sys.argv) > 1
+    else "bot1_config.json"
+)
+
 BOT_CONFIG_URL = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
-    "Core/bot1_config.json"
+    f"Core/{CONFIG_NAME}"
 )
 
 config = requests.get(
@@ -29,7 +37,9 @@ bot_config = requests.get(
     BOT_CONFIG_URL,
     timeout=10
 ).json()
-
+print(
+    f"Router: {bot_config['bot']} -> {bot_config['pair']}"
+)
 SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
 
