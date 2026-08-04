@@ -216,9 +216,9 @@ def send_reply_buttons(chat_id, buttons):
 
     payload = {
         "chatId": chat_id,
-        "header": "Nexora",
+        
         "body": " ",
-        "footer": " ",
+        
         "buttons": buttons
     }
     response = requests.post(
