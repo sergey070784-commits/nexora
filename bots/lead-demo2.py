@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 import threading
 from Core.page_engine import get_page
-
+from Core.check_commands import check_commands
 from Core.event_logger import send_event
 TOKEN = "8826512307:AAG5TzfQEDIC1Q5W8YSiS-GWDI95wucnunY"
 
@@ -187,6 +187,22 @@ def handle_message(message):
         message.chat.id,
         data
     )
+
+threading.Thread(
+
+    target=check_commands,
+
+    args=(
+        bot,
+        bot_config,
+        show_page,
+        show_popup
+    ),
+
+    daemon=True
+
+).start()
+
 while True:
 
     try:

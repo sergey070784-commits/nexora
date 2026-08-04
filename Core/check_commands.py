@@ -69,7 +69,11 @@ def check_commands(
 
             rows = response.json()
 
-            # здесь будет обработка
+            for row in rows:
+
+                command = row["command"]
+
+                print("COMMAND:", command)
 
         except Exception as e:
 
