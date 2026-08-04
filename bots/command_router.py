@@ -194,6 +194,7 @@ while True:
             last_id = row["id"]
 
             button = row.get("value")
+            print("BTN:", button)
 
             if row.get("bot") != bot_config["bot"]:
                 continue
@@ -202,6 +203,8 @@ while True:
                 continue
             
             command = notify_routes[button]
+
+            print("FOUND:", command)
 
             save_command(
 

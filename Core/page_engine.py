@@ -25,16 +25,26 @@ pages = requests.get(
     timeout=10
 ).json()
 
+notify_routes = requests.get(
+    BASE + "navigation/notify_routes.json",
+    timeout=10
+).json()
 
 def get_page(key):
 
     page_id = entry_points.get(key)
+
+    if not page_id and key.startswith("PAGE_"):
+        page_id = key
 
     if not page_id:
         page_id = routes.get(key)
 
     if not page_id:
         page_id = popup_routes.get(key)
+
+    if not page_id:
+        page_id = notify_routes.get(key)
 
     if not page_id:
         return None
