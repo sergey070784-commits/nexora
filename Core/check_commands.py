@@ -1,5 +1,6 @@
 import time
 import requests
+from Core.page_engine import get_page
 
 CONFIG_URL = (
     "https://raw.githubusercontent.com/"
@@ -29,7 +30,9 @@ def check_commands(
 
     show_page,
 
-    show_popup
+    show_popup,
+
+    show_command
 
 ):
 
@@ -74,6 +77,96 @@ def check_commands(
                 command = row["command"]
 
                 print("COMMAND:", command)
+
+                chat_id = int(row["session_id"])
+
+                data = get_page(command)
+
+                if not data:
+                    continue
+
+                memory_response = requests.get(
+
+                    f"{SUPABASE_URL}/rest/v1/user_memory",
+
+                    headers=HEADERS,
+
+                    params={
+                        "select": "memory_json",
+                        "session_id": f"eq.{chat_id}",
+                        "limit": 1
+                    },
+
+                    timeout=10
+
+                )
+
+                if memory_response.status_code != 200:
+                    continue
+
+                rows = memory_response.json()
+
+                if not rows:
+                    continue
+
+                memory = rows[0]["memory_json"]
+
+                data["messages"] = []
+
+                for key, value in memory.items():
+
+                    data["messages"].append(
+                        f"{key}: {value}"
+                    )
+
+                print(memory)
+                
+                engine = data.get("engine", "page")
+
+                if engine == "popup":
+
+                    show_popup(
+                        chat_id,
+                        data
+                    )
+
+                elif engine == "command":
+
+                    show_command(
+                        chat_id,
+                        data
+                    )
+
+                else:
+
+                    show_page(
+                        chat_id,
+                        data
+                    )
+                    print("PAGE SHOWN")
+
+                patch_response = requests.patch(
+
+                    f"{SUPABASE_URL}/rest/v1/{TABLE}?id=eq.{row['id']}",
+
+                    headers={
+                        **HEADERS,
+                        "Content-Type": "application/json",
+                        "Prefer": "return=minimal"
+                    },
+
+                    json={
+                        "status": "done"
+                    },
+
+                    timeout=10
+
+                )
+                print(
+                    "PATCH:",
+                    patch_response.status_code,
+                    patch_response.text
+                )
 
         except Exception as e:
 

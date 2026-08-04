@@ -104,6 +104,15 @@ def show_popup(chat_id, data):
         reply_markup=keyboard
     )
 
+def show_command(chat_id, data):
+
+    print("SHOW COMMAND")
+
+    show_page(
+        chat_id,
+        data
+    )
+    
 @bot.message_handler(commands=["start"])
 def start(message):
 
@@ -196,7 +205,8 @@ threading.Thread(
         bot,
         bot_config,
         show_page,
-        show_popup
+        show_popup,
+        show_command
     ),
 
     daemon=True

@@ -11,7 +11,7 @@ TOKEN = "8650712967:AAExKALGNNjVKBxr_W99s4U9uCpgEv4V1Fg"
 
 bot = telebot.TeleBot(TOKEN)
 
-ADMIN_ID = 560661314
+ADMIN_ID = 8820758323
 
 user_data = {}
 
@@ -102,6 +102,15 @@ def show_popup(chat_id, data):
         chat_id,
         text,
         reply_markup=keyboard
+    )
+    
+def show_command(chat_id, data):
+
+    print("SHOW COMMAND")
+
+    show_page(
+        chat_id,
+        data
     )
 
 @bot.message_handler(commands=["start"])
@@ -196,7 +205,8 @@ threading.Thread(
         bot,
         bot_config,
         show_page,
-        show_popup
+        show_popup,
+        show_command
     ),
 
     daemon=True
