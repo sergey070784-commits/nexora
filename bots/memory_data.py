@@ -38,7 +38,7 @@ btn_dictionary = {}
 last_dictionary_update = 0
 
 last_id = 0
-last_leads = {}
+last_memory = {}
 def init_last_id():
 
     global last_id
@@ -93,23 +93,21 @@ def load_btn_dictionary():
 
     except Exception as e:
 
-        print(
-            "Dictionary error:",
-            e
-        )
-        print("Lead Processor started...\n")
+        print("Dictionary error:", e)
+
 
 init_last_id()
-def save_memory(session_id, channel, lead):
+
+def save_memory(session_id, channel, memory):
 
     response = requests.get(
 
-        f"{SUPABASE_URL}/rest/v1/{LEADS_TABLE}",
+        f"{SUPABASE_URL}/rest/v1/{MEMORY_TABLE}",
 
         headers=HEADERS,
 
         params={
-            "select": "id",
+            "select": "id,memory_json",
             "session_id": f"eq.{session_id}",
             "limit": 1
         },
@@ -119,24 +117,22 @@ def save_memory(session_id, channel, lead):
     )
 
     if response.status_code != 200:
-        print("Lead lookup failed")
+        print("Memory lookup failed")
         return
 
     rows = response.json()
 
-    data = {
-        "session_id": session_id,
-        "channel": channel,
-        "memory_json": memory
-    }
-
     if rows:
 
-        lead_id = rows[0]["id"]
+        memory_id = rows[0]["id"]
+
+        current_memory = rows[0].get("memory_json") or {}
+
+        current_memory.update(memory)
 
         response = requests.patch(
 
-            f"{SUPABASE_URL}/rest/v1/{LEADS_TABLE}?id=eq.{lead_id}",
+            f"{SUPABASE_URL}/rest/v1/{MEMORY_TABLE}?id=eq.{memory_id}",
 
             headers={
                 **HEADERS,
@@ -144,15 +140,16 @@ def save_memory(session_id, channel, lead):
                 "Prefer": "return=minimal"
             },
 
-            json=data,
+            json={
+                "memory_json": current_memory
+            },
 
             timeout=10
 
         )
 
         if response.status_code in (200, 204):
-            print("memory updated")
-
+            print("Memory updated")
         else:
             print("Update failed:", response.text)
 
@@ -160,7 +157,7 @@ def save_memory(session_id, channel, lead):
 
         response = requests.post(
 
-            f"{SUPABASE_URL}/rest/v1/{LEADS_TABLE}",
+            f"{SUPABASE_URL}/rest/v1/{MEMORY_TABLE}",
 
             headers={
                 **HEADERS,
@@ -168,17 +165,21 @@ def save_memory(session_id, channel, lead):
                 "Prefer": "return=minimal"
             },
 
-            json=data,
+            json={
+                "session_id": session_id,
+                "channel": channel,
+                "memory_json": memory
+            },
 
             timeout=10
 
         )
 
         if response.status_code in (200, 201):
-            print("memory created")
-
+            print("Memory created")
         else:
             print("Insert failed:", response.text)
+
 while True:
 
     load_btn_dictionary()
@@ -201,63 +202,7 @@ while True:
 
         )
 
-        if response.status_code == 200:
-
-            rows = response.json()
-
-            for row in rows:
-
-                last_id = row["id"]
-
-                print(
-                    f"ID={row['id']}  Session={row['session_id']}"
-                )
-                memory = {}
-
-                actions = json.loads(
-                    row.get("actions", "[]")
-                )
-
-                for action in actions:
-
-                    button = action.get("value")
-
-                    if button not in btn_dictionary:
-                        continue
-
-                    item = btn_dictionary[button]
-
-                    lead[item["field"]] = item["value"]
-
-                if not lead:
-                    continue
-
-                lead_key = json.dumps(
-                    lead,
-                    sort_keys=True,
-                    ensure_ascii=False
-                )
-
-                session = row["session_id"]
-
-                if last_leads.get(session) == lead_key:
-                    continue
-
-                last_leads[session] = lead_key
-
-                print(
-                    json.dumps(
-                        lead,
-                        indent=4,
-                        ensure_ascii=False
-                    )
-                )
-                save_lead(
-                    row["session_id"],
-                    row["channel"],
-                    lead
-                )
-        else:
+        if response.status_code != 200:
 
             print(
                 "Supabase error:",
@@ -265,6 +210,41 @@ while True:
             )
 
             print(response.text)
+
+            time.sleep(1)
+
+            continue
+
+        rows = response.json()
+
+        for row in rows:
+
+            last_id = row["id"]
+
+            button = row.get("value")
+
+            if button not in btn_dictionary:
+                continue
+
+            item = btn_dictionary[button]
+
+            memory = {
+                item["field"]: item["value"]
+            }
+
+            print(
+                json.dumps(
+                    memory,
+                    indent=4,
+                    ensure_ascii=False
+                )
+            )
+
+            save_memory(
+                row["session_id"],
+                row["channel"],
+                memory
+            )
 
     except Exception as e:
 
