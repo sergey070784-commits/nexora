@@ -7,6 +7,7 @@ import threading
 from Core.page_engine import get_page
 from Core.check_commands import check_commands
 from Core.event_logger import send_event
+from Core.calendar_engine import get_calendar
 TOKEN = "8159696699:AAGOVnHtLK6ELCY32ctYxXFoH8qX6EvZbhc"
 
 bot = telebot.TeleBot(TOKEN)
@@ -191,6 +192,10 @@ def handle_message(message):
         )
 
         return
+
+    elif engine == "calendar":
+
+        data = get_calendar()
 
     show_page(
         message.chat.id,
