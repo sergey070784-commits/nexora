@@ -13,11 +13,11 @@
   },
   {
     "id": "BTN_00510",
-    "text": "📅 Appointment Booking"
+    "text": "📅 Book Appointments"
   },
   {
     "id": "BTN_00511",
-    "text": "📄 Document Collection"
+    "text": "📄 Collect Documents"
   },
   {
     "id": "BTN_00512",
@@ -25,7 +25,7 @@
   },
   {
     "id": "BTN_00513",
-    "text": "Complete Business Automation"
+    "text": "⚙️ Full Automation"
   }
 ]
 }
