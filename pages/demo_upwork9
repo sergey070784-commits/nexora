@@ -4,10 +4,10 @@
   "title": "Business Automation",
 
   "messages": [
-    "Starting automated workflow...",
+    "Launching workflow...",
     "🟢 Lead Created",
     "🟢 Client Profile Generated",
-    "🟢 Workflow Started"
+    "🟢 AI assistant connected"
   ],
   "buttons": [
 {
