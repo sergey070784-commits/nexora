@@ -43,6 +43,53 @@ def get_calendar(command=None):
                 ]
 
             }
+        elif command.startswith("MORNING_"):
+
+            selected_date = command.replace(
+                "MORNING_",
+                ""
+            )
+
+            return {
+
+                "engine": "page",
+
+                "title": "🌅 Morning",
+
+                "messages": [
+                    "Choose an available time."
+                ],
+
+                "buttons": [
+
+                    {
+                        "id": f"TIME_{selected_date}_09:00",
+                        "text": "🟢 09:00"
+                    },
+
+                    {
+                        "id": f"TIME_{selected_date}_09:30",
+                        "text": "🟢 09:30"
+                    },
+
+                    {
+                        "id": f"TIME_{selected_date}_10:00",
+                        "text": "🟢 10:00"
+                    },
+
+                    {
+                        "id": f"TIME_{selected_date}_10:30",
+                        "text": "🟢 10:30"
+                    },
+
+                    {
+                        "id": f"TIME_{selected_date}_11:00",
+                        "text": "🟢 11:00"
+                    }
+
+                ]
+
+            }
 
     days = []
 
@@ -106,4 +153,4 @@ if __name__ == "__main__":
 
     from pprint import pprint
 
-    pprint(get_calendar())
+    pprint(get_calendar("MORNING_2026-08-06"))

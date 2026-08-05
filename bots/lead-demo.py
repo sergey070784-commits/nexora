@@ -175,7 +175,22 @@ def handle_message(message):
         value=btn_id
 
     )
+    if btn_id.startswith((
+        "CALENDAR_",
+        "MORNING_",
+        "AFTERNOON_",
+        "EVENING_",
+        "TIME_"
+    )):
+    
+        data = get_calendar(btn_id)
 
+        show_page(
+            message.chat.id,
+            data
+        )
+
+        return
     data = get_page(btn_id)
     
 
