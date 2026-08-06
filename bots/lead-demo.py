@@ -33,13 +33,19 @@ bot_config = requests.get(
 
 def show_page(chat_id, data):
 
-    user_data[chat_id] = {
-        "page": data.get("id"),
-        "buttons": {
-            button["text"]: button["id"]
-            for button in data["buttons"]
-        }
+    state = user_data.get(chat_id, {})
+
+    state["page"] = data.get("id")
+
+    state["buttons"] = {
+
+        button["text"]: button["id"]
+
+        for button in data["buttons"]
+
     }
+
+    user_data[chat_id] = state
 
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True
@@ -66,12 +72,17 @@ def show_page(chat_id, data):
     )
 def show_popup(chat_id, data):
 
-    user_data[chat_id] = {
-        "buttons": {
-            button["text"]: button["id"]
-            for button in data["buttons"]
-        }
+    state = user_data.get(chat_id, {})
+
+    state["buttons"] = {
+
+        button["text"]: button["id"]
+
+        for button in data["buttons"]
+
     }
+
+    user_data[chat_id] = state
 
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True

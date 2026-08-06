@@ -1,0 +1,20 @@
+{
+  "engine": "page",
+  
+  "title": "🤖 Welcome",
+
+  "messages": [
+    "AI Lead Qualification & Business Automation", 
+    "See how AI qualifies new leads,",
+    "identifies high-value prospects,",
+    "and automatically launches business workflows.",
+    "⏱ Less than 1 minute"
+
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00522",
+    "text": "▶ Start"
+  }
+]
+}
