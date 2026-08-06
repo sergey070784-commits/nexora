@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-def get_calendar(command=None):
+def get_calendar(command=None, config=None):
 
     now = datetime.now()
 
@@ -50,44 +50,118 @@ def get_calendar(command=None):
                 ""
             )
 
+            return build_time_page(
+
+                title="🌅 Morning",
+
+                date=selected_date,
+
+                times=[
+                    "09:00",
+                    "09:30",
+                    "10:00",
+                    "10:30",
+                    "11:00"
+                ]
+
+            )
+
+        elif command.startswith("AFTERNOON_"):
+
+            selected_date = command.replace(
+                "AFTERNOON_",
+                ""
+            )
+
+            return build_time_page(
+
+                title="🌤 Afternoon",
+
+                date=selected_date,
+
+                times=[
+                    "13:00",
+                    "13:30",
+                    "14:00",
+                    "14:30",
+                    "15:00"
+                ]
+
+            )
+        elif command.startswith("EVENING_"):
+
+            selected_date = command.replace(
+                "EVENING_",
+                ""
+            )
+
+            return build_time_page(
+
+                title="🌙 Evening",
+
+                date=selected_date,
+
+                times=[
+                    "17:00",
+                    "17:30",
+                    "18:00",
+                    "18:30",
+                    "19:00"
+                ]
+
+            )
+        elif command.startswith("TIME_"):
+
+            selected = command.replace(
+                "TIME_",
+                ""
+            )
+
+            date, time = selected.split("_")
+
             return {
 
-                "engine": "page",
+                "engine": "command",
 
-                "title": "🌅 Morning",
+                "title": "✅ Confirm Appointment",
 
                 "messages": [
-                    "Choose an available time."
+
+                    f"📅 Date: {date}",
+
+                    f"🕒 Time: {time}",
+
+                    "",
+
+                    "Press Continue to send the request."
+
                 ],
 
                 "buttons": [
 
                     {
-                        "id": f"TIME_{selected_date}_09:00",
-                        "text": "🟢 09:00"
-                    },
 
-                    {
-                        "id": f"TIME_{selected_date}_09:30",
-                        "text": "🟢 09:30"
-                    },
+                        "id": config["finish_btn"],
 
-                    {
-                        "id": f"TIME_{selected_date}_10:00",
-                        "text": "🟢 10:00"
-                    },
+                        "text": "Continue"
 
-                    {
-                        "id": f"TIME_{selected_date}_10:30",
-                        "text": "🟢 10:30"
-                    },
-
-                    {
-                        "id": f"TIME_{selected_date}_11:00",
-                        "text": "🟢 11:00"
                     }
 
                 ]
+
+            }
+        elif command.startswith("APPOINTMENT_"):
+
+            selected = command.replace(
+                "APPOINTMENT_",
+                ""
+            )
+
+            return {
+
+                "engine": "command",
+
+                "value": command
 
             }
 
@@ -144,6 +218,33 @@ def get_calendar(command=None):
             "id": f"CALENDAR_{day['date']}",
 
             "text": f"🟢 {day['title']} • {day['month']} {day['day']}"
+
+        })
+
+    return page
+def build_time_page(title, date, times):
+
+    page = {
+
+        "engine": "page",
+
+        "title": title,
+
+        "messages": [
+            "Choose an available time."
+        ],
+
+        "buttons": []
+
+    }
+
+    for time in times:
+
+        page["buttons"].append({
+
+            "id": f"TIME_{date}_{time}",
+
+            "text": f"🟢 {time}"
 
         })
 

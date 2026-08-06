@@ -151,6 +151,7 @@ def handle_message(message):
         return
 
     btn_id = state["buttons"].get(message.text)
+    print("BTN:", btn_id)
 
     if not btn_id:
 
@@ -184,12 +185,12 @@ def handle_message(message):
     )):
     
         data = get_calendar(btn_id)
-
+        
         show_page(
             message.chat.id,
             data
         )
-
+        
         return
     data = get_page(btn_id)
     
@@ -210,7 +211,7 @@ def handle_message(message):
 
     elif engine == "calendar":
 
-        data = get_calendar()
+        data = get_calendar(config=data)
 
     show_page(
         message.chat.id,

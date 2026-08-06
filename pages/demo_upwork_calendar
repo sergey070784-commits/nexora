@@ -1,3 +1,4 @@
 {
-    "engine": "calendar"
+    "engine": "calendar",
+    "finish_btn": "BTN_00200"
 }

@@ -7,8 +7,7 @@ def send_event(
     bot_config,
     session_id,
     value=None,
-    message=None,
-    memory=None
+    message=None
 ):
 
     payload = {

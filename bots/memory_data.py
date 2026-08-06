@@ -222,6 +222,26 @@ while True:
             last_id = row["id"]
 
             button = row.get("value")
+            if button.startswith("CALENDAR="):
+
+                calendar = button.replace(
+                    "CALENDAR=",
+                    ""
+                )
+
+                save_memory(
+
+                    row["session_id"],
+
+                    row["channel"],
+
+                    {
+                        "calendar": calendar
+                    }
+
+                )
+
+                continue
 
             if button not in btn_dictionary:
                 continue
