@@ -1,0 +1,16 @@
+{
+  "engine": "command",
+  "events": [
+        "APPOINTMENT_DATE",
+        "APPOINTMENT_TIME"
+    ],
+  
+  "title": "your date and time",
+
+  "buttons": [
+    {
+      "text": "Continue",
+      "id": "BTN_00201"
+    }
+  ]
+}

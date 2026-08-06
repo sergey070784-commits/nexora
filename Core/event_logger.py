@@ -20,9 +20,8 @@ def send_event(
 
         "value": value,
 
-        "message": message,
+        "message": message
 
-        "memory": memory
 
     }
 

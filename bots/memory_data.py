@@ -222,12 +222,10 @@ while True:
             last_id = row["id"]
 
             button = row.get("value")
-            if button.startswith("CALENDAR="):
 
-                calendar = button.replace(
-                    "CALENDAR=",
-                    ""
-                )
+            if button and "=" in button:
+
+                field, value = button.split("=", 1)
 
                 save_memory(
 
@@ -236,7 +234,7 @@ while True:
                     row["channel"],
 
                     {
-                        "calendar": calendar
+                        field.lower(): value
                     }
 
                 )

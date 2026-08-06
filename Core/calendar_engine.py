@@ -1,7 +1,13 @@
 from datetime import datetime, timedelta
+calendar_config = {}
+selected_calendar = ""
 
 def get_calendar(command=None, config=None):
 
+    global calendar_config
+
+    if config:
+        calendar_config = config
     now = datetime.now()
 
     if command:
@@ -116,6 +122,9 @@ def get_calendar(command=None, config=None):
                 "TIME_",
                 ""
             )
+            global selected_calendar
+
+            selected_calendar = selected
 
             date, time = selected.split("_")
 
@@ -141,7 +150,7 @@ def get_calendar(command=None, config=None):
 
                     {
 
-                        "id": config["finish_btn"],
+                        "id": calendar_config["finish_btn"],
 
                         "text": "Continue"
 
@@ -150,20 +159,7 @@ def get_calendar(command=None, config=None):
                 ]
 
             }
-        elif command.startswith("APPOINTMENT_"):
-
-            selected = command.replace(
-                "APPOINTMENT_",
-                ""
-            )
-
-            return {
-
-                "engine": "command",
-
-                "value": command
-
-            }
+        
 
     days = []
 
