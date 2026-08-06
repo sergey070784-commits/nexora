@@ -7,6 +7,12 @@ import threading
 from Core.page_engine import get_page
 from Core.check_commands import check_commands
 from Core.event_logger import send_event
+from Core.calendar_engine import get_calendar
+from Core.value_engine import (
+    save_values,
+    get_values,
+    send_values
+)
 TOKEN = "8826512307:AAG5TzfQEDIC1Q5W8YSiS-GWDI95wucnunY"
 
 bot = telebot.TeleBot(TOKEN)
@@ -165,6 +171,68 @@ def handle_message(message):
 
         return
 
+    if btn_id.startswith((
+        "CALENDAR_",
+        "MORNING_",
+        "AFTERNOON_",
+        "EVENING_",
+        "TIME_"
+    )):
+
+        if btn_id.startswith("TIME_"):
+
+            date, time = btn_id.replace(
+                "TIME_",
+                ""
+            ).split("_")
+
+            save_values(
+
+                user_data,
+
+                message.chat.id,
+
+                {
+
+                    "APPOINTMENT_DATE": date,
+
+                    "APPOINTMENT_TIME": time
+
+                }
+
+            )
+
+        data = get_calendar(
+            command=btn_id
+        )
+
+        show_page(
+            message.chat.id,
+            data
+        )
+
+        return
+
+    values = get_values(
+
+        user_data,
+
+        message.chat.id
+
+    )
+
+    if values:
+
+        send_values(
+
+            bot_config,
+
+            message.chat.id,
+
+            values
+
+        )
+
     send_event(
 
         bot_config,
@@ -176,7 +244,6 @@ def handle_message(message):
     )
 
     data = get_page(btn_id)
-    
 
     if not data:
         return
@@ -192,21 +259,27 @@ def handle_message(message):
 
         return
 
+    elif engine == "calendar":
+
+        data = get_calendar(config=data)
+
     show_page(
         message.chat.id,
         data
     )
+
 
 threading.Thread(
 
     target=check_commands,
 
     args=(
-        bot,
+
         bot_config,
         show_page,
         show_popup,
         show_command
+
     ),
 
     daemon=True
