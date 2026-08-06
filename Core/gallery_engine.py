@@ -1,4 +1,5 @@
 import requests
+print("START")
 
 DICTIONARY_URL = (
     "https://raw.githubusercontent.com/"
@@ -15,6 +16,7 @@ def load_gallery_dictionary():
 
     if gallery_dictionary:
         return
+    
 
     gallery_dictionary = requests.get(
         DICTIONARY_URL,
@@ -38,3 +40,10 @@ def get_gallery(btn):
         "folder": item["folder"]
 
     }
+if __name__ == "__main__":
+
+    print("MAIN")
+
+    print(
+        get_gallery("BTN_00405")
+    )
