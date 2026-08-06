@@ -255,6 +255,12 @@ def handle_message(message):
     )
 
     data = get_page(btn_id)
+    from pprint import pprint
+
+    print("==========")
+    print("BTN:", btn_id)
+    pprint(data)
+    print("==========")
 
     if not data:
         return
