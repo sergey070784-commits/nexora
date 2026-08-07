@@ -13,7 +13,7 @@ def get_gallery(gallery_id):
         BASE + f"{gallery_id}.json",
         timeout=10
     )
-
+    
     if response.status_code != 200:
         return None
 
