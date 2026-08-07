@@ -6,6 +6,13 @@ from Core.page_engine import get_page
 from Core.event_logger import send_event
 import threading
 from Core.check_commands import check_commands
+from Core.calendar_engine import get_calendar
+
+from Core.value_engine import (
+    save_values,
+    get_values,
+    send_values
+)
 #===== GREEN API =====
 
 ID_INSTANCE = "7107624116"
@@ -123,10 +130,13 @@ def log_message(session_id, text):
 
 def show_page(chat_id, data):
    
-    user_data[chat_id] = {
-        "page": data.get("id"),
-        "buttons": {}
-    }
+    state = user_data.get(chat_id, {})
+
+    state["page"] = data.get("id")
+
+    state["buttons"] = {}
+
+    user_data[chat_id] = state
 
     text = data["title"]
 
@@ -161,10 +171,13 @@ def show_page(chat_id, data):
     
 def show_popup(chat_id, data):
 
-    user_data[chat_id] = {
-        "page": data.get("id"),
-        "buttons": {}
-    }
+    state = user_data.get(chat_id, {})
+
+    state["page"] = data.get("id")
+
+    state["buttons"] = {}
+
+    user_data[chat_id] = state
 
     text = data["title"]
 
@@ -355,6 +368,17 @@ while True:
                         data
                     )
 
+                elif engine == "calendar":
+
+                    data = get_calendar(
+                        config=data
+                    )
+
+                    show_page(
+                        sender,
+                        data
+                    )
+
                 else:
 
                     show_page(
@@ -367,7 +391,7 @@ while True:
                 state = user_data.get(sender)
 
                 btn_id = state["buttons"].get(text, text)
-               
+                
                 if not btn_id:
 
                     send_event(
@@ -378,21 +402,101 @@ while True:
 
                 else:
 
+                    if btn_id.startswith((
+                        "CALENDAR_",
+                        "MORNING_",
+                        "AFTERNOON_",
+                        "EVENING_",
+                        "TIME_"
+                    )):
+
+                        if btn_id.startswith("TIME_"):
+
+                            date, selected_time = btn_id.replace(
+                                "TIME_",
+                                ""
+                            ).split("_")
+
+                            save_values(
+
+                                user_data,
+
+                                sender,
+
+                                {
+
+                                    "APPOINTMENT_DATE": date,
+
+                                    "APPOINTMENT_TIME": selected_time
+
+                                }
+
+                            )
+
+                        data = get_calendar(
+                            command=btn_id
+                        )
+
+                        show_page(
+                            sender,
+                            data
+                        )
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+
+                    values = get_values(
+
+                        user_data,
+
+                        sender
+
+                    )
+
+                    if values:
+
+                        send_values(
+
+                            bot_config,
+
+                            sender,
+
+                            values
+
+                        )
+
                     send_event(
+
                         bot_config,
+
                         sender,
+
                         value=btn_id
+
                     )
 
                     data = get_page(btn_id)
 
                     if data:
-                    
+
                         engine = data.get("engine", "page")
 
                         if engine == "popup":
 
                             show_popup(
+                                sender,
+                                data
+                            )
+
+                        elif engine == "calendar":
+
+                            data = get_calendar(
+                                config=data
+                            )
+
+                            show_page(
                                 sender,
                                 data
                             )
