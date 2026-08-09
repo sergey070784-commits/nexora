@@ -1,0 +1,29 @@
+{
+  "engine": "page",
+  
+  "title": "🚀 Continue Exploring",
+
+  "messages": [
+    "The lead has been successfully processed.", 
+    "Now you can experience another live workflow.",
+    "",
+    "📅 Try the Appointment Booking Demo.",
+    "Choose how you'd like to continue:"
+
+  ],
+  "buttons": [
+  {
+      "id": "TELEGRAM_ENTRY",
+      "text": "🔵 Telegram"
+    },
+    {
+      "id": "BTN_00024",
+      "text": "🟢 WhatsApp"
+    },
+    {
+      "id": "BTN_00025",
+      "text": "📅 Booking Demo"
+    }
+  ]
+  
+}

@@ -1,0 +1,15 @@
+{
+  "title": "📅 Appointment Booking Demo",
+
+  "messages": [
+    "See how customers book an appointment",
+    "Choose a date and time to experience the workflow.",
+    "⏱ Takes less than 30 seconds."
+  ],
+  "buttons": [
+    {
+    "id": "BTN_00026",
+    "text": "▶ Start Demo"
+    }
+]
+}

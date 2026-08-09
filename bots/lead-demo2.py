@@ -33,7 +33,7 @@ bot_config = requests.get(
 
 def show_page(chat_id, data):
 
-        state = user_data.get(chat_id, {})
+    state = user_data.get(chat_id, {})
 
     state["page"] = data.get("id")
 

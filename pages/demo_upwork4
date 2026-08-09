@@ -8,23 +8,23 @@
   ],
   "buttons": [
   {
-    "id": "BTN_00509",
+    "id": "BTN_00011",
     "text": "🎯 Lead Qualification"
   },
   {
-    "id": "BTN_00510",
+    "id": "BTN_00012",
     "text": "📅 Book Appointments"
   },
   {
-    "id": "BTN_00511",
+    "id": "BTN_00013",
     "text": "📄 Collect Documents"
   },
   {
-    "id": "BTN_00512",
+    "id": "BTN_00014",
     "text": "🤖 Customer Support"
   },
   {
-    "id": "BTN_00513",
+    "id": "BTN_00015",
     "text": "⚙️ Full Automation"
   }
 ]

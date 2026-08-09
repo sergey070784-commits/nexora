@@ -129,7 +129,7 @@ def log_message(session_id, text):
         print(e)
 
 def show_page(chat_id, data):
-   
+
     state = user_data.get(chat_id, {})
 
     state["page"] = data.get("id")

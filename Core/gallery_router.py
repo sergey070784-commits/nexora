@@ -4,7 +4,7 @@ import requests
 ROUTES_URL = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
-    "Service/gallery_viewer/gallery_routes.json"
+    "Service/gallery_routes.json"
 )
 
 gallery_routes = {}
@@ -17,11 +17,13 @@ def load_routes():
     if gallery_routes:
         return
 
-    gallery_routes = requests.get(
+    response = requests.get(
         ROUTES_URL,
         timeout=10
-    ).json()
+    )
 
+
+    gallery_routes = response.json()
 
 def get_gallery_data(grl_id):
 

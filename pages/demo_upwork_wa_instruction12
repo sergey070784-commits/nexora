@@ -1,0 +1,19 @@
+{
+  "engine": "page",
+  
+  "title": "💬 Open WhatsApp Demo",
+
+  "messages": [
+    "The next demo continues in WhatsApp.",
+    "Tap the button below to open WhatsApp.",
+    "The demo command will already be written for you.",
+    "Do not change it — simply press Send."
+  ],
+
+  "buttons": [
+    {
+      "id": "https://wa.me/972527068894?text=nx_upwork",
+      "text": "🟢 Open WhatsApp"
+    }
+  ]
+}

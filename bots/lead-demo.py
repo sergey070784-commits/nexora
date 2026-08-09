@@ -13,6 +13,8 @@ from Core.value_engine import (
     get_values,
     send_values
 )
+from Core.gallery_router import get_gallery_data
+from Core.gallery_show import show_gallery
 TOKEN = "8159696699:AAGOVnHtLK6ELCY32ctYxXFoH8qX6EvZbhc"
 
 bot = telebot.TeleBot(TOKEN)
@@ -254,14 +256,23 @@ def handle_message(message):
 
     )
 
+    if btn_id.startswith("GRL_"):
+
+        data = get_gallery_data(btn_id)
+
+        if not data:
+            return
+
+        show_gallery(
+            bot,
+            message.chat.id,
+            data
+        )
+
+        return
+
     data = get_page(btn_id)
-    from pprint import pprint
-
-    print("==========")
-    print("BTN:", btn_id)
-    pprint(data)
-    print("==========")
-
+    
     if not data:
         return
 

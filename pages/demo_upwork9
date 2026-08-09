@@ -1,18 +1,19 @@
 {
   "engine": "page",
   
-  "title": "Business Automation",
+  "title": "🔔 Workflow Notification",
 
   "messages": [
-    "Launching workflow...",
-    "🟢 Lead Created",
-    "🟢 Client Profile Generated",
-    "🟢 AI assistant connected"
+    "A new qualified lead has been received",
+    "Current status:",
+    "✅ Lead Registered",
+    "✅ Client profile created",
+    "✅ Workflow started"
   ],
   "buttons": [
-{
-    "id": "BTN_00524",
-    "text": "Continue"
-  }
+    {
+    "id": "BTN_00023",
+    "text": "Continie"
+    }
 ]
 }

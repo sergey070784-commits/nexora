@@ -1,90 +1,71 @@
 {
-  "BTN_00504": {
+  "BTN_00006": {
     "field": "business",
     "value": "Agency"
   },
 
-  "BTN_00505": {
+  "BTN_00007": {
     "field": "business",
     "value": "Law Firm"
   },
 
-  "BTN_00506": {
+  "BTN_00008": {
     "field": "business",
     "value": "Healthcare"
   },
 
-  "BTN_00507": {
+  "BTN_00009": {
     "field": "business",
     "value": "Real Estate"
   },
 
-  "BTN_00508": {
+  "BTN_00010": {
     "field": "business",
     "value": "E-commerce"
   },
 
-  "BTN_00509": {
+  "BTN_00011": {
     "field": "solution",
     "value": "AI Lead Qualification"
   },
 
-  "BTN_00510": {
+  "BTN_00012": {
     "field": "solution",
     "value": "Appointment Booking"
   },
 
-  "BTN_00511": {
+  "BTN_00013": {
     "field": "solution",
     "value": "Document Collection"
   },
 
-  "BTN_00512": {
+  "BTN_00014": {
     "field": "solution",
     "value": "Customer Support"
   },
 
-  "BTN_00513": {
+  "BTN_00015": {
     "field": "solution",
     "value": "Complete Business Automation"
   },
-   "BTN_00514": {
+   "BTN_00016": {
     "field": "Inquiries",
     "value": "1–20"
   },
 
-  "BTN_00515": {
+  "BTN_00017": {
     "field": "Inquiries",
     "value": "20–100"
   },
 
-  "BTN_00516": {
+  "BTN_00018": {
     "field": "Inquiries",
     "value": "100–500"
   },
 
-  "BTN_00517": {
+  "BTN_00019": {
     "field": "Inquiries",
     "value": "500+"
-  },
-
-  "BTN_00518": {
-    "field": "Planning to implement",
-    "value": "Immediately"
-  },
-
-  "BTN_00519": {
-    "field": "Planning to implement",
-    "value": "Within 30 days"
-  },
-
-  "BTN_005120": {
-    "field": "Planning to implement",
-    "value": "Within 3 months"
-  },
-
-  "BTN_00521": {
-    "field": "Planning to implement",
-    "value": "Just exploring"
   }
+
 }
