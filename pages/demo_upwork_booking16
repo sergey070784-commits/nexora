@@ -1,0 +1,22 @@
+{
+  "engine": "page",
+  
+  "title": "calendar end",
+
+  "messages": [
+    "tekst pridumat"
+
+  ],
+  "buttons": [
+  {
+      "id": "GRL_00405",
+      "text": "example calendar"
+    },
+    {
+      "id": "BTN_00028",
+      "text": "next demoo"
+    }
+    
+  ]
+  
+}

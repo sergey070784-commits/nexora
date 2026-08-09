@@ -1,16 +1,29 @@
 {
   "engine": "page",
   
-  "title": "1",
+  "title": "🚀 Continue Exploring",
 
   "messages": [
-    "1"
+    "The lead has been successfully processed.", 
+    "Now you can experience another live workflow.",
+    "",
+    "💬 AI Customer Support & FAQ Demo",
+    "Choose how you'd like to continue:"
 
   ],
   "buttons": [
   {
-    "id": "BTN_00003",
-    "text": "AI Lead Qualification & Business Automation"
-  }
-]
+      "id": "TELEGRAM_ENTRY",
+      "text": "🔵 Telegram"
+    },
+    {
+      "id": "BTN_00024",
+      "text": "🟢 WhatsApp"
+    },
+    {
+      "id": "BTN_00025",
+      "text": "📅 Booking Demo"
+    }
+  ]
+  
 }
