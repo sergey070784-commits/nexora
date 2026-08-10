@@ -1,9 +1,18 @@
 from telebot import types
+from Core.cloudinary_gallery import get_gallery_assets
 
 
 def show_gallery(bot, chat_id, data):
 
     print("SHOW GALLERY")
+
+    gallery_id = data.get("gallery_id")
+
+    if gallery_id:
+
+        data["items"] = get_gallery_assets(
+            gallery_id
+        )
 
     for item in data.get("items", []):
 
@@ -48,7 +57,8 @@ def show_gallery(bot, chat_id, data):
             "Gallery",
             reply_markup=keyboard
         )
-        return {
+
+    return {
         action["text"]: action["id"]
         for action in actions
     }

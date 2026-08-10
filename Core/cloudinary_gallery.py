@@ -1,12 +1,23 @@
 import requests
+
 from cloudinary import config as cloudinary_config
-from cloudinary.api import resources
+from cloudinary.api import resources_by_asset_folder
 
 
-CONFIG_URL = (
+BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
-    "Core/config.json"
+)
+
+
+CONFIG_URL = BASE + "Core/config.json"
+
+LIBRARY_URL = BASE + "Service/gallery_library.json"
+
+
+CLOUDINARY_GALLERY_BASE = (
+    "Nexora/nexora core/nexora-site/"
+    "Gallery_library/"
 )
 
 
@@ -26,28 +37,75 @@ def load_cloudinary_config():
     )
 
 
-def get_gallery_assets(folder):
+def load_gallery_library():
+
+    response = requests.get(
+        LIBRARY_URL,
+        timeout=10
+    )
+
+    return response.json()
+
+
+def get_gallery_assets(gallery_id):
 
     load_cloudinary_config()
 
-    result = resources(
-        type="upload",
-        prefix=folder,
+    library = load_gallery_library()
+
+    folder = library.get(gallery_id)
+
+    if not folder:
+        return []
+
+    cloudinary_folder = (
+        CLOUDINARY_GALLERY_BASE + folder
+    )
+
+    result = resources_by_asset_folder(
+        cloudinary_folder,
         max_results=100
     )
 
-    return result.get("resources", [])
+    assets = []
+
+    for asset in result.get("resources", []):
+
+        url = asset.get("secure_url")
+
+        if not url:
+            continue
+
+        url = url.replace(
+            "/image/upload/",
+            "/image/upload/q_auto/f_auto/"
+        )
+
+        assets.append({
+            "type": asset.get(
+                "resource_type",
+                "image"
+            ),
+            "url": url,
+            "public_id": asset.get(
+                "public_id"
+            )
+        })
+
+    return assets
 
 
 if __name__ == "__main__":
 
     assets = get_gallery_assets(
-        "Nexora/Gallery_library/upwork_example_calendar"
+        "GALLERY_001"
     )
+
+    print("ASSETS:", len(assets))
 
     for asset in assets:
 
         print(
-            asset["resource_type"],
-            asset["secure_url"]
+            asset["type"],
+            asset["url"]
         )
