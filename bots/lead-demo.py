@@ -269,6 +269,10 @@ def handle_message(message):
             message.chat.id,
             data
         )
+        user_data[message.chat.id]["buttons"] = {
+            action["text"]: action["id"]
+            for action in data.get("actions", [])
+        }
 
         return
 
