@@ -48,3 +48,7 @@ def show_gallery(bot, chat_id, data):
             "Gallery",
             reply_markup=keyboard
         )
+        return {
+        action["text"]: action["id"]
+        for action in actions
+    }

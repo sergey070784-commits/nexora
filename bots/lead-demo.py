@@ -255,6 +255,7 @@ def handle_message(message):
         value=btn_id
 
     )
+    print("BTN_ID:", btn_id)
 
     if btn_id.startswith("GRL_"):
 
