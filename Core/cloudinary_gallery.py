@@ -98,8 +98,9 @@ def get_gallery_assets(gallery_id):
 if __name__ == "__main__":
 
     assets = get_gallery_assets(
-        "GALLERY_001"
-    )
+        "GALLERY_002"
+
+)
 
     print("ASSETS:", len(assets))
 

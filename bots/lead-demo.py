@@ -23,6 +23,10 @@ ADMIN_ID = 8820758323
 
 user_data = {}
 
+FILE_MESSAGES_TABLE = "file_messages"
+
+file_last_id = 0
+
 BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
@@ -32,6 +36,14 @@ bot_config = requests.get(
     BASE + "Core/bot1_config.json",
     timeout=10
 ).json()
+
+config = requests.get(
+    BASE + "Core/config.json",
+    timeout=10
+).json()
+
+SUPABASE_URL = config["supabase_url"]
+SUPABASE_KEY = config["supabase_key"]
 
 def show_page(chat_id, data):
 
@@ -159,7 +171,92 @@ def start(message):
         message.chat.id,
         data
     )
+@bot.message_handler(content_types=["document", "photo"])
+def handle_file(message):
 
+    chat_id = message.chat.id
+
+    session_id = str(chat_id)
+
+    file_name = None
+    file_type = None
+    file_id = None
+
+    if message.document:
+
+        file_id = message.document.file_id
+        file_name = message.document.file_name
+        file_type = "document"
+
+    elif message.photo:
+
+        file_id = message.photo[-1].file_id
+        file_name = f"photo_{file_id}.jpg"
+        file_type = "image"
+
+    if not file_id:
+        return
+
+    print()
+    print("📥 FILE RECEIVED")
+    print("SESSION:", session_id)
+    print("FILE:", file_name)
+    print("TYPE:", file_type)
+
+    try:
+
+        file_info = bot.get_file(file_id)
+
+        file_url = (
+            f"https://api.telegram.org/file/bot"
+            f"{TOKEN}/{file_info.file_path}"
+        )
+
+        data = {
+            "session_id": session_id,
+            "source_bot": bot_config["bot"],
+            "channel": "telegram",
+            "chat_id": str(chat_id),
+            "file_name": file_name,
+            "file_type": file_type,
+            "file_url": file_url,
+            "status": "new"
+        }
+
+        response = requests.post(
+
+            f"{SUPABASE_URL}/rest/v1/file_events",
+
+            headers={
+                "apikey": SUPABASE_KEY,
+                "Authorization": f"Bearer {SUPABASE_KEY}",
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal"
+            },
+
+            json=data,
+
+            timeout=10
+        )
+
+        if response.status_code in (200, 201):
+
+            print("✅ FILE EVENT CREATED")
+
+        else:
+
+            print(
+                "🔴 FILE EVENT ERROR:",
+                response.status_code,
+                response.text
+            )
+
+    except Exception as e:
+
+        print(
+            "🔴 FILE RECEIVE ERROR:",
+            e
+        )
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
 
@@ -302,6 +399,207 @@ def handle_message(message):
     )
 
 
+def check_file_messages():
+
+    global file_last_id
+
+    while True:
+
+        try:
+
+            response = requests.get(
+
+                f"{SUPABASE_URL}/rest/v1/{FILE_MESSAGES_TABLE}",
+
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}"
+                },
+
+                params={
+                    "select": "*",
+                    "id": f"gt.{file_last_id}",
+                    "target_bot": f"eq.{bot_config['bot']}",
+                    "status": "eq.new",
+                    "order": "id.asc"
+                },
+
+                timeout=10
+            )
+
+            if response.status_code != 200:
+
+                print(
+                    "FILE MESSAGE ERROR:",
+                    response.status_code,
+                    response.text
+                )
+
+                time.sleep(2)
+                continue
+
+            rows = response.json()
+
+            for row in rows:
+
+                file_last_id = row["id"]
+
+                print()
+                print("📥 FILE MESSAGE FOR BOT")
+                print(
+                    "SOURCE:",
+                    row["source_bot"]
+                )
+                print(
+                    "TARGET:",
+                    row["target_bot"]
+                )
+                print(
+                    "ASSET:",
+                    row["asset_id"]
+                )
+                print(
+                    "SESSION:",
+                    row["session_id"]
+                )
+                print(
+                    "CHAT:",
+                    row.get("chat_id")
+                )
+
+                chat_id = row.get("chat_id")
+
+                if not chat_id:
+
+                    print(
+                        "⚠️ NO CHAT_ID"
+                    )
+
+                    continue
+
+                asset_response = requests.get(
+
+                    f"{SUPABASE_URL}/rest/v1/assets",
+
+                    headers={
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": f"Bearer {SUPABASE_KEY}"
+                    },
+
+                    params={
+                        "select": "*",
+                        "asset_id": f"eq.{row['asset_id']}",
+                        "limit": 1
+                    },
+
+                    timeout=10
+                )
+
+                if asset_response.status_code != 200:
+
+                    print(
+                        "ASSET ERROR:",
+                        asset_response.status_code
+                    )
+
+                    continue
+
+                assets = asset_response.json()
+
+                if not assets:
+
+                    print(
+                        "⚠️ ASSET NOT FOUND"
+                    )
+
+                    continue
+
+                asset = assets[0]
+
+                print(
+                    "FILE:",
+                    asset["file_name"]
+                )
+
+                print(
+                    "URL:",
+                    asset["cloudinary_url"]
+                )
+
+                try:
+
+                    bot.send_document(
+                        chat_id,
+                        asset["cloudinary_url"]
+                    )
+
+                    requests.patch(
+
+                        f"{SUPABASE_URL}/rest/v1/{FILE_MESSAGES_TABLE}",
+
+                        headers={
+                            "apikey": SUPABASE_KEY,
+                            "Authorization": f"Bearer {SUPABASE_KEY}",
+                            "Content-Type": "application/json"
+                        },
+
+                        params={
+                            "id": f"eq.{row['id']}"
+                        },
+
+                        json={
+                            "status": "sent",
+                            "processed_at": datetime.utcnow().isoformat()
+                        },
+
+                        timeout=10
+                    )
+
+                    print(
+                        "✅ FILE SENT TO USER"
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "🔴 SEND FILE ERROR:",
+                        e
+                    )
+
+                    requests.patch(
+
+                        f"{SUPABASE_URL}/rest/v1/{FILE_MESSAGES_TABLE}",
+
+                        headers={
+                            "apikey": SUPABASE_KEY,
+                            "Authorization": f"Bearer {SUPABASE_KEY}",
+                            "Content-Type": "application/json"
+                        },
+
+                        params={
+                            "id": f"eq.{row['id']}"
+                        },
+
+                        json={
+                            "status": "error"
+                        },
+
+                        timeout=10
+                    )
+
+        except Exception as e:
+
+            print(
+                "🔴 FILE MESSAGE WORKER ERROR:",
+                e
+            )
+
+        time.sleep(1)
+threading.Thread(
+    target=check_file_messages,
+    daemon=True
+).start()
+
 threading.Thread(
 
     target=check_commands,
@@ -318,6 +616,7 @@ threading.Thread(
     daemon=True
 
 ).start()
+
 
 while True:
 
