@@ -124,6 +124,57 @@ def save_command(
     command
 ):
 
+    # ========================================
+    # CHECK: COMMAND ALREADY EXISTS
+    # ========================================
+
+    check_response = requests.get(
+
+        f"{SUPABASE_URL}/rest/v1/{COMMANDS_TABLE}",
+
+        headers=HEADERS,
+
+        params={
+            "select": "id,status",
+            "session_id": f"eq.{session_id}",
+            "command": f"eq.{command}",
+            "status": "in.(new,done)",
+            "limit": 1
+        },
+
+        timeout=10
+
+    )
+
+    if check_response.status_code != 200:
+
+        print(
+            "Command check error:",
+            check_response.status_code,
+            check_response.text
+        )
+
+        return
+
+    existing = check_response.json()
+
+    if existing:
+
+        print(
+            "COMMAND ALREADY SENT:",
+            command,
+            "SESSION:",
+            session_id,
+            "STATUS:",
+            existing[0]["status"]
+        )
+
+        return
+
+    # ========================================
+    # CREATE NEW COMMAND
+    # ========================================
+
     data = {
 
         "source_bot": source_bot,
@@ -158,11 +209,18 @@ def save_command(
 
     if response.status_code in (200, 201):
 
-        print("Command created")
+        print(
+            "Command created:",
+            command
+        )
 
     else:
 
-        print("Command error:", response.text)
+        print(
+            "Command error:",
+            response.status_code,
+            response.text
+        )
 
 while True:
 
