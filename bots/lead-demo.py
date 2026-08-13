@@ -264,6 +264,8 @@ def handle_message(message):
 
     if not state:
         return
+    print("MESSAGE:", repr(message.text))
+    print("STATE BUTTONS:", state.get("buttons"))
 
     btn_id = state["buttons"].get(message.text)
 
