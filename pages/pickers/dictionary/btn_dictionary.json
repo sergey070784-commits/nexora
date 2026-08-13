@@ -66,6 +66,19 @@
   "BTN_00019": {
     "field": "Inquiries",
     "value": "500+"
+  },
+
+  "BTN_00031": {
+    "field": "📄 Document Submission",
+    "value": "Documents received"
+  },
+  "BTN_00032": {
+    "field": "📋 Client Intake",
+    "value": "Client intake form"
+  },
+  "BTN_00033": {
+    "field": "📑 Request Review",
+    "value": "Request review"
   }
 
 }

@@ -1,0 +1,25 @@
+{
+  "engine": "page",
+  
+  "title": "Choose how to continue",
+
+  "messages": [
+    "📂 Document Examples", 
+    "You can either send your own document",
+    "or explore our examples first.",
+    "Choose how you'd like to continue:"
+    
+
+  ],
+  "buttons": [
+ 
+  {
+    "id": "BTN_00035",
+    "text": "📎 Upload Your Document"
+  },
+  {
+    "id": "GRL_00406",
+    "text": "🖼️ View Examples"
+  }
+]
+}

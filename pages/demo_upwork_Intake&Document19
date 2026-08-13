@@ -1,0 +1,24 @@
+{
+  "engine": "page",
+  
+  "title": "Choose request type",
+
+  "messages": [
+    "What would you like help with?"
+    
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00031",
+    "text": "📄 Document Submission"
+  },
+  {
+    "id": "BTN_00032",
+    "text": "📋 Client Intake"
+  },
+  {
+    "id": "BTN_00033",
+    "text": "📑 Request Review"
+  }
+]
+}
