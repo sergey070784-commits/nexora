@@ -22,6 +22,45 @@ HEADERS = {
     "apikey": SUPABASE_KEY,
     "Authorization": f"Bearer {SUPABASE_KEY}"
 }
+def clear_user_memory(session_id):
+
+    response = requests.patch(
+
+        f"{SUPABASE_URL}/rest/v1/user_memory",
+
+        headers={
+            **HEADERS,
+            "Content-Type": "application/json",
+            "Prefer": "return=minimal"
+        },
+
+        params={
+            "session_id": f"eq.{session_id}"
+        },
+
+        json={
+            "memory_json": {}
+        },
+
+        timeout=10
+    )
+
+    if response.status_code in (200, 204):
+
+        print(
+            "MEMORY CLEARED:",
+            session_id
+        )
+
+        return True
+
+    print(
+        "MEMORY CLEAR ERROR:",
+        response.status_code,
+        response.text
+    )
+
+    return False
 def check_commands(
 
     bot_config,
