@@ -138,7 +138,7 @@ def save_command(
             "select": "id,status",
             "session_id": f"eq.{session_id}",
             "command": f"eq.{command}",
-            "status": "in.(new,done)",
+            "status": "eq.new",
             "limit": 1
         },
 

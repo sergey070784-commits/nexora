@@ -142,7 +142,7 @@ def check_commands(
                         data
                     )
                     print("PAGE SHOWN")
-
+ 
                 patch_response = requests.patch(
 
                     f"{SUPABASE_URL}/rest/v1/{TABLE}?id=eq.{row['id']}",
@@ -160,11 +160,26 @@ def check_commands(
                     timeout=10
 
                 )
+
                 print(
                     "PATCH:",
                     patch_response.status_code,
                     patch_response.text
                 )
+
+# ========================================
+# COMMAND DONE → CLEAR MEMORY
+# ========================================
+
+                if patch_response.status_code in (200, 204):
+
+                    clear_user_memory(chat_id)
+
+                else:
+
+                    print(
+                        "MEMORY NOT CLEARED — COMMAND NOT DONE"
+                    )
 
         except Exception as e:
 
