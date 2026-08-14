@@ -20,8 +20,3 @@ def get_gallery(gallery_id):
     return response.json()
 
 
-if __name__ == "__main__":
-
-    print(
-        get_gallery("galli_00001")
-    )

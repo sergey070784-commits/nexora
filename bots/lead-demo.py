@@ -427,6 +427,113 @@ def handle_message(message):
         )
 
         return
+    # ========================================
+    # GALLERY FILE ACTION
+    # ========================================
+
+    gallery_actions = user_data.get(
+        message.chat.id,
+        {}
+    ).get(
+        "gallery_actions",
+        {}
+    )
+
+    action = gallery_actions.get(btn_id)
+
+    if action and action.get("type") == "file":
+
+        print("📄 GALLERY FILE ACTION")
+        print("FILE ID:", btn_id)
+        print("ACTION:", action)
+
+        file_url = action.get("file_url")
+
+        if not file_url:
+
+            print(
+                "🔴 GALLERY FILE URL NOT FOUND:",
+                btn_id
+            )
+
+            return
+
+        file_name = action.get(
+            "display_name",
+            f"{btn_id}.pdf"
+        )
+
+        if file_name.lower().endswith(".pdf"):
+
+            file_type = "document"
+
+        else:
+
+            file_type = "image"
+
+        data = {
+
+            "session_id": str(
+                message.chat.id
+            ),
+
+            "source_bot": bot_config["bot"],
+
+            "channel": "telegram",
+
+            "chat_id": str(
+               message.chat.id
+            ),
+
+            "file_name": file_name,
+
+            "file_type": file_type,
+
+            "file_url": file_url,
+
+            "status": "new"
+        }
+
+        response = requests.post(
+
+            f"{SUPABASE_URL}/rest/v1/file_events",
+
+            headers={
+
+                "apikey": SUPABASE_KEY,
+
+                "Authorization":
+                    f"Bearer {SUPABASE_KEY}",
+
+                "Content-Type":
+                    "application/json",
+
+                "Prefer":
+                    "return=minimal"
+            },
+
+            json=data,
+
+            timeout=10
+        )
+
+        if response.status_code in (200, 201):
+
+            print()
+            print("📤 GALLERY FILE EVENT CREATED")
+            print("FILE:", file_name)
+            print("TYPE:", file_type)
+            print("URL:", file_url)
+
+        else:
+
+            print(
+                "🔴 GALLERY FILE EVENT ERROR:",
+                response.status_code,
+                response.text
+            )
+
+        return
     print("🔎 GET PAGE:", repr(btn_id))
 
     data = get_page(btn_id)

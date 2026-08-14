@@ -3,7 +3,7 @@ cd /d C:\Users\server\Documents\project\nexora
 
 echo ========================================
 echo       NEXORA SERVER START
-echo       14 PROCESSES
+echo       12 PROCESSES
 echo ========================================
 echo.
 
@@ -28,12 +28,10 @@ start "NEXORA Lead Bot 1" cmd /k "python -m bots.lead-demo"
 start "NEXORA Lead Bot 2" cmd /k "python -m bots.lead-demo2"
 start "NEXORA WhatsApp Bot 1" cmd /k "python -m bots.demo_lead_1_wa"
 start "NEXORA WhatsApp Bot 2" cmd /k "python -m bots.demo_lead_2_wa"
-start "NEXORA Demo Lead 1" cmd /k "python -m bots.demo_lead_1"
-start "NEXORA Demo Lead 2" cmd /k "python -m bots.demo_lead_2"
 
 echo.
 echo ========================================
 echo   NEXORA SERVER STARTED
-echo   14 PROCESSES
+echo   12 PROCESSES
 echo ========================================
 pause

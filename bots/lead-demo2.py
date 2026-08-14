@@ -46,6 +46,14 @@ SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
 
 def show_page(chat_id, data):
+    import inspect
+
+    print(
+        "SHOW_PAGE:",
+        data.get("title"),
+        "CALLER:",
+        inspect.stack()[1].function
+    )
 
     state = user_data.get(chat_id, {})
 
@@ -60,6 +68,9 @@ def show_page(chat_id, data):
     }
 
     user_data[chat_id] = state
+    print("SHOW PAGE CHAT:", chat_id)
+    print("SHOW PAGE BUTTONS:", state["buttons"])
+    print("SHOW PAGE STATE:", state)
 
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True
@@ -79,10 +90,19 @@ def show_page(chat_id, data):
 
         text += "\n\n" + msg
 
-    bot.send_message(
+    sent = bot.send_message(
         chat_id,
         text,
         reply_markup=keyboard
+    )
+
+    print(
+        "TELEGRAM SENT:",
+        sent.message_id,
+        "TEXT:",
+        sent.text,
+        "KEYBOARD:",
+        sent.reply_markup
     )
 def show_popup(chat_id, data):
 
@@ -138,6 +158,8 @@ def show_popup(chat_id, data):
 def show_command(chat_id, data):
 
     print("SHOW COMMAND")
+    print("COMMAND BUTTONS:", data.get("buttons"))
+
 
     show_page(
         chat_id,
@@ -259,13 +281,26 @@ def handle_file(message):
         )
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
+    print(
+        "🔥 HANDLE MESSAGE:",
+        repr(message.text),
+        "CHAT:",
+        message.chat.id
+    )
 
     state = user_data.get(message.chat.id)
-
+   
     if not state:
         return
+    print("STATE OBJECT ID:", id(state))
+    print("STATE BEFORE:", state)
 
+    print("MESSAGE:", repr(message.text))
+    print("STATE BUTTONS:", state.get("buttons"))
+ 
     btn_id = state["buttons"].get(message.text)
+    print("🔘 PRESSED TEXT:", repr(message.text))
+    print("🔑 BTN_ID:", repr(btn_id))
 
     if not btn_id:
 
@@ -366,14 +401,143 @@ def handle_message(message):
             message.chat.id,
             data
         )
-        user_data[message.chat.id]["buttons"] = {
+
+        state = user_data[message.chat.id]
+
+        state["buttons"] = {
             action["text"]: action["id"]
             for action in data.get("actions", [])
         }
 
+        state["gallery_actions"] = {
+            action["id"]: action
+            for action in data.get("actions", [])
+        }
+
+        user_data[message.chat.id] = state
+
+        print(
+            "GALLERY BUTTONS:",
+            state["buttons"]
+        )
+
+        print(
+            "GALLERY ACTIONS:",
+            state["gallery_actions"]
+        )
+
         return
+    # ========================================
+    # GALLERY FILE ACTION
+    # ========================================
+
+    gallery_actions = user_data.get(
+        message.chat.id,
+        {}
+    ).get(
+        "gallery_actions",
+        {}
+    )
+
+    action = gallery_actions.get(btn_id)
+
+    if action and action.get("type") == "file":
+
+        print("📄 GALLERY FILE ACTION")
+        print("FILE ID:", btn_id)
+        print("ACTION:", action)
+
+        file_url = action.get("file_url")
+
+        if not file_url:
+
+            print(
+                "🔴 GALLERY FILE URL NOT FOUND:",
+                btn_id
+            )
+
+            return
+
+        file_name = action.get(
+            "display_name",
+            f"{btn_id}.pdf"
+        )
+
+        if file_name.lower().endswith(".pdf"):
+
+            file_type = "document"
+
+        else:
+
+            file_type = "image"
+
+        data = {
+
+            "session_id": str(
+                message.chat.id
+            ),
+
+            "source_bot": bot_config["bot"],
+
+            "channel": "telegram",
+
+            "chat_id": str(
+               message.chat.id
+            ),
+
+            "file_name": file_name,
+
+            "file_type": file_type,
+
+            "file_url": file_url,
+
+            "status": "new"
+        }
+
+        response = requests.post(
+
+            f"{SUPABASE_URL}/rest/v1/file_events",
+
+            headers={
+
+                "apikey": SUPABASE_KEY,
+
+                "Authorization":
+                    f"Bearer {SUPABASE_KEY}",
+
+                "Content-Type":
+                    "application/json",
+
+                "Prefer":
+                    "return=minimal"
+            },
+
+            json=data,
+
+            timeout=10
+        )
+
+        if response.status_code in (200, 201):
+
+            print()
+            print("📤 GALLERY FILE EVENT CREATED")
+            print("FILE:", file_name)
+            print("TYPE:", file_type)
+            print("URL:", file_url)
+
+        else:
+
+            print(
+                "🔴 GALLERY FILE EVENT ERROR:",
+                response.status_code,
+                response.text
+            )
+
+        return
+    print("🔎 GET PAGE:", repr(btn_id))
 
     data = get_page(btn_id)
+    print("📄 PAGE DATA:", data)
     
     if not data:
         return

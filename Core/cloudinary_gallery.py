@@ -89,6 +89,15 @@ def get_gallery_assets(gallery_id):
             "url": url,
             "public_id": asset.get(
                 "public_id"
+            ),
+            "asset_id": asset.get(
+                "asset_id"
+            ),
+            "display_name": asset.get(
+                "display_name"
+            ),
+            "original_filename": asset.get(
+                "original_filename"
             )
         })
 
