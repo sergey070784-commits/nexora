@@ -108,7 +108,7 @@ def save_memory(session_id, channel, memory):
 
         params={
             "select": "memory_json",
-            "session_id": f"eq.{chat_id}",
+            "session_id": f"eq.{session_id}",
             "limit": 1
         },
 

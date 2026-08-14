@@ -148,6 +148,7 @@ def check_commands(
                     continue
 
                 memory = rows[0]["memory_json"]
+                print("🧠 COMMAND MEMORY:", memory)
 
                 data["messages"] = []
 
