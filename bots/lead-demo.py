@@ -46,6 +46,14 @@ SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
 
 def show_page(chat_id, data):
+    import inspect
+
+    print(
+        "SHOW_PAGE:",
+        data.get("title"),
+        "CALLER:",
+        inspect.stack()[1].function
+    )
 
     state = user_data.get(chat_id, {})
 
@@ -60,6 +68,9 @@ def show_page(chat_id, data):
     }
 
     user_data[chat_id] = state
+    print("SHOW PAGE CHAT:", chat_id)
+    print("SHOW PAGE BUTTONS:", state["buttons"])
+    print("SHOW PAGE STATE:", state)
 
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True
@@ -79,10 +90,19 @@ def show_page(chat_id, data):
 
         text += "\n\n" + msg
 
-    bot.send_message(
+    sent = bot.send_message(
         chat_id,
         text,
         reply_markup=keyboard
+    )
+
+    print(
+        "TELEGRAM SENT:",
+        sent.message_id,
+        "TEXT:",
+        sent.text,
+        "KEYBOARD:",
+        sent.reply_markup
     )
 def show_popup(chat_id, data):
 
@@ -138,6 +158,8 @@ def show_popup(chat_id, data):
 def show_command(chat_id, data):
 
     print("SHOW COMMAND")
+    print("COMMAND BUTTONS:", data.get("buttons"))
+
 
     show_page(
         chat_id,
@@ -259,15 +281,26 @@ def handle_file(message):
         )
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
+    print(
+        "🔥 HANDLE MESSAGE:",
+        repr(message.text),
+        "CHAT:",
+        message.chat.id
+    )
 
     state = user_data.get(message.chat.id)
-
+   
     if not state:
         return
+    print("STATE OBJECT ID:", id(state))
+    print("STATE BEFORE:", state)
+
     print("MESSAGE:", repr(message.text))
     print("STATE BUTTONS:", state.get("buttons"))
-
+ 
     btn_id = state["buttons"].get(message.text)
+    print("🔘 PRESSED TEXT:", repr(message.text))
+    print("🔑 BTN_ID:", repr(btn_id))
 
     if not btn_id:
 
@@ -374,8 +407,10 @@ def handle_message(message):
         }
 
         return
+    print("🔎 GET PAGE:", repr(btn_id))
 
     data = get_page(btn_id)
+    print("📄 PAGE DATA:", data)
     
     if not data:
         return

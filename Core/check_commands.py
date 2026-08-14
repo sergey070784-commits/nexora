@@ -22,7 +22,7 @@ HEADERS = {
     "apikey": SUPABASE_KEY,
     "Authorization": f"Bearer {SUPABASE_KEY}"
 }
-def clear_user_memory(session_id):
+def clear_user_memory(session_id, channel):
 
     response = requests.patch(
 
@@ -35,7 +35,8 @@ def clear_user_memory(session_id):
         },
 
         params={
-            "session_id": f"eq.{session_id}"
+            "session_id": f"eq.{session_id}",
+            "channel": f"eq.{channel}"
         },
 
         json={
@@ -212,7 +213,10 @@ def check_commands(
 
                 if patch_response.status_code in (200, 204):
 
-                    clear_user_memory(chat_id)
+                    clear_user_memory(
+                        chat_id,
+                        row["channel"]
+       )
 
                 else:
 

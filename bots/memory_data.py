@@ -107,8 +107,9 @@ def save_memory(session_id, channel, memory):
         headers=HEADERS,
 
         params={
-            "select": "id,memory_json",
+            "select": "memory_json",
             "session_id": f"eq.{session_id}",
+            "channel": f"eq.{channel}",
             "limit": 1
         },
 
