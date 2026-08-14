@@ -1,5 +1,6 @@
 {
   "nx_menu":     "PAGE_00000",
-  "nx_upwork":   "PAGE_00001",
-  "nx_cale": "PAGE_00018"
+  "nx_upwork":   "PAGE_00003",
+  "nx_booking":  "PAGE_00015",
+  "nx_intake":   "PAGE_00020"
 }
