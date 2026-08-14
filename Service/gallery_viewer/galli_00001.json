@@ -1,16 +1,11 @@
 {
-    "id": "galli_00001",
-    
-    "gallery_id": "GALLERY_001",
-
-    "items": [],
-
-    "actions": [
-
-        {
-            "text": "Continue",
-            "id": "BTN_00028"
-        }
-
-    ]
+  "id": "galli_00001",
+  "gallery_id": "GALLERY_001",
+  "items": [],
+  "actions": [
+    {
+      "text": "Continue",
+      "id": "BTN_00028"
+    }
+  ]
 }

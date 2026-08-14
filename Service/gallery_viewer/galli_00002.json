@@ -1,16 +1,22 @@
 {
-    "id": "galli_00002",
-
-    "gallery_id": "GALLERY_002",
-
-    "items": [],
-
-    "actions": [
-
-        {
-            "text": "back menu",
-            "id": "BTN_00035"
-        }
-
-    ]
+  "id": "galli_00002",
+  "gallery_id": "GALLERY_002",
+  "folder": "upwork_docs_01",
+  "items": [],
+  "actions": [
+    {
+      "text": "1",
+      "id": "DOC_0001",
+      "type": "file"
+    },
+    {
+      "text": "2",
+      "id": "DOC_0002",
+      "type": "file"
+    },
+    {
+      "text": "Back",
+      "id": "BTN_00028"
+    }
+  ]
 }

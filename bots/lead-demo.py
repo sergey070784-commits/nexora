@@ -401,10 +401,30 @@ def handle_message(message):
             message.chat.id,
             data
         )
-        user_data[message.chat.id]["buttons"] = {
+
+        state = user_data[message.chat.id]
+
+        state["buttons"] = {
             action["text"]: action["id"]
             for action in data.get("actions", [])
         }
+
+        state["gallery_actions"] = {
+            action["id"]: action
+            for action in data.get("actions", [])
+        }
+
+        user_data[message.chat.id] = state
+
+        print(
+            "GALLERY BUTTONS:",
+            state["buttons"]
+        )
+
+        print(
+            "GALLERY ACTIONS:",
+            state["gallery_actions"]
+        )
 
         return
     print("🔎 GET PAGE:", repr(btn_id))
