@@ -15,6 +15,7 @@ from Core.value_engine import (
 )
 from Core.gallery_router import get_gallery_data
 from Core.gallery_show import show_gallery
+from io import BytesIO
 TOKEN = "8159696699:AAGOVnHtLK6ELCY32ctYxXFoH8qX6EvZbhc"
 
 bot = telebot.TeleBot(TOKEN)
@@ -491,6 +492,10 @@ def handle_message(message):
 
             "file_url": file_url,
 
+            "cloudinary_public_id": action.get("public_id"),
+
+            "file_source": "gallery",
+
             "status": "new"
         }
 
@@ -692,9 +697,22 @@ def check_file_messages():
 
                 try:
 
+                    file_response = requests.get(
+                        asset["cloudinary_url"],
+                        timeout=30
+                    )
+
+                    file_response.raise_for_status()
+
+                    file_data = BytesIO(
+                        file_response.content
+                    )
+
+                    file_data.name = asset["file_name"]
+
                     bot.send_document(
                         chat_id,
-                        asset["cloudinary_url"]
+                        file_data
                     )
 
                     requests.patch(

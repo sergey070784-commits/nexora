@@ -250,12 +250,29 @@ def process_event(event):
         if event.get("file_type") == "document"
         else "image"
     )
+    print("FILE SOURCE:", event.get("file_source"))
+    print("GALLERY PUBLIC ID:", event.get("cloudinary_public_id"))
 
-    result = cloudinary.uploader.upload(
-        file_url,
-        folder=f"incoming/{event['session_id']}",
-        resource_type=resource_type
-    )
+    if event.get("file_source") == "gallery":
+
+        result = {
+            "public_id": event["cloudinary_public_id"],
+            "secure_url": event["file_url"]
+        }
+
+    else:
+
+        resource_type = (
+            "raw"
+            if event.get("file_type") == "document"
+            else "image"
+        )
+
+        result = cloudinary.uploader.upload(
+            file_url,
+            folder=f"incoming/{event['session_id']}",
+            resource_type=resource_type
+        )
 
     print(
         "Cloudinary:",
