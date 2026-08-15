@@ -5,16 +5,18 @@
 
   "messages": [
     "AI Lead Qualification & Business Automation", 
-    "See how AI qualifies new leads,",
-    "identifies high-value prospects,",
-    "and automatically launches business workflows.",
-    "⏱ Less than 1 minute"
+    "See how AI can:",
+    "✅ Qualify new leads",
+    "✅ Understand business needs",
+    "✅ Recommend the right workflow",
+    "✅ Launch automation automatically",
+    "⏱ Live demo — less than 1 minute"
 
   ],
   "buttons": [
   {
     "id": "BTN_00004",
-    "text": "▶ Start"
+    "text": "▶️ Start Demo"
   }
 ]
 }

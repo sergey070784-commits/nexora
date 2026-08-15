@@ -4,10 +4,9 @@
   "title": "What type of business do you have?",
 
   "messages": [
-    "Choose the option",
-     "that best describes your company."
 
-
+    "Choose the option that best describes your business."
+     
   ],
   "buttons": [
   {

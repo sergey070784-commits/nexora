@@ -1,70 +1,70 @@
 {
   "BTN_00006": {
-    "field": "business",
+    "field": "business_type =",
     "value": "Agency"
   },
 
   "BTN_00007": {
-    "field": "business",
+    "field": "business_type =",
     "value": "Law Firm"
   },
 
   "BTN_00008": {
-    "field": "business",
+    "field": "business_type =",
     "value": "Healthcare"
   },
 
   "BTN_00009": {
-    "field": "business",
+    "field": "business_type =",
     "value": "Real Estate"
   },
 
   "BTN_00010": {
-    "field": "business",
+    "field": "business_type =",
     "value": "E-commerce"
   },
 
   "BTN_00011": {
-    "field": "solution",
+    "field": "primary_goal =",
     "value": "AI Lead Qualification"
   },
 
   "BTN_00012": {
-    "field": "solution",
+    "field": "primary_goal =",
     "value": "Appointment Booking"
   },
 
   "BTN_00013": {
-    "field": "solution",
+    "field": "primary_goal =",
     "value": "Document Collection"
   },
 
   "BTN_00014": {
-    "field": "solution",
+    "field": "primary_goal =",
     "value": "Customer Support"
   },
 
   "BTN_00015": {
-    "field": "solution",
+    "field": "primary_goal =",
     "value": "Complete Business Automation"
   },
    "BTN_00016": {
-    "field": "Inquiries",
+    "field": "monthly_inquiries =",
     "value": "1–20"
   },
 
   "BTN_00017": {
-    "field": "Inquiries",
+    "field": "monthly_inquiries =",
     "value": "20–100"
   },
 
   "BTN_00018": {
-    "field": "Inquiries",
+    "field": "monthly_inquiries =",
     "value": "100–500"
   },
 
   "BTN_00019": {
-    "field": "Inquiries",
+    "field": "monthly_inquiries =",
     "value": "500+"
   },
 
