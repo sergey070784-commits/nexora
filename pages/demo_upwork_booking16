@@ -1,19 +1,22 @@
 {
   "engine": "page",
   
-  "title": "calendar end",
+  "title": "📅 Appointment Scheduled",
 
   "messages": [
-    "tekst pridumat"
+    "Your appointment has been successfully scheduled.",
+    "The booking workflow is complete.",
+    "",
+    "You can also explore example calendar setups."
 
   ],
   "buttons": [
   {
-      "id": "GRL_00405",
+      "id": "GRL_00001",
       "text": "example calendar"
     },
     {
-      "id": "BTN_00028",
+      "id": "BTN_00029",
       "text": "next demoo"
     }
     
