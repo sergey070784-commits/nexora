@@ -1,15 +1,12 @@
 {
   "engine": "page",
   
-  "title": "Choose how to continue",
+  "title": "📁 Document Submission",
 
   "messages": [
-    "📂 Document Examples", 
-    "You can either send your own document",
-    "or explore our examples first.",
-    "Choose how you'd like to continue:"
-    
-
+    "You can upload your document or view examples first.", 
+    "Choose an option to continue:"
+   
   ],
   "buttons": [
  
