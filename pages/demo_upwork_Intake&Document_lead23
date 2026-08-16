@@ -1,0 +1,12 @@
+{
+  "engine": "command",
+  
+  "title": "✅ Document Received",
+
+  "buttons": [
+    {
+      "text": "Continue",
+      "id": "BTN_00038"
+    }
+  ]
+}

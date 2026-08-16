@@ -1,0 +1,16 @@
+{
+  "engine": "page",
+  
+  "title": "✅ Document Received",
+
+  "messages": [
+    "Your document has been successfully received."
+  
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00038",
+    "text": "Back main menu"
+  }
+]
+}

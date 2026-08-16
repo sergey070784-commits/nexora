@@ -1,0 +1,20 @@
+{
+  "engine": "page",
+  
+  "title": "📎 Upload Your Document",
+
+  "messages": [
+    "Please send your document here to continue.", 
+    "",
+    "Just attach the file and send it"
+   
+  ],
+  "buttons": [
+ 
+
+  {
+    "id": "BTN_00037",
+    "text": "Continue"
+  }
+]
+}
