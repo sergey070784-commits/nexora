@@ -4,7 +4,9 @@
   "title": "📁 Document Submission",
 
   "messages": [
-    "You can upload your document or view examples first.", 
+    "You can upload your own document", 
+    "or choose one from our examples.",
+    "",
     "Choose an option to continue:"
    
   ],
@@ -16,7 +18,7 @@
   },
   {
     "id": "GRL_00406",
-    "text": "🖼️ View Examples"
+    "text": "Choose Example Document"
   }
 ]
 }
