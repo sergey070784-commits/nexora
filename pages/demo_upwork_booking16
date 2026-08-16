@@ -13,11 +13,11 @@
   "buttons": [
   {
       "id": "GRL_00001",
-      "text": "example calendar"
+      "text": "📅 Example Calendars"
     },
     {
       "id": "BTN_00029",
-      "text": "next demoo"
+      "text": "📄 Intake & Document"
     }
     
   ]
