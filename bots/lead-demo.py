@@ -13,6 +13,10 @@ from Core.value_engine import (
     get_values,
     send_values
 )
+from Core.contact_handler import (
+    get_contact_data,
+    show_contact
+)
 from Core.gallery_router import get_gallery_data
 from Core.gallery_show import show_gallery
 from io import BytesIO
@@ -317,6 +321,18 @@ def handle_message(message):
 
         return
 
+    if btn_id.startswith("CTN_"):
+
+        contact_handler(
+            bot=bot,
+            chat_id=message.chat.id,
+            btn_id=btn_id,
+            user_data=user_data,
+            bot_config=bot_config
+        )
+
+        return
+
     if btn_id.startswith((
         "CALENDAR_",
         "MORNING_",
@@ -389,6 +405,27 @@ def handle_message(message):
 
     )
     print("BTN_ID:", btn_id)
+
+    if btn_id.startswith("CTN_"):
+
+        print()
+        print("📋 CONTACT BUTTON")
+        print("CTN:", btn_id)
+
+        data = get_contact_data(
+            btn_id
+        )
+
+        if not data:
+            return
+
+        show_contact(
+            bot,
+            message.chat.id,
+            data
+        )
+
+        return
 
     if btn_id.startswith("GRL_"):
 
