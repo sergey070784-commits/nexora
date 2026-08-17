@@ -349,7 +349,7 @@ def process_delivery(item):
 
     update_delivery(
         item["id"],
-        "queued"
+        "done"
     )
 
     print(
