@@ -1,4 +1,5 @@
 import requests
+from telebot import types
 
 
 BASE = (
@@ -8,7 +9,7 @@ BASE = (
 
 ROUTES_URL = (
     BASE +
-    "Service/contact_viewer/contact_routes.json"
+    "Service/contact_routes.json"
 )
 
 PAGES_BASE = (
@@ -85,7 +86,8 @@ def show_contact(bot, chat_id, data):
 
     bot.send_message(
         chat_id,
-        text
+        text,
+        reply_markup=types.ReplyKeyboardRemove()
     )
 
     print(

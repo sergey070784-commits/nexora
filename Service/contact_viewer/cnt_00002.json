@@ -1,0 +1,10 @@
+{
+  "id": "CTN_00002",
+  "engine": "contact",
+  "messages": [
+    "📞 Contact Details",
+    "Please enter your phone number."
+  ],
+  "field": "phone",
+  "next": "CTN_00003"
+}

@@ -321,18 +321,6 @@ def handle_message(message):
 
         return
 
-    if btn_id.startswith("CTN_"):
-
-        contact_handler(
-            bot=bot,
-            chat_id=message.chat.id,
-            btn_id=btn_id,
-            user_data=user_data,
-            bot_config=bot_config
-        )
-
-        return
-
     if btn_id.startswith((
         "CALENDAR_",
         "MORNING_",
@@ -425,7 +413,39 @@ def handle_message(message):
             data
         )
 
+        # ========================================
+        # CONTACT MODE
+        # HIDE NORMAL BUTTONS
+        # ========================================
+
+        state = user_data.get(
+            message.chat.id,
+            {}
+        )
+
+        state["buttons"] = {}
+
+        user_data[
+            message.chat.id
+        ] = state
+
         return
+
+
+    if btn_id.startswith("GRL_"):
+
+        data = get_gallery_data(
+            btn_id
+        )
+
+        if not data:
+            return
+
+        show_gallery(
+            bot,
+            message.chat.id,
+            data
+        )
 
     if btn_id.startswith("GRL_"):
 

@@ -1,0 +1,10 @@
+{
+  "id": "CTN_00003",
+  "engine": "contact",
+  "messages": [
+    "📧 Email Address",
+    "Please enter your email address."
+  ],
+  "field": "email",
+  "next": "BTN_00030"
+}
