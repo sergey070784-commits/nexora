@@ -450,7 +450,7 @@ def process_event(event):
 
             contact_bot_config["channel"],
 
-            field,
+            field.lower(),
 
             message
 
