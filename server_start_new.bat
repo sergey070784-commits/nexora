@@ -3,12 +3,13 @@ cd /d C:\Users\server\Documents\project\nexora
 
 echo ========================================
 echo       NEXORA SERVER START
-echo       12 PROCESSES
+echo       13 PROCESSES
 echo ========================================
 echo.
 
 REM ===== CORE =====
 start "NEXORA Memory Data" cmd /k "python -m bots.memory_data"
+start "NEXORA Contact Worker" cmd /k "python -m bots.contact_worker"
 
 REM ===== COMMAND ROUTERS =====
 REM Commands are handled through command_router configs.
@@ -32,6 +33,6 @@ start "NEXORA WhatsApp Bot 2" cmd /k "python -m bots.demo_lead_2_wa"
 echo.
 echo ========================================
 echo   NEXORA SERVER STARTED
-echo   12 PROCESSES
+echo   13 PROCESSES
 echo ========================================
 pause
