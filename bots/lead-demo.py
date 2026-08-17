@@ -434,21 +434,6 @@ def handle_message(message):
 
     if btn_id.startswith("GRL_"):
 
-        data = get_gallery_data(
-            btn_id
-        )
-
-        if not data:
-            return
-
-        show_gallery(
-            bot,
-            message.chat.id,
-            data
-        )
-
-    if btn_id.startswith("GRL_"):
-
         data = get_gallery_data(btn_id)
 
         if not data:
