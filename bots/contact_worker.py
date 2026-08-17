@@ -419,10 +419,10 @@ def process_event(event):
             "BTN_"
         ):
 
-        print()
-        print(
-            "✅ CONTACT COMPLETE"
-        )
+            print()
+            print(
+                "✅ CONTACT COMPLETE"
+            )
 
         print(
             "SESSION:",
