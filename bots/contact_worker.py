@@ -1,5 +1,6 @@
 import time
 import requests
+from Core.event_logger import send_event
 
 
 BASE = (
@@ -220,11 +221,6 @@ def process_event(event):
 
         return
 
-
-    # ====================================
-    # USER TEXT
-    # ====================================
-
     if message:
 
         session_key = str(
@@ -235,11 +231,8 @@ def process_event(event):
             session_key
         )
 
-
         if not contact:
-
             return
-
 
         print()
         print("📥 CONTACT TEXT")
@@ -260,9 +253,131 @@ def process_event(event):
             message
         )
 
-        print(
-            "✅ CONTACT TEXT RECEIVED"
+        # ====================================
+        # LOAD CURRENT CONTACT PAGE
+        # ====================================
+
+        page_name = contact["page"]
+
+        page_url = (
+            BASE +
+            "Service/contact_viewer/" +
+            page_name +
+            ".json"
         )
+
+        response = requests.get(
+            page_url,
+            timeout=10
+        )
+
+        response.raise_for_status()
+
+        page_data = response.json()
+
+        field = page_data.get(
+            "field"
+        )
+
+        next_id = page_data.get(
+            "next"
+        )
+
+        print(
+            "FIELD:",
+            field
+        )
+
+        print(
+            "NEXT:",
+            next_id
+        )
+
+        # ====================================
+        # SAVE VALUE IN ACTIVE CONTACT
+        # ====================================
+
+        contact_bot_config = {
+            "channel": event.get("channel"),
+             "bot": event.get("bot")
+        }
+
+        send_event(
+            contact_bot_config,
+            session_id,
+            value=f"{field}={message}"
+        )
+
+        print(
+            "💾 CONTACT VALUE SENT:",
+            f"{field}={message}"
+        )
+
+        # ====================================
+        # NEXT CONTACT PAGE
+        # ====================================
+
+        if next_id and next_id.startswith(
+            "CTN_"
+        ):
+
+            next_page = CONTACT_ROUTES.get(
+                next_id
+            )
+
+            if not next_page:
+
+                print(
+                    "🔴 NEXT CONTACT ROUTE NOT FOUND:",
+                    next_id
+                )
+
+                return
+
+            contact["ctn"] = next_id
+            contact["page"] = next_page
+
+            print(
+                "➡️ NEXT CONTACT PAGE:",
+                next_page
+            )
+
+            return
+
+        # ====================================
+        # CONTACT FINISHED
+        # ====================================
+
+        if next_id and next_id.startswith(
+            "BTN_"
+        ):
+
+            print()
+            print(
+                "✅ CONTACT COMPLETE"
+            )
+
+            print(
+                "SESSION:",
+                session_id
+            )
+
+            print(
+                "CONTACT DATA:",
+                contact
+            )
+
+            print(
+                "➡️ RETURN BTN:",
+                next_id
+            )
+
+            active_contacts.pop(
+                session_key,
+                None
+            )
+
+            return
         # ========================================
 # WORKER
 # ========================================
