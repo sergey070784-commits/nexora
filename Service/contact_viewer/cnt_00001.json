@@ -2,7 +2,7 @@
   "id": "CTN_00001",
   "engine": "contact",
   "messages": [
-    "👤 Personal Information",
+    "👤 Your Name",
     "Please enter your full name."
   ],
   "field": "name",

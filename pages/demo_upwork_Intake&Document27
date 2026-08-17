@@ -4,13 +4,16 @@
   "title": "📋 Client Intake",
 
   "messages": [
-    "pridumat"
+    "Let's collect the information needed for your request",
+    "I'll guide you through a few questions and",
+    "                    record your answers.",
+    "Ready to begin?"
 
   ],
   "buttons": [
     {
-    "id": "BTN_00042",
-    "text": "Continie"
+    "id": "CTN_00001",
+    "text": "▶️ Start Intake"
     }
 ]
 }

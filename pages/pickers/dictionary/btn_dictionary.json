@@ -71,6 +71,10 @@
   "BTN_00031": {
     "field": "📄 Document Submission",
     "value": "The client has uploaded a document for processing."
+  },
+  "BTN_00044": {
+    "field": "📋 Client Intake Received",
+    "value": "✅ New Contact Created"
   }
   
 }

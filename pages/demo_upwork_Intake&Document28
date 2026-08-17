@@ -1,0 +1,18 @@
+{
+  "engine": "page",
+  
+  "title": "✅ Information Received",
+
+  "messages": [
+    "Thank you.",
+    "Your information has been successfully recorded.",
+    "",
+    "Your request has been submitted for processing."
+  ],
+  "buttons": [
+    {
+    "id": "BTN_00046",
+    "text": "Continie"
+    }
+]
+}

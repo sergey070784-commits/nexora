@@ -3,8 +3,8 @@
   "engine": "contact",
   "messages": [
     "📞 Contact Details",
-    "Please enter your phone number."
+    "Please enter your phone number or email."
   ],
-  "field": "phone",
+  "field": "contact",
   "next": "CTN_00003"
 }
