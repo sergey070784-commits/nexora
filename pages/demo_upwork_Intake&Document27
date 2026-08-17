@@ -1,0 +1,16 @@
+{
+  "engine": "page",
+  
+  "title": "📋 Client Intake",
+
+  "messages": [
+    "pridumat"
+
+  ],
+  "buttons": [
+    {
+    "id": "BTN_00042",
+    "text": "Continie"
+    }
+]
+}

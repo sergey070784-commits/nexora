@@ -20,6 +20,7 @@ ROUTES_URL = (
 EVENTS_TABLE = "events"
 
 
+
 # ========================================
 # CONFIG
 # ========================================
@@ -142,10 +143,66 @@ def get_events():
 
     return response.json()
 
+def wait_for_memory_value(
+    session_id,
+    channel,
+    field,
+    value,
+    timeout=10
+):
 
-# ========================================
-# PROCESS EVENT
-# ========================================
+    start_time = time.time()
+
+    while time.time() - start_time < timeout:
+
+        response = requests.get(
+
+            f"{SUPABASE_URL}/rest/v1/user_memory",
+
+            headers=HEADERS,
+
+            params={
+                "select": "memory_json",
+                "session_id": f"eq.{session_id}",
+                "channel": f"eq.{channel}",
+                "limit": 1
+            },
+
+            timeout=10
+        )
+
+        if response.status_code == 200:
+
+            rows = response.json()
+
+            if rows:
+
+                memory = rows[0].get(
+                    "memory_json"
+                ) or {}
+
+                if str(memory.get(field)) == str(value):
+
+                    print(
+                        "🧠 MEMORY CONFIRMED:",
+                        field,
+                        "=",
+                        value
+                    )
+
+                    return True
+
+        time.sleep(0.2)
+
+    print(
+        "🔴 MEMORY NOT CONFIRMED:",
+        field,
+        "=",
+        value
+    )
+
+    return False
+
 
 def process_event(event):
 
@@ -336,6 +393,16 @@ def process_event(event):
 
             contact["ctn"] = next_id
             contact["page"] = next_page
+            send_event(
+                contact_bot_config,
+                session_id,
+                value=f"CONTACT_NEXT:{next_id}"
+            )
+
+            print(
+                "➡️ CONTACT NAVIGATION SENT:",
+                next_id
+            )
 
             print(
                 "➡️ NEXT CONTACT PAGE:",
@@ -352,35 +419,70 @@ def process_event(event):
             "BTN_"
         ):
 
-            print()
-            print(
-                "✅ CONTACT COMPLETE"
-            )
+        print()
+        print(
+            "✅ CONTACT COMPLETE"
+        )
+
+        print(
+            "SESSION:",
+            session_id
+        )
+
+        print(
+            "CONTACT DATA:",
+            contact
+        )
+
+        print(
+            "➡️ RETURN BTN:",
+            next_id
+        )
+
+        contact_bot_config = {
+            "channel": event.get("channel"),
+            "bot": event.get("bot")
+        }
+
+        memory_confirmed = wait_for_memory_value(
+
+            session_id,
+
+            contact_bot_config["channel"],
+
+            field,
+
+            message
+
+        )
+
+        if not memory_confirmed:
 
             print(
-                "SESSION:",
-                session_id
-            )
-
-            print(
-                "CONTACT DATA:",
-                contact
-            )
-
-            print(
-                "➡️ RETURN BTN:",
-                next_id
-            )
-
-            active_contacts.pop(
-                session_key,
-                None
+                "🔴 CONTACT STOPPED — MEMORY NOT READY"
             )
 
             return
-        # ========================================
-# WORKER
-# ========================================
+
+        send_event(
+            contact_bot_config,
+            session_id,
+            value=next_id
+        )
+
+        print(
+            "📤 CONTACT BTN SENT:",
+            next_id
+        )
+
+        active_contacts.pop(
+            session_key,
+            None
+        )
+
+        return
+
+
 
 print()
 print("🟢 Contact Worker Running...")

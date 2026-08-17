@@ -624,6 +624,153 @@ def handle_message(message):
         data
     )
 
+# ========================================
+# CONTACT NAVIGATION
+# ========================================
+
+contact_last_id = 0
+
+
+def init_contact_last_id():
+
+    global contact_last_id
+
+    response = requests.get(
+
+        f"{SUPABASE_URL}/rest/v1/events",
+
+        headers={
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        },
+
+        params={
+            "select": "id",
+            "order": "id.desc",
+            "limit": 1
+        },
+
+        timeout=10
+    )
+
+    if response.status_code == 200:
+
+        rows = response.json()
+
+        if rows:
+            contact_last_id = rows[0]["id"]
+
+    print(
+        "CONTACT NAV START FROM ID:",
+        contact_last_id
+    )
+
+
+def check_contact_navigation():
+
+    global contact_last_id
+
+    while True:
+
+        try:
+
+            response = requests.get(
+
+                f"{SUPABASE_URL}/rest/v1/events",
+
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}"
+                },
+
+                params={
+                    "select": "*",
+                    "id": f"gt.{contact_last_id}",
+                    "bot": f"eq.{bot_config['bot']}",
+                    "order": "id.asc"
+                },
+
+                timeout=10
+            )
+
+            if response.status_code != 200:
+
+                print(
+                    "🔴 CONTACT NAV ERROR:",
+                    response.status_code,
+                    response.text
+                )
+
+                time.sleep(1)
+                continue
+
+            rows = response.json()
+
+            for event in rows:
+
+                contact_last_id = event["id"]
+
+                value = event.get("value")
+
+                if not value:
+                    continue
+
+                if not value.startswith(
+                    "CONTACT_NEXT:"
+                ):
+                    continue
+
+                ctn_id = value.replace(
+                    "CONTACT_NEXT:",
+                    "",
+                    1
+                )
+
+                session_id = str(
+                    event.get("session_id")
+                )
+
+                print()
+                print("📋 CONTACT NAVIGATION")
+                print("SESSION:", session_id)
+                print("CTN:", ctn_id)
+
+                data = get_contact_data(
+                    ctn_id
+                )
+
+                if not data:
+
+                    print(
+                        "🔴 CONTACT PAGE NOT FOUND:",
+                        ctn_id
+                    )
+
+                    continue
+
+                show_contact(
+                    bot,
+                    session_id,
+                    data
+                )
+
+                print(
+                    "📋 CONTACT NEXT PAGE SHOWN:",
+                    ctn_id
+                )
+
+        except Exception as e:
+
+            print(
+                "🔴 CONTACT NAV WORKER ERROR:",
+                e
+            )
+
+        time.sleep(1)
+
+
+init_contact_last_id()
+
 
 def check_file_messages():
 
@@ -834,6 +981,15 @@ def check_file_messages():
             )
 
         time.sleep(1)
+
+threading.Thread(
+
+    target=check_contact_navigation,
+
+    daemon=True
+
+).start()
+
 threading.Thread(
     target=check_file_messages,
     daemon=True

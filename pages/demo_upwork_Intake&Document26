@@ -1,0 +1,18 @@
+{
+  "engine": "page",
+  
+  "title": "pridumat",
+
+  "messages": [
+    "",
+    "✅ ",
+    "",
+    ""
+  ],
+  "buttons": [
+    {
+    "id": "BTN_00041",
+    "text": "Continie"
+    }
+]
+}
