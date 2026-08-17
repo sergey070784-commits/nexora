@@ -469,6 +469,16 @@ def process_event(event):
             session_id,
             value=next_id
         )
+        send_event(
+            contact_bot_config,
+            session_id,
+            value=f"CONTACT_NEXT:{next_id}"
+        )
+
+        print(
+            "➡️ CONTACT NAVIGATION SENT:",
+            next_id
+        )
 
         print(
             "📤 CONTACT BTN SENT:",

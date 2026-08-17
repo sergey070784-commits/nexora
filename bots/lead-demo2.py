@@ -720,7 +720,7 @@ def check_contact_navigation():
                 ):
                     continue
 
-                ctn_id = value.replace(
+                next_id = value.replace(
                     "CONTACT_NEXT:",
                     "",
                     1
@@ -733,31 +733,77 @@ def check_contact_navigation():
                 print()
                 print("📋 CONTACT NAVIGATION")
                 print("SESSION:", session_id)
-                print("CTN:", ctn_id)
+                print("NEXT:", next_id)
 
-                data = get_contact_data(
-                    ctn_id
-                )
+            # ====================================
+            # NEXT CONTACT PAGE
+            # ====================================
 
-                if not data:
+                if next_id.startswith(
+                    "CTN_"
+                ):
+
+                    data = get_contact_data(
+                        next_id
+                    )
+
+                    if not data:
+
+                        print(
+                            "🔴 CONTACT PAGE NOT FOUND:",
+                            next_id
+                        )
+
+                        continue
+
+                    show_contact(
+                        bot,
+                        session_id,
+                        data
+                    )
 
                     print(
-                        "🔴 CONTACT PAGE NOT FOUND:",
-                        ctn_id
+                        "📋 CONTACT NEXT PAGE SHOWN:",
+                        next_id
                     )
 
                     continue
 
-                show_contact(
-                    bot,
-                    session_id,
-                    data
-                )
+            # ====================================
+            # CONTACT → NORMAL PAGE
+            # ====================================
 
-                print(
-                    "📋 CONTACT NEXT PAGE SHOWN:",
-                    ctn_id
-                )
+                if next_id.startswith(
+                    "BTN_"
+                ):
+
+                    page = get_page(
+                        next_id
+                    )
+
+                    if not page:
+
+                        print(
+                            "🔴 PAGE NOT FOUND:",
+                            next_id
+                        )
+
+                        continue
+
+                    print(
+                        "➡️ CONTACT RETURN PAGE:",
+                        next_id
+                    )
+
+                    show_page(
+                        session_id,
+                        page
+                    )
+
+                    print(
+                        "📄 CONTACT RETURN PAGE SHOWN:",
+                        next_id
+                    )
 
         except Exception as e:
 
@@ -767,6 +813,8 @@ def check_contact_navigation():
             )
 
         time.sleep(1)
+
+                
 
 
 init_contact_last_id()
