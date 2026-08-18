@@ -116,7 +116,7 @@ def check_commands(
 
                 print("COMMAND:", command)
 
-                chat_id = int(row["session_id"])
+                chat_id = row["session_id"]
 
                 data = get_page(command)
 
@@ -132,6 +132,7 @@ def check_commands(
                     params={
                         "select": "memory_json",
                         "session_id": f"eq.{chat_id}",
+                        "channel": f"eq.{row['channel']}",
                         "limit": 1
                     },
 
