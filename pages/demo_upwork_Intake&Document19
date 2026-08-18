@@ -1,24 +1,29 @@
 {
   "engine": "page",
   
-  "title": "Choose request type",
+  "title": "🚀 Workflow Complete",
 
   "messages": [
-    "What would you like help with?"
+   
+    "Now you can experience another live workflow.",
+    "",
     
+    "Choose how you'd like to continue:"
+
   ],
   "buttons": [
+    
   {
-    "id": "BTN_00031",
-    "text": "📄 Document Submission"
+    "id": "BTN_00029",
+    "text": "📄 Document Collection"
   },
-  {
-    "id": "BTN_00044",
-    "text": "📋 Client Intake"
-  },
-  {
-    "id": "BTN_00033",
-    "text": "📑 Request Review"
+    {
+      "id": "BTN_00025",
+      "text": "📅 Appointment Booking"
+    },
+    {
+    "id": "BTN_00003",
+    "text": "💬 AI Customer Support & FAQ"
   }
-]
+  ]
 }

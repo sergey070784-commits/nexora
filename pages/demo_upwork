@@ -1,9 +1,12 @@
 {
   "engine": "page",
   
-  "title": "🤖 Live Demo",
+  "title": "Welcome",
 
   "messages": [
+
+    "🤖 Live Demo",
+    "",
 
     "Choose a workflow to explore:"
      
@@ -14,7 +17,7 @@
     "text": "📋 Client Intake"
   },
   {
-    "id": "BTN_00020",
+    "id": "BTN_00029",
     "text": "📄 Document Collection"
   },
   {

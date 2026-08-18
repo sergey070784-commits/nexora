@@ -4,16 +4,16 @@
   "title": "Welcome",
 
   "messages": [
-    "📄 Client Intake & Document Collection",
-    "Let's collect the information and documents", 
-    "needed to process your request.",
-    "I'll guide you step by step.",
+    "📄 Document Collection",
+    "", 
+    "Let's collect the documents needed for your request.",
+    "",
     "Ready to begin?"
 
   ],
   "buttons": [
   {
-    "id": "BTN_00030",
+    "id": "BTN_00031",
     "text": "▶️ Start Demo"
   }
 ]

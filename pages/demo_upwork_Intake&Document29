@@ -4,7 +4,7 @@
   "title": "🚀 Workflow Complete",
 
   "messages": [
-    "The lead has been successfully processed.", 
+   
     "Now you can experience another live workflow.",
     "",
     
@@ -20,10 +20,10 @@
     "id": "BTN_00029",
     "text": "📄 Document Collection"
   },
-    {
-      "id": "BTN_00025",
-      "text": "📅 Appointment Booking"
-    }
+  {
+    "id": "BTN_00003",
+    "text": "💬 AI Customer Support & FAQ"
+  }
+    
   ]
-
 }
