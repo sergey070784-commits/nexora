@@ -1,0 +1,30 @@
+{
+  "engine": "page",
+  
+  "title": "🤖 Live Demo",
+
+  "messages": [
+
+    "Choose a workflow to explore:"
+     
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00040",
+    "text": "📋 Client Intake"
+  },
+  {
+    "id": "BTN_00020",
+    "text": "📄 Document Collection"
+  },
+  {
+    "id": "BTN_00025",
+    "text": "📅 Appointment Booking"
+  },
+  {
+    "id": "BTN_00003",
+    "text": "💬 AI Customer Support & FAQ"
+  }
+  
+]
+}
