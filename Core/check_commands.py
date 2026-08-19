@@ -116,7 +116,7 @@ def check_commands(
 
                 print("COMMAND:", command)
 
-                chat_id = int(row["session_id"])
+                chat_id = row["session_id"]
 
                 data = get_page(command)
 
