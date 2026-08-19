@@ -8,25 +8,11 @@
   ],
   "buttons": [
 
-  {
-    "id": "BTN_00001",
-    "text": "ברוכים הבאים"
-  },
-  {
-    "id": "BTN_00002",
-    "text": "התחלה"
-  },
+  
   {
     "id": "BTN_00025",
     "text": "calendar"
-  },
-  {
-    "id": "BTN_00029",
-    "text": "Intake & Document"
-  },
-  {
-    "id": "BTN_00003",
-    "text": "demo upwork"
   }
+  
   ]
 }
