@@ -7,12 +7,16 @@ from Core.event_logger import send_event
 import threading
 from Core.check_commands import check_commands
 from Core.calendar_engine import get_calendar
-
+from Core.contact_handler import (
+    get_contact_data,
+    show_contact
+)
 from Core.value_engine import (
     save_values,
     get_values,
     send_values
 )
+from Core.contact_handler import get_contact_data
 #===== GREEN API =====
 
 ID_INSTANCE = "710722689636"
@@ -26,6 +30,8 @@ API_URL = (
 
 user_data = {}
 ignore_messages = {}
+contact_last_id = 0
+
 BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
@@ -35,6 +41,14 @@ bot_config = requests.get(
     BASE + "Core/whatsapp_bot2_config.json",
     timeout=10
 ).json()
+
+config = requests.get(
+    BASE + "Core/config.json",
+    timeout=10
+).json()
+
+SUPABASE_URL = config["supabase_url"]
+SUPABASE_KEY = config["supabase_key"]
 
 #===== SEND MESSAGE =====
 
@@ -128,8 +142,39 @@ def log_message(session_id, text):
 
         print(e)
 
-def show_page(chat_id, data):
+def show_contact(chat_id, data):
 
+    title = data.get(
+        "title",
+        ""
+    )
+
+    messages = data.get(
+        "messages",
+        []
+    )
+
+    text = title
+
+    for message in messages:
+
+        if text:
+            text += "\n\n"
+
+        text += message
+
+    send_message(
+        chat_id,
+        text
+    )
+
+    print(
+        "📋 CONTACT SHOWN:",
+        data.get("id")
+    )
+
+def show_page(chat_id, data):
+   
     state = user_data.get(chat_id, {})
 
     state["page"] = data.get("id")
@@ -229,7 +274,9 @@ def send_reply_buttons(chat_id, buttons):
 
     payload = {
         "chatId": chat_id,
+        
         "body": " ",
+        
         "buttons": buttons
     }
     response = requests.post(
@@ -389,7 +436,7 @@ while True:
                 state = user_data.get(sender)
 
                 btn_id = state["buttons"].get(text, text)
-               
+                
                 if not btn_id:
 
                     send_event(
@@ -399,6 +446,34 @@ while True:
                     )
 
                 else:
+
+                    if btn_id.startswith("CTN_"):
+
+                        print()
+                        print("📋 CONTACT BUTTON")
+                        print("CTN:", btn_id)
+
+                        data = get_contact_data(
+                            btn_id
+                        )
+
+                        if data:
+
+                            state["page"] = data.get("id")
+                            state["buttons"] = {}
+
+                            user_data[sender] = state
+
+                            show_contact(
+                                sender,
+                                data
+                            )
+
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
 
                     if btn_id.startswith((
                         "CALENDAR_",
