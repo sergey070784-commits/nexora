@@ -224,9 +224,7 @@ def process_event(event):
         "value"
     )
 
-    message = event.get(
-        "message"
-    )
+    message = event.get("message")
 
     channel = event.get(
         "channel"

@@ -30,7 +30,7 @@ API_URL = (
 
 user_data = {}
 ignore_messages = {}
-contact_last_id = 0
+contact_nav_last_id = 0
 
 BASE = (
     "https://raw.githubusercontent.com/"
@@ -292,10 +292,154 @@ def show_command(chat_id, data):
         chat_id,
         data
     )
+
+def check_contact_navigation():
+
+    global contact_nav_last_id
+
+    while True:
+
+        try:
+
+            response = requests.get(
+
+                f"{SUPABASE_URL}/rest/v1/events",
+
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}"
+                },
+
+                params={
+                    "select": "*",
+                    "id": f"gt.{contact_nav_last_id}",
+                    "bot": "eq.whatsapp_bot1",
+                    "value": "like.CONTACT_NEXT:*",
+                    "order": "id.asc"
+                },
+
+                timeout=10
+            )
+
+            if response.status_code != 200:
+
+                time.sleep(1)
+                continue
+
+            rows = response.json()
+
+            for event in rows:
+
+                contact_nav_last_id = event["id"]
+
+                value = event.get("value")
+
+                if not value:
+                    continue
+
+                if not value.startswith(
+                    "CONTACT_NEXT:"
+                ):
+                    continue
+
+                next_id = value.replace(
+                    "CONTACT_NEXT:",
+                    "",
+                    1
+                )
+
+                session_id = str(
+                    event.get("session_id")
+                )
+
+                print()
+                print("📋 WA CONTACT NAVIGATION")
+                print("SESSION:", session_id)
+                print("NEXT:", next_id)
+
+
+                # ====================================
+                # NEXT CONTACT PAGE
+                # ====================================
+
+                if next_id.startswith(
+                    "CTN_"
+                ):
+
+                    data = get_contact_data(
+                        next_id
+                    )
+
+                    if not data:
+
+                        print(
+                            "🔴 WA CONTACT PAGE NOT FOUND:",
+                            next_id
+                        )
+
+                        continue
+
+                    show_contact(
+                        session_id,
+                        data
+                    )
+
+                    print(
+                        "📋 WA CONTACT NEXT PAGE SHOWN:",
+                        next_id
+                    )
+
+                    continue
+
+
+                # ====================================
+                # CONTACT → NORMAL PAGE
+                # ====================================
+
+                if next_id.startswith(
+                    "BTN_"
+                ):
+
+                    data = get_page(
+                        next_id
+                    )
+
+                    if not data:
+
+                        print(
+                            "🔴 WA RETURN PAGE NOT FOUND:",
+                            next_id
+                        )
+
+                        continue
+
+                    show_page(
+                        session_id,
+                        data
+                    )
+
+                    print(
+                        "📄 WA CONTACT RETURN PAGE SHOWN:",
+                        next_id
+                    )
+
+        except Exception as e:
+
+            print(
+                "🔴 WA CONTACT NAV WORKER ERROR:",
+                e
+            )
+
+        time.sleep(1)
     
 print("🟢 wa demo_lead 2  Running...")
 
 #===== MAIN LOOP =====
+threading.Thread(
+    target=check_contact_navigation,
+    daemon=True
+).start()
+
 threading.Thread(
 
     target=check_commands,
