@@ -436,20 +436,10 @@ def handle_message(message):
         # HIDE NORMAL BUTTONS
         # ========================================
 
-        state = user_data.get(
-            message.chat.id,
-            {}
-        )
-
-        state["page"] = data.get(
-            "id"
-        )
-
-        state["buttons"] = {}
-
-        user_data[
-            message.chat.id
-        ] = state
+        show_page(
+            session_id,
+            page
+   )
         return
 
 
