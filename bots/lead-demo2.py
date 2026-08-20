@@ -73,6 +73,15 @@ def show_page(chat_id, data):
     }
 
     user_data[chat_id] = state
+    print(
+        "🧠 SHOW_PAGE USER_DATA ID:",
+        id(user_data)
+    )
+
+    print(
+        "🧠 SHOW_PAGE STORED STATE:",
+        user_data.get(chat_id)
+    )
     print("SHOW PAGE CHAT:", chat_id)
     print("SHOW PAGE BUTTONS:", state["buttons"])
     print("SHOW PAGE STATE:", state)
@@ -291,6 +300,15 @@ def handle_message(message):
         repr(message.text),
         "CHAT:",
         message.chat.id
+    )
+    print(
+        "🧠 HANDLE USER_DATA ID:",
+        id(user_data)
+    )
+
+    print(
+        "🧠 HANDLE STORED STATE:",
+        user_data.get(message.chat.id)
     )
 
     state = user_data.get(message.chat.id)
