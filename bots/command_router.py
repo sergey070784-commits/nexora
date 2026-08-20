@@ -274,6 +274,12 @@ while True:
 
             if row.get("bot") != bot_config["bot"]:
                 continue
+            print(
+                "🔎 ROUTE CHECK:",
+                repr(button),
+                "MATCH:",
+                button in notify_routes
+            )
 
             if button not in notify_routes:
                 continue
