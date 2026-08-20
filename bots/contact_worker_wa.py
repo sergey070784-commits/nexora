@@ -450,6 +450,16 @@ def process_event(event):
 
             return
 
+        print(
+            "🔎 WA CONTACT DECISION:",
+            "CURRENT CTN =",
+            contact["ctn"],
+            "| NEXT =",
+            next_id,
+            "| FIELD =",
+            field
+      )
+
 
         # =================================
         # CONTACT FINISHED
