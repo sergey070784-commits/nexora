@@ -722,7 +722,7 @@ def check_contact_navigation():
                     1
                 )
 
-                session_id = str(
+                session_id = int(
                     event.get("session_id")
                 )
 
