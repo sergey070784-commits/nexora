@@ -787,6 +787,29 @@ def check_contact_navigation():
                         session_id,
                         page
                     )
+                    state = user_data.get(
+                        int(session_id),
+                        {}
+                    )
+
+                    state["page"] = None
+
+                    state["buttons"] = {
+                        button["text"]: button["id"]
+                        for button in page.get(
+                            "buttons",
+                            []
+                        )
+                    }
+
+                    user_data[
+                        int(session_id)
+                    ] = state
+
+                    print(
+                        "📋 CONTACT RETURN STATE:",
+                        state
+                    )
 
                     print(
                         "📄 CONTACT RETURN PAGE SHOWN:",
