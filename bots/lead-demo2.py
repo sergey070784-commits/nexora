@@ -434,6 +434,7 @@ def handle_message(message):
         ] = state
         return
 
+
     if btn_id.startswith("GRL_"):
 
         data = get_gallery_data(btn_id)
