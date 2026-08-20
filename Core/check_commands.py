@@ -116,7 +116,10 @@ def check_commands(
 
                 print("COMMAND:", command)
 
-                chat_id = int(row["session_id"])
+                if row["channel"] == "telegram":
+                    chat_id = int(row["session_id"])
+                else:
+                    chat_id = row["session_id"]
 
                 data = get_page(command)
 
@@ -228,6 +231,6 @@ def check_commands(
 
         except Exception as e:
 
-            print(e)
+            print("ERROR:", e)
 
         time.sleep(1)

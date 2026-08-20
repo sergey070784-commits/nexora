@@ -1,6 +1,6 @@
 import time
 import requests
-
+import sys
 from Core.event_logger import send_event
 
 
@@ -8,7 +8,21 @@ BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
 )
+CONFIG_NAME = (
+    sys.argv[1]
+    if len(sys.argv) > 1
+    else "whatsapp_bot1_config.json"
+)
 
+bot_config = requests.get(
+    BASE + f"Core/{CONFIG_NAME}",
+    timeout=10
+).json()
+
+print(
+    "🟢 CONTACT WORKER BOT:",
+    bot_config["bot"]
+)
 
 CONFIG_URL = BASE + "Core/config.json"
 
@@ -123,7 +137,7 @@ def get_events():
         params={
             "select": "*",
             "id": f"gt.{last_id}",
-            "bot": "eq.whatsapp_bot1",
+            "bot": f"eq.{bot_config['bot']}",
             "order": "id.asc"
         },
 
