@@ -423,12 +423,15 @@ def handle_message(message):
             {}
         )
 
+        state["page"] = data.get(
+            "id"
+        )
+
         state["buttons"] = {}
 
         user_data[
             message.chat.id
         ] = state
-
         return
 
 
