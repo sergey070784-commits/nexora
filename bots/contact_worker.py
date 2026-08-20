@@ -125,6 +125,7 @@ def get_events():
         params={
             "select": "*",
             "id": f"gt.{last_id}",
+            "bot": "eq.telegram_bot1",
             "order": "id.asc"
         },
 

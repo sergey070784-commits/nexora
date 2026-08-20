@@ -30,7 +30,7 @@ API_URL = (
 
 user_data = {}
 ignore_messages = {}
-contact_nav_last_id = 0
+contact_last_id = 0
 
 BASE = (
     "https://raw.githubusercontent.com/"
@@ -292,10 +292,44 @@ def show_command(chat_id, data):
         chat_id,
         data
     )
+def init_contact_last_id():
+
+    global contact_last_id
+
+    response = requests.get(
+
+        f"{SUPABASE_URL}/rest/v1/events",
+
+        headers={
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        },
+
+        params={
+            "select": "id",
+            "order": "id.desc",
+            "limit": 1
+        },
+
+        timeout=10
+    )
+
+    if response.status_code == 200:
+
+        rows = response.json()
+
+        if rows:
+            contact_last_id = rows[0]["id"]
+
+    print(
+        "WA CONTACT NAV START FROM ID:",
+        contact_last_id
+    )
+
 
 def check_contact_navigation():
 
-    global contact_nav_last_id
+    global contact_last_id
 
     while True:
 
@@ -312,9 +346,8 @@ def check_contact_navigation():
 
                 params={
                     "select": "*",
-                    "id": f"gt.{contact_nav_last_id}",
+                    "id": f"gt.{contact_last_id}",
                     "bot": "eq.whatsapp_bot1",
-                    "value": "like.CONTACT_NEXT:*",
                     "order": "id.asc"
                 },
 
@@ -323,6 +356,12 @@ def check_contact_navigation():
 
             if response.status_code != 200:
 
+                print(
+                    "🔴 WA CONTACT NAV ERROR:",
+                    response.status_code,
+                    response.text
+                )
+
                 time.sleep(1)
                 continue
 
@@ -330,7 +369,7 @@ def check_contact_navigation():
 
             for event in rows:
 
-                contact_nav_last_id = event["id"]
+                contact_last_id = event["id"]
 
                 value = event.get("value")
 
@@ -356,7 +395,6 @@ def check_contact_navigation():
                 print("📋 WA CONTACT NAVIGATION")
                 print("SESSION:", session_id)
                 print("NEXT:", next_id)
-
 
                 # ====================================
                 # NEXT CONTACT PAGE
@@ -391,7 +429,6 @@ def check_contact_navigation():
 
                     continue
 
-
                 # ====================================
                 # CONTACT → NORMAL PAGE
                 # ====================================
@@ -400,22 +437,27 @@ def check_contact_navigation():
                     "BTN_"
                 ):
 
-                    data = get_page(
+                    page = get_page(
                         next_id
                     )
 
-                    if not data:
+                    if not page:
 
                         print(
-                            "🔴 WA RETURN PAGE NOT FOUND:",
+                            "🔴 WA PAGE NOT FOUND:",
                             next_id
                         )
 
                         continue
 
+                    print(
+                        "➡️ WA CONTACT RETURN PAGE:",
+                        next_id
+                    )
+
                     show_page(
                         session_id,
-                        data
+                        page
                     )
 
                     print(
@@ -431,29 +473,28 @@ def check_contact_navigation():
             )
 
         time.sleep(1)
+
     
 print("🟢 wa demo_lead 2  Running...")
 
 #===== MAIN LOOP =====
+
+init_contact_last_id()
+
 threading.Thread(
     target=check_contact_navigation,
     daemon=True
 ).start()
 
 threading.Thread(
-
     target=check_commands,
-
     args=(
-        
         bot_config,
         show_page,
         show_popup,
         show_command
     ),
-
     daemon=True
-
 ).start()
 
 while True:
@@ -511,6 +552,10 @@ while True:
                 ) or {}
             ).get("text")
         )
+        print(
+            "📦 WA MESSAGE DATA:",
+            message_data
+        )
 
         if message_data.get(
             "typeMessage"
@@ -528,6 +573,18 @@ while True:
                         "interactiveButtonsResponse"
                     ) or {}
                 ).get("selectedDisplayText")
+            )
+
+        elif message_data.get(
+            "typeMessage"
+        ) == "textMessage":
+
+            text = (
+                (
+                    message_data.get(
+                        "textMessageData"
+                    ) or {}
+                ).get("textMessage")
             )
 
         if (
@@ -580,6 +637,25 @@ while True:
                 state = user_data.get(sender)
 
                 btn_id = state["buttons"].get(text, text)
+
+                if str(state.get("page") or "").startswith("CTN_"):
+
+                    send_event(
+                        bot_config,
+                        sender,
+                        message=text
+                    )
+
+                    print()
+                    print("📥 CONTACT TEXT SENT")
+                    print("SESSION:", sender)
+                    print("TEXT:", text)
+
+                    delete_notification(
+                        receipt_id
+                    )
+
+                    continue
                 
                 if not btn_id:
 
@@ -596,6 +672,12 @@ while True:
                         print()
                         print("📋 CONTACT BUTTON")
                         print("CTN:", btn_id)
+
+                        send_event(
+                            bot_config,
+                            sender,
+                            value=btn_id
+                        )
 
                         data = get_contact_data(
                             btn_id
