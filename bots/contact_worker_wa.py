@@ -496,7 +496,7 @@ def process_event(event):
 
                 channel,
 
-                field,
+                field.lower(),
 
                 message
 
