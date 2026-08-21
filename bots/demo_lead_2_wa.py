@@ -347,7 +347,7 @@ def check_contact_navigation():
                 params={
                     "select": "*",
                     "id": f"gt.{contact_last_id}",
-                    "bot": "eq.whatsapp_bot2",
+                    "bot": "eq.whatsapp_bot1",
                     "order": "id.asc"
                 },
 
