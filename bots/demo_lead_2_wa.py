@@ -347,7 +347,7 @@ def check_contact_navigation():
                 params={
                     "select": "*",
                     "id": f"gt.{contact_last_id}",
-                    "bot": "eq.whatsapp_bot1",
+                    "bot": "eq.whatsapp_bot2",
                     "order": "id.asc"
                 },
 
@@ -631,8 +631,15 @@ while True:
                         sender,
                         data
                     )
+                print("🔎 WA USER DATA KEYS:", list(user_data.keys()))
+                print("🔎 WA SENDER:", repr(sender))
                
             elif sender in user_data:
+                print(
+                    "🔎 WA STATE CHECK:",
+                    sender,
+                    user_data.get(sender)
+                )
 
                 state = user_data.get(sender)
 
