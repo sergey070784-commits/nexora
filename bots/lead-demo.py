@@ -286,14 +286,17 @@ def handle_file(message):
         )
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
+
+    session_id = message.chat.id
+
     print(
         "🔥 HANDLE MESSAGE:",
         repr(message.text),
         "CHAT:",
-        message.chat.id
+        session_id
     )
 
-    state = user_data.get(message.chat.id)
+    state = user_data.get(session_id)
    
     if not state:
         return
