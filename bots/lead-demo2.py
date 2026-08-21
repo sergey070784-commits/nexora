@@ -73,15 +73,6 @@ def show_page(chat_id, data):
     }
 
     user_data[chat_id] = state
-    print(
-        "🧠 SHOW_PAGE USER_DATA ID:",
-        id(user_data)
-    )
-
-    print(
-        "🧠 SHOW_PAGE STORED STATE:",
-        user_data.get(chat_id)
-    )
     print("SHOW PAGE CHAT:", chat_id)
     print("SHOW PAGE BUTTONS:", state["buttons"])
     print("SHOW PAGE STATE:", state)
@@ -306,13 +297,6 @@ def handle_message(message):
     )
 
     state = user_data.get(session_id)
-
-    print(
-        "🧠 HANDLE STORED STATE:",
-        user_data.get(message.chat.id)
-    )
-
-    state = user_data.get(message.chat.id)
    
     if not state:
         return
@@ -452,7 +436,6 @@ def handle_message(message):
             message.chat.id
         ] = state
         return
-
 
 
     if btn_id.startswith("GRL_"):
@@ -801,6 +784,11 @@ def check_contact_navigation():
                     print(
                         "➡️ CONTACT RETURN PAGE:",
                         next_id
+                    )
+
+                    show_page(
+                        session_id,
+                        page
                     )
 
                     state = user_data.get(
