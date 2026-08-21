@@ -419,7 +419,7 @@ def handle_message(message):
         print("📋 CONTACT BUTTON")
         print("CTN:", btn_id)
 
-                data = get_contact_data(
+        data = get_contact_data(
             btn_id
         )
 
