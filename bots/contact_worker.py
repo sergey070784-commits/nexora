@@ -1,29 +1,12 @@
 import time
 import requests
 from Core.event_logger import send_event
-import sys
-
 
 BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
 )
 
-CONFIG_NAME = (
-    sys.argv[1]
-    if len(sys.argv) > 1
-    else "telegram_bot1_config.json"
-)
-
-bot_config = requests.get(
-    BASE + f"Core/{CONFIG_NAME}",
-    timeout=10
-).json()
-
-print(
-    "🟢 CONTACT WORKER BOT:",
-    bot_config["bot"]
-)
 CONFIG_URL = BASE + "Core/config.json"
 
 ROUTES_URL = (
@@ -31,9 +14,7 @@ ROUTES_URL = (
     "Service/contact_routes.json"
 )
 
-
 EVENTS_TABLE = "events"
-
 
 
 # ========================================
@@ -44,7 +25,6 @@ config = requests.get(
     CONFIG_URL,
     timeout=10
 ).json()
-
 
 SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
@@ -69,7 +49,6 @@ routes_response = requests.get(
 routes_response.raise_for_status()
 
 CONTACT_ROUTES = routes_response.json()
-
 
 print()
 print("📋 CONTACT ROUTES LOADED")
@@ -140,7 +119,7 @@ def get_events():
         params={
             "select": "*",
             "id": f"gt.{last_id}",
-            "bot": f"eq.{bot_config['bot']}",
+            "bot": "eq.telegram_bot1",
             "order": "id.asc"
         },
 

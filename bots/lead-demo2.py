@@ -419,7 +419,7 @@ def handle_message(message):
         print("📋 CONTACT BUTTON")
         print("CTN:", btn_id)
 
-        data = get_contact_data(
+                data = get_contact_data(
             btn_id
         )
 
@@ -437,11 +437,22 @@ def handle_message(message):
         # HIDE NORMAL BUTTONS
         # ========================================
 
-        show_page(
-            session_id,
-            page
-   )
+        state = user_data.get(
+            message.chat.id,
+            {}
+        )
+
+        state["page"] = data.get(
+            "id"
+        )
+
+        state["buttons"] = {}
+
+        user_data[
+            message.chat.id
+        ] = state
         return
+
 
 
     if btn_id.startswith("GRL_"):
