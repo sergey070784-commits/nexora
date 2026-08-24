@@ -17,6 +17,10 @@ from Core.value_engine import (
     send_values
 )
 from Core.contact_handler import get_contact_data
+
+from Core.gallery_router import get_gallery_data
+
+from Core.gallery_show_wa import show_gallery_wa
 #===== GREEN API =====
 
 ID_INSTANCE = "7107624116"
@@ -49,6 +53,11 @@ config = requests.get(
 
 SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
+
+HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}"
+}
 
 #===== SEND MESSAGE =====
 
@@ -473,6 +482,240 @@ def check_contact_navigation():
             )
 
         time.sleep(1)
+def check_file_messages():
+
+    global file_last_id
+
+    while True:
+
+        try:
+
+            response = requests.get(
+
+                f"{SUPABASE_URL}/rest/v1/file_messages",
+
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}"
+                },
+
+                params={
+                    "select": "*",
+                    "id": f"gt.{file_last_id}",
+                    "target_bot": f"eq.{bot_config['bot']}",
+                    "status": "eq.new",
+                    "order": "id.asc"
+                },
+
+                timeout=10
+            )
+
+            if response.status_code != 200:
+
+                print(
+                    "🔴 WA FILE MESSAGE ERROR:",
+                    response.status_code,
+                    response.text
+                )
+
+                time.sleep(2)
+
+                continue
+
+            rows = response.json()
+
+            for row in rows:
+
+                file_last_id = row["id"]
+
+                print()
+                print("📥 WA FILE MESSAGE FOR BOT")
+
+                print(
+                    "SOURCE:",
+                    row["source_bot"]
+                )
+
+                print(
+                    "TARGET:",
+                    row["target_bot"]
+                )
+
+                print(
+                    "ASSET:",
+                    row["asset_id"]
+                )
+
+                print(
+                    "SESSION:",
+                    row["session_id"]
+                )
+
+                print(
+                    "CHAT:",
+                    row.get("chat_id")
+                )
+
+                chat_id = row.get("chat_id")
+
+                if not chat_id:
+
+                    print(
+                        "⚠️ WA NO CHAT_ID"
+                    )
+
+                    continue
+
+                asset_response = requests.get(
+
+                    f"{SUPABASE_URL}/rest/v1/assets",
+
+                    headers={
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            f"Bearer {SUPABASE_KEY}"
+                    },
+
+                    params={
+                        "select": "*",
+                        "asset_id":
+                            f"eq.{row['asset_id']}",
+                        "limit": 1
+                    },
+
+                    timeout=10
+                )
+
+                if asset_response.status_code != 200:
+
+                    print(
+                        "🔴 WA ASSET ERROR:",
+                        asset_response.status_code
+                    )
+
+                    continue
+
+                assets = asset_response.json()
+
+                if not assets:
+
+                    print(
+                        "⚠️ WA ASSET NOT FOUND"
+                    )
+
+                    continue
+
+                asset = assets[0]
+
+                print(
+                    "FILE:",
+                    asset["file_name"]
+                )
+
+                print(
+                    "URL:",
+                    asset["cloudinary_url"]
+                )
+
+                try:
+
+                    send_file(
+                        chat_id,
+                        asset["cloudinary_url"],
+                        asset["file_name"]
+                    )
+
+                    requests.patch(
+
+                        f"{SUPABASE_URL}/rest/v1/file_messages",
+
+                        headers={
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                f"Bearer {SUPABASE_KEY}",
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        params={
+                            "id": f"eq.{row['id']}"
+                        },
+
+                        json={
+                            "status": "sent"
+                        },
+
+                        timeout=10
+                    )
+
+                    print(
+                        "✅ WA FILE SENT TO USER"
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "🔴 WA SEND FILE ERROR:",
+                        e
+                    )
+
+                    requests.patch(
+
+                        f"{SUPABASE_URL}/rest/v1/file_messages",
+
+                        headers={
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                f"Bearer {SUPABASE_KEY}",
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        params={
+                            "id": f"eq.{row['id']}"
+                        },
+
+                        json={
+                            "status": "error"
+                        },
+
+                        timeout=10
+                    )
+
+        except Exception as e:
+
+            print(
+                "🔴 WA FILE MESSAGE WORKER ERROR:",
+                e
+            )
+
+        time.sleep(1)
+
+
+def send_file(
+    chat_id,
+    file_url,
+    file_name
+):
+
+    url = (
+        f"{API_URL}/sendFileByUrl/{API_TOKEN}"
+    )
+
+    payload = {
+        "chatId": chat_id,
+        "urlFile": file_url,
+        "fileName": file_name
+    }
+
+    response = requests.post(
+        url,
+        json=payload
+    )
+
+    return response.json()
+
+file_last_id = 0
 
     
 print("🟢 wa demo_lead 1  Running...")
@@ -483,6 +726,11 @@ init_contact_last_id()
 
 threading.Thread(
     target=check_contact_navigation,
+    daemon=True
+).start()
+
+threading.Thread(
+    target=check_file_messages,
     daemon=True
 ).start()
 
@@ -538,6 +786,86 @@ while True:
                 "messageData"
             ) or {}
         )
+        if message_data.get(
+            "typeMessage"
+        ) == "imageMessage":
+            
+
+            file_data = (
+                message_data.get(
+                    "fileMessageData"
+                ) or {}
+            )
+
+            file_url = file_data.get(
+                "downloadUrl"
+            )
+
+            file_name = file_data.get(
+                "fileName"
+            )
+
+            mime_type = file_data.get(
+                "mimeType"
+            )
+
+            print()
+            print("📥 WA FILE RECEIVED")
+            print("SESSION:", sender)
+            print("FILE:", file_name)
+            print("MIME:", mime_type)
+            print("URL:", file_url)
+
+            data = {
+
+                "session_id": sender,
+
+                "source_bot": bot_config["bot"],
+
+                "channel": "whatsapp",
+
+                "chat_id": sender,
+
+                "file_name": file_name,
+
+                "file_type": "image",
+
+                "file_url": file_url,
+
+                "status": "new"
+            }
+
+            response = requests.post(
+
+                f"{SUPABASE_URL}/rest/v1/file_events",
+
+                headers={
+                    **HEADERS,
+                    "Content-Type": "application/json",
+                    "Prefer": "return=minimal"
+                },
+
+                json=data,
+
+                timeout=10
+            )
+
+            if response.status_code in (200, 201):
+
+                print()
+                print("🟢 WA FILE EVENT CREATED")
+                print("FILE:", file_name)
+                print("TYPE:", "image")
+                print("SESSION:", sender)
+
+            else:
+
+                print()
+                print(
+                    "🔴 WA FILE EVENT ERROR:",
+                    response.status_code,
+                    response.text
+                )
 
         text = (
             (
@@ -775,12 +1103,319 @@ while True:
                         value=btn_id
 
                     )
+                    if btn_id.startswith("GRL_"):
 
-                    data = get_page(btn_id)
+                        print()
+                        print("🖼 WA GALLERY BUTTON")
+                        print("GRL:", btn_id)
+
+                        data = get_gallery_data(
+                            btn_id
+                        )
+
+                        if not data:
+
+                            print(
+                                "🔴 WA GALLERY DATA NOT FOUND:",
+                                btn_id
+                            )
+
+                            delete_notification(
+                                receipt_id
+                            )
+
+                            continue
+
+                        gallery = show_gallery_wa(
+                            sender,
+                            data
+                        )
+
+                        if not gallery:
+
+                            print(
+                                "🔴 WA GALLERY RESULT EMPTY:",
+                                btn_id
+                            )
+
+                            delete_notification(
+                                receipt_id
+                            )
+
+                            continue
+
+                        # ========================================
+                        # SHOW GALLERY IMAGES IN WA
+                        # ========================================
+
+                        for item in gallery.get(
+                            "items",
+                            []
+                        ):
+
+                            if item.get("type") != "image":
+                                continue
+
+                            image_url = item.get(
+                                "url"
+                            )
+
+                            if not image_url:
+                                continue
+
+                            print()
+                            print(
+                                "🖼 WA GALLERY SEND IMAGE"
+                            )
+                            print(
+                                "URL:",
+                                image_url
+                            )
+
+                            send_image(
+                                sender,
+                                image_url
+                            )
+
+                        # ========================================
+                        # SAVE GALLERY BUTTONS
+                        # ========================================
+
+                        state = user_data.get(
+                            sender,
+                            {}
+                        )
+
+                        state["buttons"] = gallery.get(
+                            "buttons",
+                            {}
+                        )
+
+                        state["gallery_actions"] = gallery.get(
+                            "gallery_actions",
+                            {}
+                        )
+
+                        user_data[sender] = state
+
+                        print()
+                        print(
+                            "🖼 WA GALLERY BUTTONS:",
+                            state["buttons"]
+                        )
+
+                        print(
+                            "🖼 WA GALLERY ACTIONS:",
+                            state["gallery_actions"]
+                        )
+
+                        # ========================================
+                        # SHOW GALLERY ACTION BUTTONS
+                        # ========================================
+
+                        buttons = []
+
+                        for action in gallery.get(
+                            "actions",
+                            []
+                        ):
+
+                            if not action.get("id"):
+                                continue
+
+                            if not action.get("text"):
+                                continue
+
+                            buttons.append(
+                                {
+                                    "buttonId":
+                                        action["id"],
+
+                                    "buttonText":
+                                        action["text"]
+                                }
+                            )
+
+                        if buttons:
+
+                            print()
+                            print(
+                                "🖼 WA GALLERY SEND BUTTONS:",
+                                buttons
+                            )
+
+                            send_reply_buttons(
+                                sender,
+                                buttons
+                            )
+
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+                    # ========================================
+                    # GALLERY FILE ACTION
+                    # ========================================
+
+                    gallery_actions = user_data.get(
+                        sender,
+                        {}
+                    ).get(
+                        "gallery_actions",
+                        {}
+                    )
+
+                    action = gallery_actions.get(
+                        btn_id
+                    )
+
+                    if action and action.get("type") == "file":
+
+                        print()
+                        print("📄 WA GALLERY FILE ACTION")
+                        print("FILE ID:", btn_id)
+                        print("ACTION:", action)
+
+                        file_url = action.get(
+                            "file_url"
+                        )
+
+                        if not file_url:
+
+                            print(
+                                "🔴 WA GALLERY FILE URL NOT FOUND:",
+                                btn_id
+                            )
+
+                            delete_notification(
+                                receipt_id
+                            )
+
+                            continue
+
+                        file_name = action.get(
+                            "display_name",
+                            f"{btn_id}.pdf"
+                        )
+
+                        if file_name.lower().endswith(".pdf"):
+
+                            file_type = "document"
+
+                        else:
+
+                            file_type = "image"
+
+                        data = {
+
+                            "session_id": sender,
+
+                            "source_bot":
+                                bot_config["bot"],
+
+                            "channel":
+                                "whatsapp",
+
+                            "chat_id":
+                                sender,
+
+                            "file_name":
+                                file_name,
+
+                            "file_type":
+                                file_type,
+
+                            "file_url":
+                                file_url,
+
+                            "cloudinary_public_id":
+                                action.get(
+                                    "public_id"
+                                ),
+
+                            "file_source":
+                                "gallery",
+
+                            "status":
+                                "new"
+                        }
+
+                        response = requests.post(
+
+                            f"{SUPABASE_URL}/rest/v1/file_events",
+
+                            headers={
+                                "apikey":
+                                    SUPABASE_KEY,
+
+                                "Authorization":
+                                    f"Bearer {SUPABASE_KEY}",
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Prefer":
+                                    "return=minimal"
+                            },
+
+                            json=data,
+
+                            timeout=10
+                        )
+
+                        if response.status_code in (200, 201):
+
+                            print()
+                            print(
+                                "📤 WA GALLERY FILE EVENT CREATED"
+                            )
+
+                            print(
+                                "FILE:",
+                                file_name
+                            )
+
+                            print(
+                                "TYPE:",
+                                file_type
+                            )
+
+                            print(
+                                "URL:",
+                                file_url
+                            )
+
+                        else:
+
+                            print()
+                            print(
+                                "🔴 WA GALLERY FILE EVENT ERROR:",
+                                response.status_code,
+                                response.text
+                            )
+
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+
+
+                    # ========================================
+                    # NORMAL PAGE
+                    # ========================================
+
+                    data = get_page(
+                        btn_id
+                    )
 
                     if data:
 
-                        engine = data.get("engine", "page")
+                        engine = data.get(
+                            "engine",
+                            "page"
+                        )
 
                         if engine == "popup":
 
@@ -805,8 +1440,8 @@ while True:
                             show_page(
                                 sender,
                                 data
-                            )
-                          
+                            ) 
+                                                    
         delete_notification(
             receipt_id
         )

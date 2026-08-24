@@ -104,11 +104,39 @@ def check_commands(
 
             if response.status_code != 200:
 
+                print(
+                    "COMMANDS GET ERROR:",
+                    response.status_code,
+                    response.text[:300]
+                )
+
                 time.sleep(1)
 
                 continue
 
-            rows = response.json()
+            if not response.text.strip():
+
+                print(
+                    "COMMANDS GET EMPTY RESPONSE:",
+                    response.status_code
+                )
+
+                time.sleep(1)
+                continue
+
+            try:
+
+                rows = response.json()
+
+            except ValueError:
+
+                print(
+                "COMMANDS GET INVALID JSON:",
+                repr(response.text[:300])
+            )
+
+            time.sleep(1)
+            continue
 
             for row in rows:
 
