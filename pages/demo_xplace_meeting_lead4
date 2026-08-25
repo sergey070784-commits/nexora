@@ -1,0 +1,16 @@
+{
+  "engine": "command",
+  "events": [
+        "APPOINTMENT_DATE",
+        "APPOINTMENT_TIME"
+    ],
+  
+  "title": "פגישה חדשה נקבע ✅",
+
+  "buttons": [
+    {
+      "text": "לתפרית הראשי",
+      "id": "BTN_00051"
+    }
+  ]
+}

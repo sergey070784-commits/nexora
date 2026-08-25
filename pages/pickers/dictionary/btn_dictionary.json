@@ -75,6 +75,11 @@
   "BTN_00040": {
     "field": "📋 Client Intake Received",
     "value": "✅ New Client Created"
+  },
+  
+  "BTN_00049": {
+    "field": "📋 פניה חדשה",
+    "value": "✅ איש קשר נוצר"
   }
   
 }
