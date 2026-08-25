@@ -1385,6 +1385,41 @@ while True:
                                 "URL:",
                                 file_url
                             )
+                            # ========================================
+                            # KEEP GALLERY BUTTONS AFTER FILE SEND
+                            # ========================================
+
+                            state = user_data.get(
+                                sender,
+                                {}
+                            )
+
+                            buttons = []
+
+                            for text, button_id in state.get(
+                                "buttons",
+                                {}
+                            ).items():
+
+                                buttons.append(
+                                    {
+                                        "buttonId": button_id,
+                                        "buttonText": text
+                                    }
+                                )
+
+                            if buttons:
+
+                                print()
+                                print(
+                                    "🖼 WA GALLERY KEEP BUTTONS:",
+                                    buttons
+                                )
+
+                                send_reply_buttons(
+                                    sender,
+                                    buttons
+                                )
 
                         else:
 
