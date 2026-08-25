@@ -133,10 +133,10 @@ def check_commands(
                 print(
                 "COMMANDS GET INVALID JSON:",
                 repr(response.text[:300])
-            )
+                )
 
-            time.sleep(1)
-            continue
+                time.sleep(1)
+                continue
 
             for row in rows:
 
