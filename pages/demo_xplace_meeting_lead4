@@ -1,11 +1,11 @@
 {
   "engine": "command",
   "events": [
-        "APPOINTMENT_DATE",
-        "APPOINTMENT_TIME"
+        "תאריל",
+        "שעה"
     ],
   
-  "title": "פגישה חדשה נקבע ✅",
+  "title": "🔔 התקבלה פנייה חדשה",
 
   "buttons": [
     {

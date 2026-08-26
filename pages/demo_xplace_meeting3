@@ -1,8 +1,8 @@
 {
     "engine": "calendar",
     "events": [
-        "APPOINTMENT_DATE",
-        "APPOINTMENT_TIME"
+        "תאריל",
+        "שעה"
     ],
     "finish_btn": "BTN_00050"
 }
