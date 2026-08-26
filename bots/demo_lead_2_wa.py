@@ -6,7 +6,10 @@ from Core.page_engine import get_page
 from Core.event_logger import send_event
 import threading
 from Core.check_commands import check_commands
-from Core.calendar_engine import get_calendar
+from Core.calendar_engine import (
+    get_calendar,
+    get_calendar_events
+)
 from Core.contact_handler import (
     get_contact_data,
     show_contact
@@ -1044,21 +1047,18 @@ while True:
                                 ""
                             ).split("_")
 
-                            save_values(
+                            events = get_calendar_events()
 
-                                user_data,
+                            if len(events) >= 2:
 
-                                sender,
-
-                                {
-
-                                    "APPOINTMENT_DATE": date,
-
-                                    "APPOINTMENT_TIME": selected_time
-
-                                }
-
-                            )
+                                save_values(
+                                    user_data,
+                                    sender,
+                                    {
+                                        events[0]: date,
+                                        events[1]: selected_time
+                                    }
+                                )
 
                         data = get_calendar(
                             command=btn_id

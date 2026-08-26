@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 calendar_config = {}
 selected_calendar = ""
 
+
+
 def get_calendar(command=None, config=None):
 
     global calendar_config
@@ -218,6 +220,16 @@ def get_calendar(command=None, config=None):
         })
 
     return page
+
+def get_calendar_events():
+    return calendar_config.get(
+        "events",
+        [
+            "APPOINTMENT_DATE",
+            "APPOINTMENT_TIME"
+        ]
+    )
+
 def build_time_page(title, date, times):
 
     page = {

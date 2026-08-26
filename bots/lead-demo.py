@@ -7,7 +7,10 @@ import threading
 from Core.page_engine import get_page
 from Core.check_commands import check_commands
 from Core.event_logger import send_event
-from Core.calendar_engine import get_calendar
+from Core.calendar_engine import (
+    get_calendar,
+    get_calendar_events
+)
 from Core.value_engine import (
     save_values,
     get_values,
@@ -339,22 +342,18 @@ def handle_message(message):
                 ""
             ).split("_")
 
-            save_values(
+            events = get_calendar_events()
 
-                user_data,
+            if len(events) >= 2:
 
-                message.chat.id,
-
-                {
-
-                    "APPOINTMENT_DATE": date,
-
-                    "APPOINTMENT_TIME": time
-
-                }
-
-            )
-
+                save_values(
+                    user_data,
+                    message.chat.id,
+                    {
+                        events[0]: date,
+                        events[1]: time
+                    }
+                )
         data = get_calendar(
             command=btn_id
         )
