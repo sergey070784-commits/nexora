@@ -1,7 +1,7 @@
 {
     "engine": "calendar",
     "events": [
-        "תאריל",
+        "תאריך",
         "שעה"
     ],
     "finish_btn": "BTN_00050"
