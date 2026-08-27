@@ -82,16 +82,32 @@
     "value": "✅ איש קשר נוצר"
   },
   "BTN_00402": {
-    "field": "💡 Main Need",
-    "value": "Automate a Process"
+    "field": "Определён",
+    "value": "ответу 1"
   },
    "BTN_00403": {
-    "field": "💡 Main Need",
-    "value": "Generate More Leads"
+    "field": "Определён",
+    "value": "ответу 2"
   },
-   "BTN_00404": {
-    "field": "💡 Main Need",
-    "value": "Customer Support"
+   "BTN_00412": {
+    "field": "Определён",
+    "value": "ответу 3"
+  },
+  "BTN_00413": {
+    "field": "Определён",
+    "value": "ответу 4"
+  },
+  "BTN_00414": {
+    "field": "Определён",
+    "value": "Вответу 5"
+  },
+  "BTN_00415": {
+    "field": "Определён",
+    "value": "ответу 6"
+  },
+  "BTN_00416": {
+    "field": "Определён",
+    "value": "ответу 7"
   }
   
 }
