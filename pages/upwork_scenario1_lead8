@@ -1,0 +1,16 @@
+{
+  "engine": "command",
+  
+  "title": "New lead received",
+  "events": [
+        "APPOINTMENT_DATE",
+        "APPOINTMENT_TIME"
+    ],
+
+  "buttons": [
+    {
+      "text": "Main Menu",
+      "id": "BTN_00408"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "engine": "page",
+  
+  "title": "🤖 Personalized Qualification",
+
+  "messages": [
+    "The conversation can be tailored to each customer's needs", 
+    "The assistant can ask relevant questions,",
+    "collect the required information,",
+    "use the answers to guide the next step.",
+    "The exact questions can be defined by the business",
+    "adapted to each customer's situation."
+    
+  ],
+  "buttons": [
+  {
+    "id": "CTN_00400",
+    "text": "Coninue"
+  }
+]
+}

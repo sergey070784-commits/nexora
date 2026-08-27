@@ -1,0 +1,18 @@
+{
+  "engine": "page",
+  
+  "title": "🎉 You're All Set!",
+
+  "messages": [
+    "Your request has been received successfully.", 
+    "Your appointment has been scheduled.",
+    "We look forward to speaking with you!"
+   
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00408",
+    "text": "Main Menu"
+  }
+]
+}

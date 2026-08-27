@@ -1,0 +1,18 @@
+{
+  "engine": "popup",
+
+  "title": "🤖 Personalized Conversation",
+  
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1787777212/Screenshot_2026-08-26_234113_hjytkh.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00401",
+      "text": "Continue"
+    }
+  ]
+}

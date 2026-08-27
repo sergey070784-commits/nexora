@@ -80,6 +80,18 @@
   "BTN_00049": {
     "field": "✅ פגישה נקבעה",
     "value": "✅ איש קשר נוצר"
+  },
+  "BTN_00402": {
+    "field": "Automate a Process",
+    "value": "💡 Main Need"
+  },
+   "BTN_00403": {
+    "field": "Generate More Leads",
+    "value": "💡 Main Need"
+  },
+   "BTN_00404": {
+    "field": "Customer Support",
+    "value": "💡 Main Need"
   }
   
 }

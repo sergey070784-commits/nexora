@@ -1,0 +1,21 @@
+{
+  "engine": "page",
+  
+  "title": "📅 Schedule a Call",
+
+  "messages": [
+    "Production version: real-time availability will be retrieved",
+    "from the client's Calendly account",
+    "only available slots will be offered.",
+    "",
+    "The next step is to schedule a convenient time."
+   
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00406",
+    "text": "Booking"
+  }
+  
+]
+}

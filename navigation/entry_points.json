@@ -3,5 +3,6 @@
   "nx_upwork":   "PAGE_00001",
   "nx_booking":  "PAGE_00015",
   "nx_intake":   "PAGE_00020",
-  "nx_xplace":   "PAGE_00034"
+  "nx_xplace":   "PAGE_00034",
+  "nx_upwork_example": "PAGE_00399"
 }
