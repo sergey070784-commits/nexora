@@ -82,16 +82,16 @@
     "value": "✅ איש קשר נוצר"
   },
   "BTN_00402": {
-    "field": "Automate a Process",
-    "value": "💡 Main Need"
+    "field": "💡 Main Need",
+    "value": "Automate a Process"
   },
    "BTN_00403": {
-    "field": "Generate More Leads",
-    "value": "💡 Main Need"
+    "field": "💡 Main Need",
+    "value": "Generate More Leads"
   },
    "BTN_00404": {
-    "field": "Customer Support",
-    "value": "💡 Main Need"
+    "field": "💡 Main Need",
+    "value": "Customer Support"
   }
   
 }
