@@ -213,6 +213,14 @@ def process_event(event):
         "message"
     )
 
+    # Fast CTN path is already handled by lead-demo.
+    # This event is only for command/notification processing.
+    if value == "CTN_INPUT":
+        return
+
+    if value and value.startswith("CONTACT_NEXT:"):
+        return
+
 
     # ====================================
     # CTN BUTTON

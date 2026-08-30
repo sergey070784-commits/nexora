@@ -31,6 +31,58 @@ ADMIN_ID = 8700197324
 
 user_data = {}
 
+# ========================================
+# CONTACT FAST NAVIGATION
+# ========================================
+contact_page_cache = {}
+page_cache = {}
+
+def prefetch_contact_page(ctn_id):
+    if not ctn_id or not ctn_id.startswith("CTN_") or ctn_id in contact_page_cache:
+        return
+    def _load():
+        try:
+            data = get_contact_data(ctn_id)
+            if data:
+                contact_page_cache[ctn_id] = data
+                print("⚡ CONTACT PREFETCH READY:", ctn_id)
+        except Exception as e:
+            print("CONTACT PREFETCH ERROR:", ctn_id, e)
+    threading.Thread(target=_load, daemon=True).start()
+
+def get_fast_contact_data(ctn_id):
+    data = contact_page_cache.pop(ctn_id, None)
+    if data:
+        print("⚡ CONTACT CACHE HIT:", ctn_id)
+        return data
+    print("⏳ CONTACT CACHE MISS:", ctn_id)
+    return get_contact_data(ctn_id)
+
+def prefetch_page(page_id):
+    if not page_id or page_id in page_cache:
+        return
+    def _load():
+        try:
+            data = get_page(page_id)
+            if data:
+                page_cache[page_id] = data
+                print("⚡ PAGE PREFETCH READY:", page_id)
+        except Exception as e:
+            print("PAGE PREFETCH ERROR:", page_id, e)
+    threading.Thread(target=_load, daemon=True).start()
+
+def get_fast_page(page_id):
+    data = page_cache.pop(page_id, None)
+    if data:
+        print("⚡ PAGE CACHE HIT:", page_id)
+        return data
+    print("⏳ PAGE CACHE MISS:", page_id)
+    return get_page(page_id)
+
+def send_event_background(**kwargs):
+    threading.Thread(target=send_event, kwargs=kwargs, daemon=True).start()
+
+
 FILE_MESSAGES_TABLE = "file_messages"
 
 file_last_id = 0
@@ -315,16 +367,64 @@ def handle_message(message):
 
     if not btn_id:
 
-        send_event(
+        contact_state = user_data.get(session_id, {})
 
-            bot_config,
+        if contact_state.get("contact_mode"):
+            contact_data = contact_state.get("contact_data") or {}
+            field = contact_data.get("field")
+            next_id = contact_data.get("next")
 
-            message.chat.id,
+            if field and next_id:
+                # Notification/command event: background only.
+                # Keep CTN navigation independent from command routing.
+                # The router expects the route key (e.g. BTN_00039),
+                # not CTN_INPUT.
+                if next_id.startswith("BTN_"):
+                    send_event_background(
+                        bot_config=bot_config,
+                        session_id=message.chat.id,
+                        value=next_id
+                    )
 
+                # Memory event: background only.
+                send_event_background(
+                    bot_config=bot_config,
+                    session_id=message.chat.id,
+                    value=f"{field}={message.text}"
+                )
+
+                if next_id.startswith("CTN_"):
+                    data = get_fast_contact_data(next_id)
+                    if not data:
+                        print("🔴 CONTACT PAGE NOT FOUND:", next_id)
+                        return
+                    contact_state["contact_data"] = data
+                    contact_state["page"] = data.get("id")
+                    user_data[session_id] = contact_state
+                    show_contact(bot, message.chat.id, data)
+                    next_next = data.get("next")
+                    if next_next and next_next.startswith("CTN_"):
+                        prefetch_contact_page(next_next)
+                    elif next_next and next_next.startswith("BTN_"):
+                        prefetch_page(next_next)
+                    return
+
+                if next_id.startswith("BTN_"):
+                    data = get_fast_page(next_id)
+                    if not data:
+                        return
+                    show_page(message.chat.id, data)
+                    contact_state["contact_mode"] = False
+                    contact_state["contact_data"] = None
+                    contact_state["page"] = None
+                    user_data[session_id] = contact_state
+                    return
+
+        send_event_background(
+            bot_config=bot_config,
+            session_id=message.chat.id,
             message=message.text
-
         )
-
         return
 
     if btn_id.startswith((
@@ -337,7 +437,7 @@ def handle_message(message):
 
         if btn_id.startswith("TIME_"):
 
-            date, selected_time = btn_id.replace(
+            date, time = btn_id.replace(
                 "TIME_",
                 ""
             ).split("_")
@@ -348,13 +448,12 @@ def handle_message(message):
 
                 save_values(
                     user_data,
-                    sender,
+                    message.chat.id,
                     {
                         events[0]: date,
-                        events[1]: selected_time
+                        events[1]: time
                     }
                 )
-
         data = get_calendar(
             command=btn_id
         )
@@ -386,15 +485,18 @@ def handle_message(message):
 
         )
 
-    send_event(
-
-        bot_config,
-
-        message.chat.id,
-
-        value=btn_id
-
-    )
+    if btn_id.startswith("CTN_"):
+        send_event_background(
+            bot_config=bot_config,
+            session_id=message.chat.id,
+            value=btn_id
+        )
+    else:
+        send_event(
+            bot_config,
+            message.chat.id,
+            value=btn_id
+        )
     print("BTN_ID:", btn_id)
 
     if btn_id.startswith("CTN_"):
@@ -403,7 +505,7 @@ def handle_message(message):
         print("📋 CONTACT BUTTON")
         print("CTN:", btn_id)
 
-        data = get_contact_data(
+        data = get_fast_contact_data(
             btn_id
         )
 
@@ -426,15 +528,17 @@ def handle_message(message):
             {}
         )
 
-        state["page"] = data.get(
-            "id"
-        )
-
+        state["page"] = data.get("id")
         state["buttons"] = {}
+        state["contact_mode"] = True
+        state["contact_data"] = data
 
-        user_data[
-            message.chat.id
-        ] = state
+        user_data[message.chat.id] = state
+        next_id = data.get("next")
+        if next_id and next_id.startswith("CTN_"):
+            prefetch_contact_page(next_id)
+        elif next_id and next_id.startswith("BTN_"):
+            prefetch_page(next_id)
         return
 
 
@@ -618,221 +722,12 @@ def handle_message(message):
 # ========================================
 # CONTACT NAVIGATION
 # ========================================
-
-contact_last_id = 0
-
-
-def init_contact_last_id():
-
-    global contact_last_id
-
-    response = requests.get(
-
-        f"{SUPABASE_URL}/rest/v1/events",
-
-        headers={
-            "apikey": SUPABASE_KEY,
-            "Authorization": f"Bearer {SUPABASE_KEY}"
-        },
-
-        params={
-            "select": "id",
-            "order": "id.desc",
-            "limit": 1
-        },
-
-        timeout=10
-    )
-
-    if response.status_code == 200:
-
-        rows = response.json()
-
-        if rows:
-            contact_last_id = rows[0]["id"]
-
-    print(
-        "CONTACT NAV START FROM ID:",
-        contact_last_id
-    )
-
+# CTN navigation is handled directly in handle_message().
+# The old event-driven navigation worker is intentionally disabled:
+# it would duplicate pages after the fast path already showed them.
 
 def check_contact_navigation():
-
-    global contact_last_id
-
-    while True:
-
-        try:
-
-            response = requests.get(
-
-                f"{SUPABASE_URL}/rest/v1/events",
-
-                headers={
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": f"Bearer {SUPABASE_KEY}"
-                },
-
-                params={
-                    "select": "*",
-                    "id": f"gt.{contact_last_id}",
-                    "bot": f"eq.{bot_config['bot']}",
-                    "order": "id.asc"
-                },
-
-                timeout=10
-            )
-
-            if response.status_code != 200:
-
-                print(
-                    "🔴 CONTACT NAV ERROR:",
-                    response.status_code,
-                    response.text
-                )
-
-                time.sleep(1)
-                continue
-
-            rows = response.json()
-
-            for event in rows:
-
-                contact_last_id = event["id"]
-
-                value = event.get("value")
-
-                if not value:
-                    continue
-
-                if not value.startswith(
-                    "CONTACT_NEXT:"
-                ):
-                    continue
-
-                next_id = value.replace(
-                    "CONTACT_NEXT:",
-                    "",
-                    1
-                )
-
-                session_id = int(
-                    event.get("session_id")
-                )
-
-                print()
-                print("📋 CONTACT NAVIGATION")
-                print("SESSION:", session_id)
-                print("NEXT:", next_id)
-
-            # ====================================
-            # NEXT CONTACT PAGE
-            # ====================================
-
-                if next_id.startswith(
-                    "CTN_"
-                ):
-
-                    data = get_contact_data(
-                        next_id
-                    )
-
-                    if not data:
-
-                        print(
-                            "🔴 CONTACT PAGE NOT FOUND:",
-                            next_id
-                        )
-
-                        continue
-
-                    show_contact(
-                        bot,
-                        session_id,
-                        data
-                    )
-
-                    print(
-                        "📋 CONTACT NEXT PAGE SHOWN:",
-                        next_id
-                    )
-
-                    continue
-
-            # ====================================
-            # CONTACT → NORMAL PAGE
-            # ====================================
-
-                if next_id.startswith(
-                    "BTN_"
-                ):
-
-                    page = get_page(
-                        next_id
-                    )
-
-                    if not page:
-
-                        print(
-                            "🔴 PAGE NOT FOUND:",
-                            next_id
-                        )
-
-                        continue
-
-                    print(
-                        "➡️ CONTACT RETURN PAGE:",
-                        next_id
-                    )
-
-                    show_page(
-                        session_id,
-                        page
-                    )
-
-                    state = user_data.get(
-                        int(session_id),
-                        {}
-                    )
-
-                    state["page"] = None
-
-                    state["buttons"] = {
-                        button["text"]: button["id"]
-                        for button in page.get(
-                            "buttons",
-                            []
-                        )
-                    }
-
-                    user_data[
-                        int(session_id)
-                    ] = state
-
-                    print(
-                        "📋 CONTACT RETURN STATE:",
-                        state
-                    )
-
-                    print(
-                        "📄 CONTACT RETURN PAGE SHOWN:",
-                        next_id
-                    )
-
-        except Exception as e:
-
-            print(
-                "🔴 CONTACT NAV WORKER ERROR:",
-                e
-            )
-
-        time.sleep(1)
-
-                
-
-
-init_contact_last_id()
+    print("⚡ CONTACT NAVIGATION WORKER DISABLED — fast session path active")
 
 
 def check_file_messages():
