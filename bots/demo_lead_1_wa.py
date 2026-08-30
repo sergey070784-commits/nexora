@@ -39,6 +39,57 @@ user_data = {}
 ignore_messages = {}
 contact_last_id = 0
 
+# ========================================
+# CONTACT FAST NAVIGATION
+# ========================================
+contact_page_cache = {}
+page_cache = {}
+
+def prefetch_contact_page(ctn_id):
+    if not ctn_id or not ctn_id.startswith("CTN_") or ctn_id in contact_page_cache:
+        return
+    def _load():
+        try:
+            data = get_contact_data(ctn_id)
+            if data:
+                contact_page_cache[ctn_id] = data
+                print("⚡ CONTACT PREFETCH READY:", ctn_id)
+        except Exception as e:
+            print("CONTACT PREFETCH ERROR:", ctn_id, e)
+    threading.Thread(target=_load, daemon=True).start()
+
+def get_fast_contact_data(ctn_id):
+    data = contact_page_cache.pop(ctn_id, None)
+    if data:
+        print("⚡ CONTACT CACHE HIT:", ctn_id)
+        return data
+    print("⏳ CONTACT CACHE MISS:", ctn_id)
+    return get_contact_data(ctn_id)
+
+def prefetch_page(page_id):
+    if not page_id or page_id in page_cache:
+        return
+    def _load():
+        try:
+            data = get_page(page_id)
+            if data:
+                page_cache[page_id] = data
+                print("⚡ PAGE PREFETCH READY:", page_id)
+        except Exception as e:
+            print("PAGE PREFETCH ERROR:", page_id, e)
+    threading.Thread(target=_load, daemon=True).start()
+
+def get_fast_page(page_id):
+    data = page_cache.pop(page_id, None)
+    if data:
+        print("⚡ PAGE CACHE HIT:", page_id)
+        return data
+    print("⏳ PAGE CACHE MISS:", page_id)
+    return get_page(page_id)
+
+def send_event_background(**kwargs):
+    threading.Thread(target=send_event, kwargs=kwargs, daemon=True).start()
+
 BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
@@ -725,12 +776,8 @@ print("🟢 wa demo_lead 1  Running...")
 
 #===== MAIN LOOP =====
 
-init_contact_last_id()
-
-threading.Thread(
-    target=check_contact_navigation,
-    daemon=True
-).start()
+# CONTACT NAVIGATION WORKER DISABLED — fast session path active
+# CTN navigation is handled directly from the current session contact_data.
 
 threading.Thread(
     target=check_file_messages,
@@ -969,30 +1016,64 @@ while True:
 
                 btn_id = state["buttons"].get(text, text)
 
-                if str(state.get("page") or "").startswith("CTN_"):
+                if str(state.get("page") or "").startswith("CTN_") and state.get("contact_mode"):
 
-                    send_event(
-                        bot_config,
-                        sender,
-                        message=text
-                    )
+                    contact_data = state.get("contact_data") or {}
+                    field = contact_data.get("field")
+                    next_id = contact_data.get("next")
 
-                    print()
-                    print("📥 CONTACT TEXT SENT")
-                    print("SESSION:", sender)
-                    print("TEXT:", text)
+                    if field and next_id:
+                        # Save memory asynchronously; navigation never waits for it.
+                        send_event_background(
+                            bot_config=bot_config,
+                            session_id=sender,
+                            value=f"{field}={text}"
+                        )
 
-                    delete_notification(
-                        receipt_id
-                    )
+                        if next_id.startswith("CTN_"):
+                            data = get_fast_contact_data(next_id)
+                            if data:
+                                state["page"] = data.get("id")
+                                state["buttons"] = {}
+                                state["contact_mode"] = True
+                                state["contact_data"] = data
+                                user_data[sender] = state
+                                show_contact(sender, data)
 
-                    continue
-                
+                                next_next = data.get("next")
+                                if next_next and next_next.startswith("CTN_"):
+                                    prefetch_contact_page(next_next)
+                                elif next_next and next_next.startswith("BTN_"):
+                                    prefetch_page(next_next)
+
+                            delete_notification(receipt_id)
+                            continue
+
+                        if next_id.startswith("BTN_"):
+                            # Command routing is asynchronous; send the BTN route key.
+                            send_event_background(
+                                bot_config=bot_config,
+                                session_id=sender,
+                                value=next_id
+                            )
+
+                            data = get_fast_page(next_id)
+                            if data:
+                                show_page(sender, data)
+
+                            state["contact_mode"] = False
+                            state["contact_data"] = None
+                            state["page"] = None
+                            user_data[sender] = state
+
+                            delete_notification(receipt_id)
+                            continue
+
                 if not btn_id:
 
-                    send_event(
-                        bot_config,
-                        sender,
+                    send_event_background(
+                        bot_config=bot_config,
+                        session_id=sender,
                         message=text
                     )
 
@@ -1004,13 +1085,13 @@ while True:
                         print("📋 CONTACT BUTTON")
                         print("CTN:", btn_id)
 
-                        send_event(
-                            bot_config,
-                            sender,
+                        send_event_background(
+                            bot_config=bot_config,
+                            session_id=sender,
                             value=btn_id
                         )
 
-                        data = get_contact_data(
+                        data = get_fast_contact_data(
                             btn_id
                         )
 
@@ -1018,6 +1099,8 @@ while True:
 
                             state["page"] = data.get("id")
                             state["buttons"] = {}
+                            state["contact_mode"] = True
+                            state["contact_data"] = data
 
                             user_data[sender] = state
 
@@ -1025,6 +1108,12 @@ while True:
                                 sender,
                                 data
                             )
+
+                            next_id = data.get("next")
+                            if next_id and next_id.startswith("CTN_"):
+                                prefetch_contact_page(next_id)
+                            elif next_id and next_id.startswith("BTN_"):
+                                prefetch_page(next_id)
 
                         delete_notification(
                             receipt_id
