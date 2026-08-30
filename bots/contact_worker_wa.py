@@ -442,7 +442,8 @@ def process_event(event):
             contact["page"] = next_page
 
 
-            send_event(
+            # Navigation handled directly by WA session fast path; CONTACT_NEXT disabled here.
+            # send_event(
 
                 contact_bot_config,
 
@@ -502,28 +503,8 @@ def process_event(event):
                 "➡️ RETURN BTN:",
                 next_id
             )
+        # Memory is background-only; never block CTN navigation.
 
-
-            memory_confirmed = wait_for_memory_value(
-
-                session_id,
-
-                channel,
-
-                field.lower(),
-
-                message
-
-            )
-
-
-            if not memory_confirmed:
-
-                print(
-                    "🔴 WA CONTACT STOPPED — MEMORY NOT READY"
-                )
-
-                return
 
 
             # =================================
@@ -545,7 +526,8 @@ def process_event(event):
             # CONTACT NAVIGATION
             # =================================
 
-            send_event(
+            # Navigation handled directly by WA session fast path; CONTACT_NEXT disabled here.
+            # send_event(
 
                 contact_bot_config,
 
