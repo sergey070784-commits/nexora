@@ -1,599 +1,1490 @@
-import time
 import requests
-import sys
+from datetime import datetime
+import json
+import time
+from Core.page_engine import get_page
 from Core.event_logger import send_event
+import threading
+from Core.check_commands import check_commands
+from Core.calendar_engine import (
+    get_calendar,
+    get_calendar_events
+)
+from Core.contact_handler import (
+    get_contact_data,
+    show_contact
+)
+from Core.value_engine import (
+    save_values,
+    get_values,
+    send_values
+)
+from Core.contact_handler import get_contact_data
 
+from Core.gallery_router import get_gallery_data
+
+from Core.gallery_show_wa import show_gallery_wa
+#===== GREEN API =====
+
+ID_INSTANCE = "7107624116"
+API_TOKEN = "7343f694bbfd4f6a9d8c7dd48934073e46cd9c9a44b04428bc"
+
+API_URL = (
+    f"https://api.green-api.com/"
+    f"waInstance{ID_INSTANCE}"
+    )
+#===== USER DATA =====
+
+user_data = {}
+ignore_messages = {}
+contact_last_id = 0
 
 BASE = (
     "https://raw.githubusercontent.com/"
     "sergey070784-commits/nexora/main/"
 )
-CONFIG_NAME = (
-    sys.argv[1]
-    if len(sys.argv) > 1
-    else "whatsapp_bot1_config.json"
-)
 
 bot_config = requests.get(
-    BASE + f"Core/{CONFIG_NAME}",
+    BASE + "Core/whatsapp_bot1_config.json",
     timeout=10
 ).json()
 
-print(
-    "🟢 CONTACT WORKER BOT:",
-    bot_config["bot"]
-)
-
-CONFIG_URL = BASE + "Core/config.json"
-
-ROUTES_URL = (
-    BASE +
-    "Service/contact_routes.json"
-)
-
-EVENTS_TABLE = "events"
-
-
-# ========================================
-# CONFIG
-# ========================================
-
 config = requests.get(
-    CONFIG_URL,
+    BASE + "Core/config.json",
     timeout=10
 ).json()
 
 SUPABASE_URL = config["supabase_url"]
 SUPABASE_KEY = config["supabase_key"]
 
-
 HEADERS = {
     "apikey": SUPABASE_KEY,
-    "Authorization": f"Bearer {SUPABASE_KEY}",
-    "Content-Type": "application/json"
+    "Authorization": f"Bearer {SUPABASE_KEY}"
 }
 
+#===== SEND MESSAGE =====
 
-# ========================================
-# CONTACT ROUTES
-# ========================================
+def send_message(chat_id, text):
 
-routes_response = requests.get(
-    ROUTES_URL,
-    timeout=10
-)
+    url = f"{API_URL}/sendMessage/{API_TOKEN}"
 
-routes_response.raise_for_status()
+    payload = {
+        "chatId": chat_id,
+        "message": text
+    }
 
-CONTACT_ROUTES = routes_response.json()
-
-
-print()
-print("📋 WA CONTACT ROUTES LOADED")
-print(
-    "CTN:",
-    list(CONTACT_ROUTES.keys())
-)
-
-
-# ========================================
-# ACTIVE CONTACTS
-# ========================================
-
-active_contacts = {}
-
-
-# ========================================
-# EVENT POSITION
-# ========================================
-
-response = requests.get(
-
-    f"{SUPABASE_URL}/rest/v1/{EVENTS_TABLE}",
-
-    headers=HEADERS,
-
-    params={
-        "select": "id",
-        "order": "id.desc",
-        "limit": 1
-    },
-
-    timeout=10
-)
-
-if response.status_code == 200:
-
-    rows = response.json()
-
-    if rows:
-        last_id = rows[0]["id"]
-    else:
-        last_id = 0
-
-else:
-
-    print(
-        "🔴 WA CONTACT EVENTS INIT ERROR:",
-        response.status_code,
-        response.text
+    response = requests.post(
+        url,
+        json=payload
     )
 
-    last_id = 0
+    return response.json()
+
+#===== GET NOTIFICATION =====
+def send_image(chat_id, image_url):
+
+    url = (
+        f"{API_URL}/sendFileByUrl/{API_TOKEN}"
+    )
+
+    payload = {
+        "chatId": chat_id,
+        "urlFile": image_url,
+        "fileName": "image.png"
+    }
+
+    response = requests.post(
+        url,
+        json=payload
+    )
+
+    return response.json()
+#===== get NOTIFICATION =====
+
+def get_notification():
+
+    url = (
+        f"{API_URL}/receiveNotification/"
+        f"{API_TOKEN}"
+    )
+
+    response = requests.get(url)
+
+    if not response.text.strip():
+        return None
+
+    return response.json()
+
+#===== DELETE NOTIFICATION =====
+
+def delete_notification(receipt_id):
+
+    url = (
+        f"{API_URL}/deleteNotification/"
+        f"{API_TOKEN}/{receipt_id}"
+    )
+
+    requests.delete(url)
 
 
-# ========================================
-# GET EVENTS
-# ========================================
 
-def get_events():
+def log_message(session_id, text):
+
+    try:
+
+        requests.post(
+
+            "https://message.sergey070784.workers.dev/",
+
+            json={
+
+                "session_id": str(session_id),
+
+                "channel": bot_config["channel"],
+
+                "message": text
+
+            },
+
+            timeout=10
+
+        )
+
+    except Exception as e:
+
+        print(e)
+
+def show_contact(chat_id, data):
+
+    title = data.get(
+        "title",
+        ""
+    )
+
+    messages = data.get(
+        "messages",
+        []
+    )
+
+    text = title
+
+    for message in messages:
+
+        if text:
+            text += "\n\n"
+
+        text += message
+
+    send_message(
+        chat_id,
+        text
+    )
+
+    print(
+        "📋 CONTACT SHOWN:",
+        data.get("id")
+    )
+
+def show_page(chat_id, data):
+   
+    state = user_data.get(chat_id, {})
+
+    state["page"] = data.get("id")
+
+    state["buttons"] = {}
+
+    user_data[chat_id] = state
+
+    text = data["title"]
+
+    for msg in data["messages"]:
+
+        text += "\n\n" + msg
+
+    send_message(
+        chat_id,
+        text
+    )
+
+    buttons = []
+
+    for button in data["buttons"]:
+
+        user_data[chat_id]["buttons"][
+            button["text"]
+        ] = button["id"]
+
+        buttons.append(
+            {
+                "buttonId": button["id"],
+                "buttonText": button["text"]
+            }
+        )
+
+    send_reply_buttons(
+        chat_id,
+        buttons
+    )
+    
+def show_popup(chat_id, data):
+
+    state = user_data.get(chat_id, {})
+
+    state["page"] = data.get("id")
+
+    state["buttons"] = {}
+
+    user_data[chat_id] = state
+
+    text = data["title"]
+
+    for msg in data["messages"]:
+
+        text += "\n\n" + msg
+
+    if data.get("image"):
+
+        send_image(
+            chat_id,
+            data["image"]
+        )
+    send_message(
+        chat_id,
+        text
+    )
+
+
+    buttons = []
+
+    for button in data["buttons"]:
+
+        user_data[chat_id][
+            "buttons"
+        ][
+            button["text"]
+        ] = button["id"]
+
+        buttons.append(
+            {
+                "buttonId":
+                    button["id"],
+
+                "buttonText":
+                    button["text"]
+            }
+        )
+
+    send_reply_buttons(
+        chat_id,
+        buttons
+    )
+
+def send_reply_buttons(chat_id, buttons):
+    url = (
+        f"{API_URL}/sendInteractiveButtonsReply/{API_TOKEN}"
+    )
+
+    payload = {
+        "chatId": chat_id,
+        
+        "body": " ",
+        
+        "buttons": buttons
+    }
+    response = requests.post(
+        url,
+        json=payload
+    )
+
+def show_command(chat_id, data):
+
+    print("SHOW COMMAND")
+
+    show_page(
+        chat_id,
+        data
+    )
+def init_contact_last_id():
+
+    global contact_last_id
 
     response = requests.get(
 
-        f"{SUPABASE_URL}/rest/v1/{EVENTS_TABLE}",
+        f"{SUPABASE_URL}/rest/v1/events",
 
-        headers=HEADERS,
+        headers={
+            "apikey": SUPABASE_KEY,
+            "Authorization": f"Bearer {SUPABASE_KEY}"
+        },
 
         params={
-            "select": "*",
-            "id": f"gt.{last_id}",
-            "bot": f"eq.{bot_config['bot']}",
-            "order": "id.asc"
+            "select": "id",
+            "order": "id.desc",
+            "limit": 1
         },
 
         timeout=10
     )
 
-    if response.status_code != 200:
+    if response.status_code == 200:
 
-        print(
-            "🔴 WA CONTACT EVENTS ERROR:",
-            response.status_code,
-            response.text
-        )
+        rows = response.json()
 
-        return []
+        if rows:
+            contact_last_id = rows[0]["id"]
 
-    return response.json()
+    print(
+        "WA CONTACT NAV START FROM ID:",
+        contact_last_id
+    )
 
 
-# ========================================
-# WAIT FOR MEMORY
-# ========================================
+def check_contact_navigation():
 
-def wait_for_memory_value(
-    session_id,
-    channel,
-    field,
-    value,
-    timeout=10
-):
+    global contact_last_id
 
-    start_time = time.time()
+    while True:
 
-    while time.time() - start_time < timeout:
+        try:
 
-        response = requests.get(
+            response = requests.get(
 
-            f"{SUPABASE_URL}/rest/v1/user_memory",
+                f"{SUPABASE_URL}/rest/v1/events",
 
-            headers=HEADERS,
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}"
+                },
 
-            params={
-                "select": "memory_json",
-                "session_id": f"eq.{session_id}",
-                "channel": f"eq.{channel}",
-                "limit": 1
-            },
+                params={
+                    "select": "*",
+                    "id": f"gt.{contact_last_id}",
+                    "bot": "eq.whatsapp_bot1",
+                    "order": "id.asc"
+                },
 
-            timeout=10
-        )
+                timeout=10
+            )
 
-        if response.status_code == 200:
+            if response.status_code != 200:
+
+                print(
+                    "🔴 WA CONTACT NAV ERROR:",
+                    response.status_code,
+                    response.text
+                )
+
+                time.sleep(1)
+                continue
 
             rows = response.json()
 
-            if rows:
+            for event in rows:
 
-                memory = rows[0].get(
-                    "memory_json"
-                ) or {}
+                contact_last_id = event["id"]
 
-                if str(
-                    memory.get(field)
-                ) == str(value):
+                value = event.get("value")
 
-                    print(
-                        "🧠 MEMORY CONFIRMED:",
-                        field,
-                        "=",
-                        value
-                    )
+                if not value:
+                    continue
 
-                    return True
+                if not value.startswith(
+                    "CONTACT_NEXT:"
+                ):
+                    continue
 
-        time.sleep(0.2)
-
-    print(
-        "🔴 MEMORY NOT CONFIRMED:",
-        field,
-        "=",
-        value
-    )
-
-    return False
-
-
-# ========================================
-# PROCESS EVENT
-# ========================================
-
-def process_event(event):
-
-    session_id = event.get(
-        "session_id"
-    )
-
-    value = event.get(
-        "value"
-    )
-
-    message = event.get("message")
-
-    channel = event.get(
-        "channel"
-    )
-
-    bot = event.get(
-        "bot"
-    )
-
-
-    # ====================================
-    # CONTACT BUTTON
-    # ====================================
-
-    if value and value.startswith("CTN_"):
-
-        ctn_id = value
-
-        print()
-        print("📋 WA CONTACT ENTRY")
-        print("SESSION:", session_id)
-        print("CTN:", ctn_id)
-
-        page_name = CONTACT_ROUTES.get(
-            ctn_id
-        )
-
-        if not page_name:
-
-            print(
-                "🔴 WA CTN NOT FOUND:",
-                ctn_id
-            )
-
-            return
-
-        active_contacts[
-            str(session_id)
-        ] = {
-
-            "ctn": ctn_id,
-            "page": page_name
-        }
-
-        print(
-            "🟢 WA CONTACT ACTIVE"
-        )
-
-        print(
-            "SESSION:",
-            session_id
-        )
-
-        print(
-            "CTN:",
-            ctn_id
-        )
-
-        print(
-            "PAGE:",
-            page_name
-        )
-
-        return
-
-
-    # ====================================
-    # CONTACT TEXT
-    # ====================================
-
-    if message:
-
-        session_key = str(
-            session_id
-        )
-
-        contact = active_contacts.get(
-            session_key
-        )
-
-        if not contact:
-
-            return
-
-        print()
-        print("📥 WA CONTACT TEXT")
-
-        print(
-            "SESSION:",
-            session_id
-        )
-
-        print(
-            "CTN:",
-            contact["ctn"]
-        )
-
-        print(
-            "PAGE:",
-            contact["page"]
-        )
-
-        print(
-            "TEXT:",
-            message
-        )
-
-
-        # =================================
-        # LOAD CURRENT CONTACT PAGE
-        # =================================
-
-        page_name = contact["page"]
-
-        page_url = (
-            BASE +
-            "Service/contact_viewer/" +
-            page_name +
-            ".json"
-        )
-
-        response = requests.get(
-            page_url,
-            timeout=10
-        )
-
-        response.raise_for_status()
-
-        page_data = response.json()
-
-        field = page_data.get(
-            "field"
-        )
-
-        next_id = page_data.get(
-            "next"
-        )
-
-        print(
-            "FIELD:",
-            field
-        )
-
-        print(
-            "NEXT:",
-            next_id
-        )
-
-
-        # =================================
-        # SAVE VALUE → MEMORY PIPELINE
-        # =================================
-
-        contact_bot_config = {
-
-            "channel": channel,
-
-            "bot": bot
-
-        }
-
-        send_event(
-
-            contact_bot_config,
-
-            session_id,
-
-            value=f"{field}={message}"
-
-        )
-
-        print(
-            "💾 WA CONTACT VALUE SENT:",
-            f"{field}={message}"
-        )
-
-
-        # =================================
-        # NEXT CONTACT PAGE
-        # =================================
-
-        if next_id and next_id.startswith(
-            "CTN_"
-        ):
-
-            next_page = CONTACT_ROUTES.get(
-                next_id
-            )
-
-            if not next_page:
-
-                print(
-                    "🔴 WA NEXT CONTACT ROUTE NOT FOUND:",
-                    next_id
+                next_id = value.replace(
+                    "CONTACT_NEXT:",
+                    "",
+                    1
                 )
 
-                return
+                session_id = str(
+                    event.get("session_id")
+                )
 
-            contact["ctn"] = next_id
+                print()
+                print("📋 WA CONTACT NAVIGATION")
+                print("SESSION:", session_id)
+                print("NEXT:", next_id)
 
-            contact["page"] = next_page
+                # ====================================
+                # NEXT CONTACT PAGE
+                # ====================================
 
+                if next_id.startswith(
+                    "CTN_"
+                ):
 
-            # Navigation handled directly by WA session fast path; CONTACT_NEXT disabled here.
-            # send_event(
+                    data = get_contact_data(
+                        next_id
+                    )
 
-                contact_bot_config,
+                    if not data:
 
-                session_id,
+                        print(
+                            "🔴 WA CONTACT PAGE NOT FOUND:",
+                            next_id
+                        )
 
-                value=f"CONTACT_NEXT:{next_id}"
+                        continue
 
-            )
+                    show_contact(
+                        session_id,
+                        data
+                    )
 
-            print(
-                "➡️ WA CONTACT NAVIGATION SENT:",
-                next_id
-            )
+                    print(
+                        "📋 WA CONTACT NEXT PAGE SHOWN:",
+                        next_id
+                    )
 
-            print(
-                "➡️ WA NEXT CONTACT PAGE:",
-                next_page
-            )
+                    continue
 
-            return
+                # ====================================
+                # CONTACT → NORMAL PAGE
+                # ====================================
 
-        print(
-            "🔎 WA CONTACT DECISION:",
-            "CURRENT CTN =",
-            contact["ctn"],
-            "| NEXT =",
-            next_id,
-            "| FIELD =",
-            field
-      )
+                if next_id.startswith(
+                    "BTN_"
+                ):
 
+                    page = get_page(
+                        next_id
+                    )
 
-        # =================================
-        # CONTACT FINISHED
-        # =================================
+                    if not page:
 
-        if next_id and next_id.startswith(
-            "BTN_"
-        ):
+                        print(
+                            "🔴 WA PAGE NOT FOUND:",
+                            next_id
+                        )
 
-            print()
-            print(
-                "✅ WA CONTACT COMPLETE"
-            )
+                        continue
 
-            print(
-                "SESSION:",
-                session_id
-            )
+                    print(
+                        "➡️ WA CONTACT RETURN PAGE:",
+                        next_id
+                    )
 
-            print(
-                "CONTACT DATA:",
-                contact
-            )
+                    show_page(
+                        session_id,
+                        page
+                    )
 
-            print(
-                "➡️ RETURN BTN:",
-                next_id
-            )
-        # Memory is background-only; never block CTN navigation.
+                    print(
+                        "📄 WA CONTACT RETURN PAGE SHOWN:",
+                        next_id
+                    )
 
-
-
-            # =================================
-            # NORMAL BTN
-            # =================================
-
-            send_event(
-
-                contact_bot_config,
-
-                session_id,
-
-                value=next_id
-
-            )
-
-
-            # =================================
-            # CONTACT NAVIGATION
-            # =================================
-
-            # Navigation handled directly by WA session fast path; CONTACT_NEXT disabled here.
-            # send_event(
-
-                contact_bot_config,
-
-                session_id,
-
-                value=f"CONTACT_NEXT:{next_id}"
-
-            )
-
+        except Exception as e:
 
             print(
-                "➡️ WA CONTACT NAVIGATION SENT:",
-                next_id
+                "🔴 WA CONTACT NAV WORKER ERROR:",
+                e
             )
+
+        time.sleep(1)
+def check_file_messages():
+
+    global file_last_id
+
+    while True:
+
+        try:
+
+            response = requests.get(
+
+                f"{SUPABASE_URL}/rest/v1/file_messages",
+
+                headers={
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": f"Bearer {SUPABASE_KEY}"
+                },
+
+                params={
+                    "select": "*",
+                    "id": f"gt.{file_last_id}",
+                    "target_bot": f"eq.{bot_config['bot']}",
+                    "status": "eq.new",
+                    "order": "id.asc"
+                },
+
+                timeout=10
+            )
+
+            if response.status_code != 200:
+
+                print(
+                    "🔴 WA FILE MESSAGE ERROR:",
+                    response.status_code,
+                    response.text
+                )
+
+                time.sleep(2)
+
+                continue
+
+            rows = response.json()
+
+            for row in rows:
+
+                file_last_id = row["id"]
+
+                print()
+                print("📥 WA FILE MESSAGE FOR BOT")
+
+                print(
+                    "SOURCE:",
+                    row["source_bot"]
+                )
+
+                print(
+                    "TARGET:",
+                    row["target_bot"]
+                )
+
+                print(
+                    "ASSET:",
+                    row["asset_id"]
+                )
+
+                print(
+                    "SESSION:",
+                    row["session_id"]
+                )
+
+                print(
+                    "CHAT:",
+                    row.get("chat_id")
+                )
+
+                chat_id = row.get("chat_id")
+
+                if not chat_id:
+
+                    print(
+                        "⚠️ WA NO CHAT_ID"
+                    )
+
+                    continue
+
+                asset_response = requests.get(
+
+                    f"{SUPABASE_URL}/rest/v1/assets",
+
+                    headers={
+                        "apikey": SUPABASE_KEY,
+                        "Authorization":
+                            f"Bearer {SUPABASE_KEY}"
+                    },
+
+                    params={
+                        "select": "*",
+                        "asset_id":
+                            f"eq.{row['asset_id']}",
+                        "limit": 1
+                    },
+
+                    timeout=10
+                )
+
+                if asset_response.status_code != 200:
+
+                    print(
+                        "🔴 WA ASSET ERROR:",
+                        asset_response.status_code
+                    )
+
+                    continue
+
+                assets = asset_response.json()
+
+                if not assets:
+
+                    print(
+                        "⚠️ WA ASSET NOT FOUND"
+                    )
+
+                    continue
+
+                asset = assets[0]
+
+                print(
+                    "FILE:",
+                    asset["file_name"]
+                )
+
+                print(
+                    "URL:",
+                    asset["cloudinary_url"]
+                )
+
+                try:
+
+                    send_file(
+                        chat_id,
+                        asset["cloudinary_url"],
+                        asset["file_name"]
+                    )
+
+                    requests.patch(
+
+                        f"{SUPABASE_URL}/rest/v1/file_messages",
+
+                        headers={
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                f"Bearer {SUPABASE_KEY}",
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        params={
+                            "id": f"eq.{row['id']}"
+                        },
+
+                        json={
+                            "status": "sent"
+                        },
+
+                        timeout=10
+                    )
+
+                    print(
+                        "✅ WA FILE SENT TO USER"
+                    )
+
+                except Exception as e:
+
+                    print(
+                        "🔴 WA SEND FILE ERROR:",
+                        e
+                    )
+
+                    requests.patch(
+
+                        f"{SUPABASE_URL}/rest/v1/file_messages",
+
+                        headers={
+                            "apikey": SUPABASE_KEY,
+                            "Authorization":
+                                f"Bearer {SUPABASE_KEY}",
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        params={
+                            "id": f"eq.{row['id']}"
+                        },
+
+                        json={
+                            "status": "error"
+                        },
+
+                        timeout=10
+                    )
+
+        except Exception as e:
 
             print(
-                "📤 WA CONTACT BTN SENT:",
-                next_id
+                "🔴 WA FILE MESSAGE WORKER ERROR:",
+                e
             )
 
-
-            active_contacts.pop(
-                session_key,
-                None
-            )
-
-            return
+        time.sleep(1)
 
 
-# ========================================
-# WORKER
-# ========================================
+def send_file(
+    chat_id,
+    file_url,
+    file_name
+):
 
-print()
-print("🟢 WA Contact Worker Running...")
-print("Waiting for Contact...")
+    url = (
+        f"{API_URL}/sendFileByUrl/{API_TOKEN}"
+    )
 
+    payload = {
+        "chatId": chat_id,
+        "urlFile": file_url,
+        "fileName": file_name
+    }
+
+    response = requests.post(
+        url,
+        json=payload
+    )
+
+    return response.json()
+
+file_last_id = 0
+
+    
+print("🟢 wa demo_lead 1  Running...")
+
+#===== MAIN LOOP =====
+
+init_contact_last_id()
+
+threading.Thread(
+    target=check_contact_navigation,
+    daemon=True
+).start()
+
+threading.Thread(
+    target=check_file_messages,
+    daemon=True
+).start()
+
+threading.Thread(
+    target=check_commands,
+    args=(
+        bot_config,
+        show_page,
+        show_popup,
+        show_command
+    ),
+    daemon=True
+).start()
 
 while True:
 
     try:
 
-        rows = get_events()
+        notification = get_notification()
+          
+        if not notification:
 
-        for event in rows:
+            time.sleep(1)
 
-            last_id = event["id"]
+            continue
 
-            try:
+        receipt_id = notification.get(
+            "receiptId"
+        )
 
-                process_event(
-                    event
-                )
+        body = notification.get(
+            "body"
+        ) or {}
 
-            except Exception as e:
+        webhook_type = body.get(
+            "typeWebhook"
+        )
 
+        if webhook_type != "incomingMessageReceived":
+
+            delete_notification(receipt_id)
+
+            continue
+
+        sender = (
+            body.get(
+                "senderData"
+            ) or {}
+        ).get("chatId")
+
+        message_data = (
+            body.get(
+                "messageData"
+            ) or {}
+        )
+        if message_data.get(
+            "typeMessage"
+        ) == "imageMessage":
+            
+
+            file_data = (
+                message_data.get(
+                    "fileMessageData"
+                ) or {}
+            )
+
+            file_url = file_data.get(
+                "downloadUrl"
+            )
+
+            file_name = file_data.get(
+                "fileName"
+            )
+
+            mime_type = file_data.get(
+                "mimeType"
+            )
+
+            print()
+            print("📥 WA FILE RECEIVED")
+            print("SESSION:", sender)
+            print("FILE:", file_name)
+            print("MIME:", mime_type)
+            print("URL:", file_url)
+
+            data = {
+
+                "session_id": sender,
+
+                "source_bot": bot_config["bot"],
+
+                "channel": "whatsapp",
+
+                "chat_id": sender,
+
+                "file_name": file_name,
+
+                "file_type": "image",
+
+                "file_url": file_url,
+
+                "status": "new"
+            }
+
+            response = requests.post(
+
+                f"{SUPABASE_URL}/rest/v1/file_events",
+
+                headers={
+                    **HEADERS,
+                    "Content-Type": "application/json",
+                    "Prefer": "return=minimal"
+                },
+
+                json=data,
+
+                timeout=10
+            )
+
+            if response.status_code in (200, 201):
+
+                print()
+                print("🟢 WA FILE EVENT CREATED")
+                print("FILE:", file_name)
+                print("TYPE:", "image")
+                print("SESSION:", sender)
+
+            else:
+
+                print()
                 print(
-                    "🔴 WA CONTACT EVENT ERROR:",
-                    e
+                    "🔴 WA FILE EVENT ERROR:",
+                    response.status_code,
+                    response.text
                 )
+
+        text = (
+            (
+                message_data.get(
+                    "textMessageData"
+                ) or {}
+            ).get("textMessage")
+            or
+            (
+                message_data.get(
+                    "extendedTextMessageData"
+                ) or {}
+            ).get("text")
+        )
+        print(
+            "📦 WA MESSAGE DATA:",
+            message_data
+        )
+
+        if message_data.get(
+            "typeMessage"
+        ) == "interactiveButtonsResponse":
+
+            text = (
+                (
+                    message_data.get(
+                        "interactiveButtonsResponse"
+                    ) or {}
+                ).get("selectedId")
+                or
+                (
+                    message_data.get(
+                        "interactiveButtonsResponse"
+                    ) or {}
+                ).get("selectedDisplayText")
+            )
+
+        elif message_data.get(
+            "typeMessage"
+        ) == "textMessage":
+
+            text = (
+                (
+                    message_data.get(
+                        "textMessageData"
+                    ) or {}
+                ).get("textMessage")
+            )
+
+        if (
+            sender
+            and text
+            and webhook_type == "incomingMessageReceived"
+        ):
+           
+            data = get_page(
+                text.lower()
+            )
+
+            if data:
+
+                send_event(
+                    bot_config,
+                    sender,
+                    value=text.lower()
+                )
+
+                engine = data.get("engine", "page")
+
+                if engine == "popup":
+
+                    show_popup(
+                        sender,
+                        data
+                    )
+
+                elif engine == "calendar":
+
+                    data = get_calendar(
+                        config=data
+                    )
+
+                    show_page(
+                        sender,
+                        data
+                    )
+
+                else:
+
+                    show_page(
+                        sender,
+                        data
+                    )
+               
+            elif sender in user_data:
+
+                state = user_data.get(sender)
+
+                btn_id = state["buttons"].get(text, text)
+
+                if str(state.get("page") or "").startswith("CTN_"):
+
+                    send_event(
+                        bot_config,
+                        sender,
+                        message=text
+                    )
+
+                    print()
+                    print("📥 CONTACT TEXT SENT")
+                    print("SESSION:", sender)
+                    print("TEXT:", text)
+
+                    delete_notification(
+                        receipt_id
+                    )
+
+                    continue
+                
+                if not btn_id:
+
+                    send_event(
+                        bot_config,
+                        sender,
+                        message=text
+                    )
+
+                else:
+
+                    if btn_id.startswith("CTN_"):
+
+                        print()
+                        print("📋 CONTACT BUTTON")
+                        print("CTN:", btn_id)
+
+                        send_event(
+                            bot_config,
+                            sender,
+                            value=btn_id
+                        )
+
+                        data = get_contact_data(
+                            btn_id
+                        )
+
+                        if data:
+
+                            state["page"] = data.get("id")
+                            state["buttons"] = {}
+
+                            user_data[sender] = state
+
+                            show_contact(
+                                sender,
+                                data
+                            )
+
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+
+                    if btn_id.startswith((
+                        "CALENDAR_",
+                        "MORNING_",
+                        "AFTERNOON_",
+                        "EVENING_",
+                        "TIME_"
+                    )):
+
+                        if btn_id.startswith("TIME_"):
+
+                            date, selected_time = btn_id.replace(
+                                "TIME_",
+                                ""
+                            ).split("_")
+
+                            events = get_calendar_events()
+
+                            if len(events) >= 2:
+
+                                save_values(
+                                    user_data,
+                                    sender,
+                                    {
+                                        events[0]: date,
+                                        events[1]: selected_time
+                                    }
+                                )
+                        data = get_calendar(
+                            command=btn_id
+                        )
+
+                        show_page(
+                            sender,
+                            data
+                        )
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+
+                    values = get_values(
+
+                        user_data,
+
+                        sender
+
+                    )
+
+                    if values:
+
+                        send_values(
+
+                            bot_config,
+
+                            sender,
+
+                            values
+
+                        )
+
+                    send_event(
+
+                        bot_config,
+
+                        sender,
+
+                        value=btn_id
+
+                    )
+                    if btn_id.startswith("GRL_"):
+
+                        print()
+                        print("🖼 WA GALLERY BUTTON")
+                        print("GRL:", btn_id)
+
+                        data = get_gallery_data(
+                            btn_id
+                        )
+
+                        if not data:
+
+                            print(
+                                "🔴 WA GALLERY DATA NOT FOUND:",
+                                btn_id
+                            )
+
+                            delete_notification(
+                                receipt_id
+                            )
+
+                            continue
+
+                        gallery = show_gallery_wa(
+                            sender,
+                            data
+                        )
+
+                        if not gallery:
+
+                            print(
+                                "🔴 WA GALLERY RESULT EMPTY:",
+                                btn_id
+                            )
+
+                            delete_notification(
+                                receipt_id
+                            )
+
+                            continue
+
+                        # ========================================
+                        # SHOW GALLERY IMAGES IN WA
+                        # ========================================
+
+                        for item in gallery.get(
+                            "items",
+                            []
+                        ):
+
+                            if item.get("type") != "image":
+                                continue
+
+                            image_url = item.get(
+                                "url"
+                            )
+
+                            if not image_url:
+                                continue
+
+                            print()
+                            print(
+                                "🖼 WA GALLERY SEND IMAGE"
+                            )
+                            print(
+                                "URL:",
+                                image_url
+                            )
+
+                            send_image(
+                                sender,
+                                image_url
+                            )
+
+                        # ========================================
+                        # SAVE GALLERY BUTTONS
+                        # ========================================
+
+                        state = user_data.get(
+                            sender,
+                            {}
+                        )
+
+                        state["buttons"] = gallery.get(
+                            "buttons",
+                            {}
+                        )
+
+                        state["gallery_actions"] = gallery.get(
+                            "gallery_actions",
+                            {}
+                        )
+
+                        user_data[sender] = state
+
+                        print()
+                        print(
+                            "🖼 WA GALLERY BUTTONS:",
+                            state["buttons"]
+                        )
+
+                        print(
+                            "🖼 WA GALLERY ACTIONS:",
+                            state["gallery_actions"]
+                        )
+
+                        # ========================================
+                        # SHOW GALLERY ACTION BUTTONS
+                        # ========================================
+
+                        buttons = []
+
+                        for action in gallery.get(
+                            "actions",
+                            []
+                        ):
+
+                            if not action.get("id"):
+                                continue
+
+                            if not action.get("text"):
+                                continue
+
+                            buttons.append(
+                                {
+                                    "buttonId":
+                                        action["id"],
+
+                                    "buttonText":
+                                        action["text"]
+                                }
+                            )
+
+                        if buttons:
+
+                            print()
+                            print(
+                                "🖼 WA GALLERY SEND BUTTONS:",
+                                buttons
+                            )
+
+                            send_reply_buttons(
+                                sender,
+                                buttons
+                            )
+
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+                    # ========================================
+                    # GALLERY FILE ACTION
+                    # ========================================
+
+                    gallery_actions = user_data.get(
+                        sender,
+                        {}
+                    ).get(
+                        "gallery_actions",
+                        {}
+                    )
+
+                    action = gallery_actions.get(
+                        btn_id
+                    )
+
+                    if action and action.get("type") == "file":
+
+                        print()
+                        print("📄 WA GALLERY FILE ACTION")
+                        print("FILE ID:", btn_id)
+                        print("ACTION:", action)
+
+                        file_url = action.get(
+                            "file_url"
+                        )
+
+                        if not file_url:
+
+                            print(
+                                "🔴 WA GALLERY FILE URL NOT FOUND:",
+                                btn_id
+                            )
+
+                            delete_notification(
+                                receipt_id
+                            )
+
+                            continue
+
+                        file_name = action.get(
+                            "display_name",
+                            f"{btn_id}.pdf"
+                        )
+
+                        if file_name.lower().endswith(".pdf"):
+
+                            file_type = "document"
+
+                        else:
+
+                            file_type = "image"
+
+                        data = {
+
+                            "session_id": sender,
+
+                            "source_bot":
+                                bot_config["bot"],
+
+                            "channel":
+                                "whatsapp",
+
+                            "chat_id":
+                                sender,
+
+                            "file_name":
+                                file_name,
+
+                            "file_type":
+                                file_type,
+
+                            "file_url":
+                                file_url,
+
+                            "cloudinary_public_id":
+                                action.get(
+                                    "public_id"
+                                ),
+
+                            "file_source":
+                                "gallery",
+
+                            "status":
+                                "new"
+                        }
+
+                        response = requests.post(
+
+                            f"{SUPABASE_URL}/rest/v1/file_events",
+
+                            headers={
+                                "apikey":
+                                    SUPABASE_KEY,
+
+                                "Authorization":
+                                    f"Bearer {SUPABASE_KEY}",
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Prefer":
+                                    "return=minimal"
+                            },
+
+                            json=data,
+
+                            timeout=10
+                        )
+
+                        if response.status_code in (200, 201):
+
+                            print()
+                            print(
+                                "📤 WA GALLERY FILE EVENT CREATED"
+                            )
+
+                            print(
+                                "FILE:",
+                                file_name
+                            )
+
+                            print(
+                                "TYPE:",
+                                file_type
+                            )
+
+                            print(
+                                "URL:",
+                                file_url
+                            )
+                            # ========================================
+                            # KEEP GALLERY BUTTONS AFTER FILE SEND
+                            # ========================================
+
+                            state = user_data.get(
+                                sender,
+                                {}
+                            )
+
+                            buttons = []
+
+                            for text, button_id in state.get(
+                                "buttons",
+                                {}
+                            ).items():
+
+                                buttons.append(
+                                    {
+                                        "buttonId": button_id,
+                                        "buttonText": text
+                                    }
+                                )
+
+                            if buttons:
+
+                                print()
+                                print(
+                                    "🖼 WA GALLERY KEEP BUTTONS:",
+                                    buttons
+                                )
+
+                                send_reply_buttons(
+                                    sender,
+                                    buttons
+                                )
+
+                        else:
+
+                            print()
+                            print(
+                                "🔴 WA GALLERY FILE EVENT ERROR:",
+                                response.status_code,
+                                response.text
+                            )
+
+                        delete_notification(
+                            receipt_id
+                        )
+
+                        continue
+
+
+                    # ========================================
+                    # NORMAL PAGE
+                    # ========================================
+
+                    data = get_page(
+                        btn_id
+                    )
+
+                    if data:
+
+                        engine = data.get(
+                            "engine",
+                            "page"
+                        )
+
+                        if engine == "popup":
+
+                            show_popup(
+                                sender,
+                                data
+                            )
+
+                        elif engine == "calendar":
+
+                            data = get_calendar(
+                                config=data
+                            )
+
+                            show_page(
+                                sender,
+                                data
+                            )
+
+                        else:
+
+                            show_page(
+                                sender,
+                                data
+                            ) 
+                                                    
+        delete_notification(
+            receipt_id
+        )
+
+        time.sleep(1)
 
     except Exception as e:
 
         print(
-            "🔴 WA CONTACT WORKER ERROR:",
+            "🔴 Error:",
             e
         )
-
-    time.sleep(1)

@@ -1488,14 +1488,3 @@ while True:
             "🔴 Error:",
             e
         )
-
-
-# === FAST CTN SESSION PATH ===
-# CTN navigation must not wait for memory/command workers.
-# The current contact page already contains its "next" field.
-# WA-specific display remains handled by the existing show/render functions.
-#
-# IMPORTANT:
-# The message handler should resolve next_id from session["contact_data"]["next"],
-# display the next CTN immediately, and send memory/command events in background.
-# === END FAST CTN SESSION PATH ===
