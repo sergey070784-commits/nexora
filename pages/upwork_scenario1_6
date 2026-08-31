@@ -1,7 +1,7 @@
 {
     "engine": "calendar",
     "events": [
-        "APPOINTMENT",
+        "Date",
         "at"
     ],
     "finish_btn": "BTN_00407"
