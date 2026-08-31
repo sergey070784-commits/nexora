@@ -4,5 +4,7 @@
         "Date",
         "at"
     ],
+     "order": [2, 3],
+     
     "finish_btn": "BTN_00407"
 }

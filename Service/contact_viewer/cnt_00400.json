@@ -10,5 +10,6 @@
     "Please enter your full name."
   ],
   "field": "name",
+  "order": 4,
   "next": "CTN_00401"
 }
