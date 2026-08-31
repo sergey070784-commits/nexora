@@ -180,17 +180,114 @@ def check_commands(
                     continue
 
                 memory = rows[0]["memory_json"]
-                print("🧠 COMMAND MEMORY:", memory)
+
+                print(
+                    "🧠 COMMAND MEMORY:",
+                    memory
+                )
 
                 data["messages"] = []
 
-                for key, value in memory.items():
+                # ========================================
+                # 1. EVENTS FIRST
+                # ========================================
+
+                events = data.get(
+                    "events",
+                    []
+                )
+
+                used_keys = set()
+
+                for event in events:
+
+                    if event in memory:
+
+                        data["messages"].append(
+                            f"{event}: {memory[event]}"
+                        )
+
+                        used_keys.add(event)
+
+
+                # ========================================
+                # 2. LOAD ORDER MAP
+                # ========================================
+
+                from Core.value_engine import load_order_map
+
+                order_map = load_order_map()
+
+
+                # ========================================
+                # 3. SORT REMAINING MEMORY
+                # ========================================
+
+                indexed_values = []
+
+                for index, (key, value) in enumerate(
+                   memory.items()
+                ):
+
+                    if key in used_keys:
+                        continue
+
+                    order = order_map.get(
+                        (
+                            str(key),
+                            str(value)
+                        )
+                    )
+
+                    if order is None:
+
+                        indexed_values.append(
+                            (
+                                1,
+                                999999,
+                                index,
+                                key,
+                                value
+                            )
+                        )
+
+                    else:
+
+                        indexed_values.append(
+                            (
+                                0,
+                                order,
+                                index,
+                                key,
+                                value
+                            )
+                        )
+
+
+                indexed_values.sort(
+                    key=lambda item: (
+                        item[0],
+                        item[1],
+                        item[2]
+                    )
+                )
+
+
+                # ========================================
+                # 4. ADD SORTED MEMORY
+                # ========================================
+
+                for _, _, _, key, value in indexed_values:
 
                     data["messages"].append(
                         f"{key}: {value}"
                     )
 
-                print(memory)
+
+                print(
+                    "🧭 LEAD ORDERED:",
+                    data["messages"]
+                )
                 
                 engine = data.get("engine", "page")
 
