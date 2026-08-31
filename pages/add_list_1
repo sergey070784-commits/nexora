@@ -1,0 +1,21 @@
+{
+  "engine": "list",
+  "title": "🍽 Choose a restaurant",
+  "messages": [
+    "Select a restaurant."
+  ],
+  "items": [
+    {
+      "id": "BTN_REST_001",
+      "text": "🍕 Bella Italia"
+    },
+    {
+      "id": "BTN_REST_002",
+      "text": "🍔 Burger House"
+    },
+    {
+      "id": "BTN_REST_003",
+      "text": "🍣 Tokyo"
+    }
+  ]
+}

@@ -164,6 +164,80 @@ def show_page(chat_id, data):
         "KEYBOARD:",
         sent.reply_markup
     )
+
+def show_list(chat_id, data):
+
+    state = user_data.get(
+        chat_id,
+        {}
+    )
+
+    state["page"] = data.get("id")
+    state["buttons"] = {}
+
+    user_data[chat_id] = state
+
+    text = data.get(
+        "title",
+        ""
+    )
+
+    for msg in data.get(
+        "messages",
+        []
+    ):
+
+        if text:
+            text += "\n\n"
+
+        text += msg
+
+    bot.send_message(
+        chat_id,
+        text
+    )
+
+    keyboard = types.InlineKeyboardMarkup()
+
+    for item in data.get(
+        "items",
+        []
+    ):
+
+        item_id = item.get("id")
+        item_text = item.get("text")
+
+        if not item_id or not item_text:
+            continue
+
+        user_data[chat_id]["buttons"][
+            item_text
+        ] = item_id
+
+        keyboard.add(
+            types.InlineKeyboardButton(
+                text=item_text,
+                callback_data=item_id
+            )
+        )
+
+    if data.get("items"):
+
+        bot.send_message(
+            chat_id,
+            "👇 Choose:",
+            reply_markup=keyboard
+        )
+
+    print(
+        "SHOW_LIST:",
+        data.get("title")
+    )
+
+    print(
+        "SHOW LIST BUTTONS:",
+        user_data[chat_id]["buttons"]
+    )
 def show_popup(chat_id, data):
 
     state = user_data.get(chat_id, {})
@@ -700,6 +774,13 @@ def handle_message(message):
         return
 
     engine = data.get("engine", "page")
+
+    if engine == "list":
+
+        show_list(
+            message.chat.id,
+            data
+        )
 
     if engine == "popup":
 

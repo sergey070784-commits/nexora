@@ -32,6 +32,10 @@
   {
     "id": "BTN_00421",
     "text": "nx_freelancehunt_example"
+  },
+  {
+    "id": "BTN_00600",
+    "text": "add list"
   }
   
   ]
