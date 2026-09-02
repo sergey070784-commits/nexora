@@ -1067,10 +1067,9 @@ while True:
 
                 if not btn_id:
 
-                    send_event_background(
-                        bot_config=bot_config,
-                        session_id=sender,
-                        message=text
+                    print(
+                        "📝 TEXT SAVED — KEEP CURRENT PAGE:",
+                        state.get("page")
                     )
 
                 else:
