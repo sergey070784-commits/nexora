@@ -951,6 +951,17 @@ while True:
             )
 
         if (
+            message_data.get("typeMessage") == "textMessage"
+            and sender
+            and text
+            and sender in user_data
+        ):
+            send_user_text_background(
+                session_id=sender,
+                message_text=text
+            )
+
+        if (
             sender
             and text
             and webhook_type == "incomingMessageReceived"
