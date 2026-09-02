@@ -955,12 +955,7 @@ while True:
             and text
             and webhook_type == "incomingMessageReceived"
         ):
-
-            log_message(
-                sender,
-                text
-            )
-           
+ 
             data = get_page(
                 text.lower()
             )
