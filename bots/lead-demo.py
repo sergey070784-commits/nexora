@@ -441,11 +441,11 @@ def handle_message(message):
                     user_data[session_id] = contact_state
                     return
 
-        send_event_background(
-            bot_config=bot_config,
-            session_id=message.chat.id,
-            message=message.text
+        print(
+            "📝 TEXT SAVED — KEEP CURRENT PAGE:",
+            contact_state.get("page")
         )
+
         return
 
     if btn_id.startswith((
