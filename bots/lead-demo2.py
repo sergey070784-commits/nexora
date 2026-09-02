@@ -382,10 +382,10 @@ def handle_message(message):
     if not btn_id:
 
         if message.text:
-                send_user_text_background(
-                    session_id=message.chat.id,
-                    message_text=message.text
-                )
+            send_user_text_background(
+                session_id=message.chat.id,
+                message_text=message.text
+            )
 
         contact_state = user_data.get(session_id, {})
 
