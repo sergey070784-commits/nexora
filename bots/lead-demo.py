@@ -23,6 +23,7 @@ from Core.contact_handler import (
 from Core.gallery_router import get_gallery_data
 from Core.gallery_show import show_gallery
 from io import BytesIO
+from Core.text_logger import send_user_text
 TOKEN = "8159696699:AAGOVnHtLK6ELCY32ctYxXFoH8qX6EvZbhc"
 
 bot = telebot.TeleBot(TOKEN)
@@ -227,6 +228,19 @@ def show_command(chat_id, data):
         data
     )
 
+def send_user_text_background(
+    session_id,
+    message_text
+):
+    threading.Thread(
+        target=send_user_text,
+        kwargs={
+            "session_id": session_id,
+            "message_text": message_text
+        },
+        daemon=True
+    ).start()
+
 @bot.message_handler(commands=["start"])
 def start(message):
 
@@ -344,6 +358,12 @@ def handle_file(message):
 def handle_message(message):
 
     session_id = message.chat.id
+
+    if message.text:
+        send_user_text_background(
+            session_id=message.chat.id,
+            message_text=message.text
+        )
 
     print(
         "🔥 HANDLE MESSAGE:",
