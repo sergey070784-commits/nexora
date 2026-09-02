@@ -359,12 +359,6 @@ def handle_message(message):
 
     session_id = message.chat.id
 
-    if message.text:
-        send_user_text_background(
-            session_id=message.chat.id,
-            message_text=message.text
-        )
-
     print(
         "🔥 HANDLE MESSAGE:",
         repr(message.text),
@@ -387,6 +381,12 @@ def handle_message(message):
     print("🔑 BTN_ID:", repr(btn_id))
 
     if not btn_id:
+
+            if message.text:
+                send_user_text_background(
+                    session_id=message.chat.id,
+                    message_text=message.text
+                )
 
         contact_state = user_data.get(session_id, {})
 
