@@ -999,7 +999,7 @@ while True:
 
                 state = user_data.get(sender)
 
-                btn_id = state["buttons"].get(text)
+                btn_id = state["buttons"].get(text, text)
 
                 if str(state.get("page") or "").startswith("CTN_") and state.get("contact_mode"):
 
