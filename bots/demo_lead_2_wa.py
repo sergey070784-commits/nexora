@@ -24,6 +24,8 @@ from Core.contact_handler import get_contact_data
 from Core.gallery_router import get_gallery_data
 
 from Core.gallery_show_wa import show_gallery_wa
+
+from Core.text_logger import send_user_text
 #===== GREEN API =====
 
 ID_INSTANCE = "710722689636"
@@ -131,6 +133,16 @@ def send_message(chat_id, text):
 
     return response.json()
 
+def send_user_text_background(session_id, message_text):
+    threading.Thread(
+        target=send_user_text,
+        kwargs={
+            "session_id": session_id,
+            "message_text": message_text
+        },
+        daemon=True
+    ).start()
+
 #===== GET NOTIFICATION =====
 def send_image(chat_id, image_url):
 
@@ -184,26 +196,20 @@ def log_message(session_id, text):
     try:
 
         requests.post(
-
             "https://message.sergey070784.workers.dev/",
-
             json={
-
                 "session_id": str(session_id),
-
-                "channel": bot_config["channel"],
-
-                "message": text
-
+                "message_text": text
             },
-
             timeout=10
-
         )
 
     except Exception as e:
 
-        print(e)
+        print(
+            "🔴 TEXT WORKER ERROR:",
+            e
+        )
 
 def show_contact(chat_id, data):
 
@@ -970,6 +976,11 @@ while True:
             and text
             and webhook_type == "incomingMessageReceived"
         ):
+
+            log_message(
+                sender,
+                text
+            )
            
             data = get_page(
                 text.lower()
