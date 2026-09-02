@@ -190,27 +190,6 @@ def delete_notification(receipt_id):
     requests.delete(url)
 
 
-
-def log_message(session_id, text):
-
-    try:
-
-        requests.post(
-            "https://message.sergey070784.workers.dev/",
-            json={
-                "session_id": str(session_id),
-                "message_text": text
-            },
-            timeout=10
-        )
-
-    except Exception as e:
-
-        print(
-            "🔴 TEXT WORKER ERROR:",
-            e
-        )
-
 def show_contact(chat_id, data):
 
     title = data.get(
@@ -1025,7 +1004,7 @@ while True:
 
                 state = user_data.get(sender)
 
-                btn_id = state["buttons"].get(text, text)
+                btn_id = state["buttons"].get(text)
 
                 if str(state.get("page") or "").startswith("CTN_") and state.get("contact_mode"):
 
