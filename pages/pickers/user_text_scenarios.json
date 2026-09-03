@@ -1,0 +1,34 @@
+{
+    "scenarios": [
+        {
+            "id": "scenario_1",
+            "start_btn": "BTN_00003",
+            "end_btn": "BTN_00023"
+        },
+        {
+            "id": "scenario_2",
+            "start_btn": "BTN_00025",
+            "end_btn": "BTN_00028"
+        },
+        {
+            "id": "scenario_3",
+            "start_btn": "BTN_00029",
+            "end_btn": "BTN_00038"
+        },
+        {
+            "id": "scenario_4",
+            "start_btn": "BTN_00039",
+            "end_btn": "BTN_00041"
+        },
+        {
+            "id": "scenario_5",
+            "start_btn": "BTN_00045",
+            "end_btn": "BTN_00051"
+        },
+        {
+            "id": "scenario_6",
+            "start_btn": "BTN_00400",
+            "end_btn": "BTN_00405"
+        }
+    ]
+}

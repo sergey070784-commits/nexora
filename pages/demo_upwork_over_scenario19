@@ -4,7 +4,7 @@
   "title": "🚀 Workflow Complete",
 
   "messages": [
-    "The lead has been successfully processed.", 
+   
     "Now you can experience another live workflow.",
     "",
     
@@ -12,8 +12,9 @@
 
   ],
   "buttons": [
-    {
-    "id": "BTN_00040",
+    
+  {
+    "id": "BTN_00039",
     "text": "📋 Client Intake"
   },
     {
