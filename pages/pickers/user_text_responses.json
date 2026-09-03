@@ -1,0 +1,42 @@
+{
+    "responses": [
+        {
+            "id": "greeting_en",
+            "language": "en",
+            "keywords": [
+                "hi",
+                "hello",
+                "hey",
+                "how are you",
+                "how are u",
+                "how r you",
+                "good morning",
+                "good afternoon",
+                "good evening"
+            ],
+            "answer": "Hi! How can I help you?"
+        },
+        {
+            "id": "greeting_he",
+            "language": "he",
+            "keywords": [
+                "שלום",
+                "היי",
+                "מה שלומך",
+                "מה נשמע",
+                "בוקר טוב",
+                "ערב טוב"
+            ],
+            "answer": "שלום! איך אפשר לעזור לך?"
+        },
+        {
+            "id": "not_found",
+            "language": "any",
+            "keywords": [],
+            "answers": {
+                "en": "I'm sorry, I didn't understand your message.",
+                "he": "מצטער, לא הצלחתי להבין את ההודעה שלך."
+            }
+        }
+    ]
+}
