@@ -1,17 +1,17 @@
 {
     "scenarios": [
         {
-            "id": "scenario_1",
+            "id": "nx_upwork",
             "start_btn": "BTN_00003",
             "end_btn": "BTN_00023"
         },
         {
-            "id": "scenario_2",
+            "id": "nx_booking",
             "start_btn": "BTN_00025",
             "end_btn": "BTN_00028"
         },
         {
-            "id": "scenario_3",
+            "id": "nx_intake",
             "start_btn": "BTN_00029",
             "end_btn": "BTN_00038"
         },
@@ -21,7 +21,7 @@
             "end_btn": "BTN_00041"
         },
         {
-            "id": "scenario_5",
+            "id": "PAGE_00399",
             "start_btn": "BTN_00045",
             "end_btn": "BTN_00051"
         },
