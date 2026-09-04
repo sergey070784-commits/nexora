@@ -26,6 +26,8 @@ from Core.gallery_router import get_gallery_data
 from Core.gallery_show_wa import show_gallery_wa
 
 from Core.text_logger import send_user_text
+
+from Core.user_text_page import check_user_text_page
 #===== GREEN API =====
 
 ID_INSTANCE = "7107624116"
@@ -778,6 +780,18 @@ threading.Thread(
         show_command
     ),
     daemon=True
+).start()
+threading.Thread(
+
+    target=check_user_text_page,
+
+    args=(
+        bot_config,
+        show_page
+    ),
+
+    daemon=True
+
 ).start()
 
 while True:

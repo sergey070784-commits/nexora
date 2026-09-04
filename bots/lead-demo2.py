@@ -24,6 +24,7 @@ from Core.gallery_router import get_gallery_data
 from Core.gallery_show import show_gallery
 from io import BytesIO
 from Core.text_logger import send_user_text
+from Core.user_text_page import check_user_text_page
 TOKEN = "8826512307:AAG5TzfQEDIC1Q5W8YSiS-GWDI95wucnunY"
 
 bot = telebot.TeleBot(TOKEN)
@@ -984,6 +985,18 @@ threading.Thread(
         show_popup,
         show_command
 
+    ),
+
+    daemon=True
+
+).start()
+threading.Thread(
+
+    target=check_user_text_page,
+
+    args=(
+        bot_config,
+        show_page
     ),
 
     daemon=True
