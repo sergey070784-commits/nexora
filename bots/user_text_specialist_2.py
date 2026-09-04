@@ -88,50 +88,54 @@ def get_pending_messages():
 
 
 # ========================================
-# EVENTS
+# MESSAGE TIME
 # ========================================
 
-def get_ctn_event(
-    session_id,
-    message_id
-):
+def get_message_created_at(message_id):
 
-    # Get the original message time
-    message_url = (
+    url = (
         f"{SUPABASE_URL}/rest/v1/"
         "user_text_messages"
     )
 
-    message_params = {
+    params = {
         "select": "created_at",
         "id": f"eq.{message_id}",
         "limit": "1"
     }
 
     response = requests.get(
-        message_url,
+        url,
         headers=HEADERS,
-        params=message_params,
+        params=params,
         timeout=10
     )
 
     response.raise_for_status()
 
-    message_data = response.json()
+    data = response.json()
 
-    if not message_data:
+    if not data:
         return None
 
-    message_created_at = (
-        message_data[0]["created_at"]
+    return data[0]["created_at"]
+
+
+# ========================================
+# GET LAST CTN
+# ========================================
+
+def get_last_ctn(
+    session_id,
+    message_created_at
+):
+
+    url = (
+        f"{SUPABASE_URL}/rest/v1/"
+        "events"
     )
 
-    # Find the latest CTN before the message
-    events_url = (
-        f"{SUPABASE_URL}/rest/v1/events"
-    )
-
-    events_params = {
+    params = {
         "select": "id,value,created_at",
         "session_id": f"eq.{session_id}",
         "value": "like.CTN_*",
@@ -141,9 +145,9 @@ def get_ctn_event(
     }
 
     response = requests.get(
-        events_url,
+        url,
         headers=HEADERS,
-        params=events_params,
+        params=params,
         timeout=10
     )
 
@@ -155,6 +159,91 @@ def get_ctn_event(
         return None
 
     return events[0]
+
+
+# ========================================
+# GET LAST BTN
+# ========================================
+
+def get_last_btn(
+    session_id,
+    message_created_at
+):
+
+    url = (
+        f"{SUPABASE_URL}/rest/v1/"
+        "events"
+    )
+
+    params = {
+        "select": "id,value,created_at",
+        "session_id": f"eq.{session_id}",
+        "value": "like.BTN_*",
+        "created_at": f"lte.{message_created_at}",
+        "order": "created_at.desc",
+        "limit": "1"
+    }
+
+    response = requests.get(
+        url,
+        headers=HEADERS,
+        params=params,
+        timeout=10
+    )
+
+    response.raise_for_status()
+
+    events = response.json()
+
+    if not events:
+        return None
+
+    return events[0]
+
+
+# ========================================
+# CHECK ACTIVE CTN
+# ========================================
+
+def get_active_ctn(
+    session_id,
+    message_created_at
+):
+
+    last_ctn = get_last_ctn(
+        session_id,
+        message_created_at
+    )
+
+    if not last_ctn:
+        return None
+
+    last_btn = get_last_btn(
+        session_id,
+        message_created_at
+    )
+
+    # No BTN after CTN
+    if not last_btn:
+        return last_ctn
+
+    ctn_time = last_ctn["created_at"]
+    btn_time = last_btn["created_at"]
+
+    # BTN happened after CTN
+    if btn_time > ctn_time:
+
+        print(
+            "🔓 BTN AFTER CTN:",
+            last_btn["value"],
+            "| CTN:",
+            last_ctn["value"]
+        )
+
+        return None
+
+    # CTN is still active
+    return last_ctn
 
 
 # ========================================
@@ -265,7 +354,9 @@ def process_message(message):
         "🔎 SPECIALIST 2:",
         message_id,
         "| SESSION:",
-        session_id
+        session_id,
+        "| BTN:",
+        message["last_btn"]
     )
 
     # ------------------------------------
@@ -280,17 +371,31 @@ def process_message(message):
     )
 
     # ------------------------------------
-    # Currently we only support CTN
+    # Get message time
+    # ------------------------------------
+
+    message_created_at = get_message_created_at(
+        message_id
+    )
+
+    if not message_created_at:
+
+        raise Exception(
+            f"Message time not found: {message_id}"
+        )
+
+    # ------------------------------------
+    # CTN CHECK
     # ------------------------------------
 
     if "CTN" in ignore_types:
 
-        ctn_event = get_ctn_event(
+        active_ctn = get_active_ctn(
             session_id,
-            message_id
+            message_created_at
         )
 
-        if ctn_event:
+        if active_ctn:
 
             update_status(
                 queue_id,
@@ -298,8 +403,8 @@ def process_message(message):
             )
 
             print(
-                "🚫 IGNORED — CTN:",
-                ctn_event["value"],
+                "🚫 IGNORED — ACTIVE CTN:",
+                active_ctn["value"],
                 "| MESSAGE:",
                 message_id
             )
@@ -307,7 +412,8 @@ def process_message(message):
             return
 
     # ------------------------------------
-    # No ignore → send to READY
+    # No active ignore
+    # → send to READY
     # ------------------------------------
 
     if not ready_exists(message_id):
@@ -352,7 +458,9 @@ def main():
                         "processing"
                     )
 
-                    process_message(message)
+                    process_message(
+                        message
+                    )
 
                 except Exception as e:
 

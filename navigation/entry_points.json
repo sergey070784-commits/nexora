@@ -1,9 +1,11 @@
 {
   "nx_menu":     "PAGE_00000",
   "nx_upwork":   "PAGE_00001",
+  "nx_support":  "PAGE_00003",
   "nx_booking":  "PAGE_00015",
-  "nx_intake":   "PAGE_00020",
+  "nx_coll_doc": "PAGE_00020",
   "nx_xplace":   "PAGE_00034",
-  "nx_freelancehunt_example": "PAGE_00408",
+  "nx_xplace_meeting":   "PAGE_00035",
+  "nx_intake":   "PAGE_00029",
   "nx_fb_0": "PAGE_00399"
 }

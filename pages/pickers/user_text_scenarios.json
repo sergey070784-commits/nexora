@@ -1,7 +1,7 @@
 {
     "scenarios": [
         {
-            "id": "nx_upwork",
+            "id": "nx_support",
             "start_btn": "BTN_00003",
             "end_btn": "BTN_00023"
         },
@@ -11,22 +11,22 @@
             "end_btn": "BTN_00028"
         },
         {
-            "id": "nx_intake",
+            "id": "nx_coll_doc",
             "start_btn": "BTN_00029",
             "end_btn": "BTN_00038"
         },
         {
-            "id": "scenario_4",
+            "id": "nx_intake",
             "start_btn": "BTN_00039",
             "end_btn": "BTN_00041"
         },
         {
-            "id": "PAGE_00399",
+            "id": "nx_xplace_meeting",
             "start_btn": "BTN_00045",
             "end_btn": "BTN_00051"
         },
         {
-            "id": "scenario_6",
+            "id": "nx_fb_0",
             "start_btn": "BTN_00400",
             "end_btn": "BTN_00405"
         }
