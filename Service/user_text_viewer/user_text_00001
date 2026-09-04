@@ -1,0 +1,25 @@
+{
+  "engine": "user_text",
+
+  "title": "Otvet na soobshchenie",
+
+  "buttons": [
+
+    {
+      "type": "start",
+      "text": "Продолжить"
+    },
+
+    {
+      "type": "end",
+      "text": "Завершить"
+    },
+
+    {
+      "type": "custom",
+      "id": "BTN_00000",
+      "text": "Дополнительный вариант"
+    }
+
+  ]
+}
