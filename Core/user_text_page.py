@@ -156,9 +156,7 @@ def check_user_text_page(
                     },
 
                     json={
-                        "status": "sent",
-                        "processed_at":
-                            datetime.utcnow().isoformat()
+                        "status": "sent"
                     },
 
                     timeout=10
