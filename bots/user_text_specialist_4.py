@@ -61,7 +61,7 @@ def get_pending_messages():
     )
 
     params = {
-        "select": "id,message_id,session_id,last_btn,status",
+        "select": "id,message_id,session_id,message_text,last_btn,status",
         "status": "eq.pending",
         "order": "id.asc",
         "limit": "20"
@@ -352,7 +352,28 @@ def process_message(message):
     ready_id = message["id"]
     message_id = message["message_id"]
     session_id = message["session_id"]
+    message_text = message["message_text"]
     last_btn = message["last_btn"]
+
+    # =========================
+    # IGNORE NX_ TEXT
+    # =========================
+
+    if "nx_" in message_text:
+
+        update_status(
+            ready_id,
+            "done"
+        )
+
+        print(
+            "⏭️ IGNORE NX_ TEXT:",
+            message_id,
+            "| TEXT:",
+            message_text
+        )
+
+        return
 
     print(
         "🔎 SPECIALIST 4:",
