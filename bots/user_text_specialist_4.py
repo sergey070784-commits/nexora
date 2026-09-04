@@ -61,11 +61,12 @@ def get_pending_messages():
     )
 
     params = {
-        "select": "id,message_id,session_id,message_text,last_btn,status",
-        "status": "eq.pending",
+       
+        "select": "id,message_id,session_id,message_text,last_btn,result2_status",
+        "result2_status": "eq.pending",
         "order": "id.asc",
         "limit": "20"
-    }
+}
 
     response = requests.get(
         url,
@@ -326,7 +327,8 @@ def update_status(
     }
 
     payload = {
-        "status": status
+
+        "result2_status": status
     }
 
     response = requests.patch(
