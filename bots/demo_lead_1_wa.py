@@ -1034,7 +1034,7 @@ while True:
 
                     if field and next_id:
                         # Save memory asynchronously; navigation never waits for it.
-                        send_event_background(
+                        send_event(
                             bot_config=bot_config,
                             session_id=sender,
                             value=f"{field}={text}"
