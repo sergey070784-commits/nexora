@@ -6,7 +6,7 @@ import time
 import threading
 from Core.page_engine import get_page
 from Core.check_commands import check_commands
-from Core.event_logger import send_event
+from Core.event_logger import send_event, send_ctn_event
 from Core.calendar_engine import (
     get_calendar,
     get_calendar_events
@@ -397,24 +397,26 @@ def handle_message(message):
             next_id = contact_data.get("next")
 
             if field and next_id:
-                # Notification/command event: background only.
-                # Keep CTN navigation independent from command routing.
-                # The router expects the route key (e.g. BTN_00039),
-                # not CTN_INPUT.
+
                 if next_id.startswith("BTN_"):
+                    threading.Thread(
+                        target=send_ctn_event,
+                        args=(
+                            bot_config,
+                            message.chat.id,
+                            field,
+                            message.text,
+                            next_id
+                        ),
+                        daemon=True
+                    ).start()
+
+                else:
                     send_event_background(
                         bot_config=bot_config,
                         session_id=message.chat.id,
-                        value=next_id
+                        value=f"{field}={message.text}"
                     )
-
-                # Memory event: background only.
-                send_event_background(
-                    bot_config=bot_config,
-                    session_id=message.chat.id,
-                    value=f"{field}={message.text}"
-                )
-
                 if next_id.startswith("CTN_"):
                     data = get_fast_contact_data(next_id)
                     if not data:
