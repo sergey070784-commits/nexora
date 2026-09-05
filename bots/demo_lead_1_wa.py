@@ -3,7 +3,7 @@ from datetime import datetime
 import json
 import time
 from Core.page_engine import get_page
-from Core.event_logger import send_event
+from Core.event_logger import send_event, send_ctn_event
 import threading
 from Core.check_commands import check_commands
 from Core.calendar_engine import (
@@ -1033,12 +1033,20 @@ while True:
                     next_id = contact_data.get("next")
 
                     if field and next_id:
-                        # Save memory asynchronously; navigation never waits for it.
-                        send_event(
-                            bot_config=bot_config,
-                            session_id=sender,
-                            value=f"{field}={text}"
-                        )
+
+                        if next_id.startswith("BTN_"):
+                            threading.Thread(
+                                target=send_ctn_event,
+                                args=(bot_config, sender, field, text, next_id),
+                                daemon=True
+                            ).start()
+
+                        else:
+                            send_event_background(
+                                bot_config=bot_config,
+                                session_id=sender,
+                                value=f"{field}={text}"
+                            )
 
                         if next_id.startswith("CTN_"):
                             data = get_fast_contact_data(next_id)
@@ -1060,13 +1068,7 @@ while True:
                             continue
 
                         if next_id.startswith("BTN_"):
-                            # Command routing is asynchronous; send the BTN route key.
-                            send_event_background(
-                                bot_config=bot_config,
-                                session_id=sender,
-                                value=next_id
-                            )
-
+                           
                             data = get_fast_page(next_id)
                             if data:
                                 show_page(sender, data)
