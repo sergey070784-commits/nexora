@@ -110,7 +110,7 @@ def check_commands(
                     response.text[:300]
                 )
 
-                time.sleep(1)
+                time.sleep(10)
 
                 continue
 
@@ -121,7 +121,7 @@ def check_commands(
                     response.status_code
                 )
 
-                time.sleep(1)
+                time.sleep(10)
                 continue
 
             try:
@@ -135,7 +135,7 @@ def check_commands(
                 repr(response.text[:300])
                 )
 
-                time.sleep(1)
+                time.sleep(10)
                 continue
 
             for row in rows:
@@ -358,4 +358,4 @@ def check_commands(
 
             print("ERROR:", e)
 
-        time.sleep(1)
+        time.sleep(10)

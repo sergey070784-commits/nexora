@@ -211,7 +211,7 @@ while True:
 
             print(response.text)
 
-            time.sleep(1)
+            time.sleep(10)
 
             continue
 
@@ -271,4 +271,4 @@ while True:
             e
         )
 
-    time.sleep(1)
+    time.sleep(10)

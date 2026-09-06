@@ -187,7 +187,7 @@ def wait_for_memory_value(
 
                     return True
 
-        time.sleep(0.2)
+        time.sleep(10)
 
     print(
         "🔴 MEMORY NOT CONFIRMED:",
@@ -532,4 +532,4 @@ while True:
             e
         )
 
-    time.sleep(1)
+    time.sleep(10)

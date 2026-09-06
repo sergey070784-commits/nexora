@@ -471,7 +471,7 @@ def main():
                         "pending"
                     )
 
-            time.sleep(2)
+            time.sleep(10)
 
         except Exception as e:
 
@@ -480,7 +480,7 @@ def main():
                 e
             )
 
-            time.sleep(5)
+            time.sleep(10)
 
 
 if __name__ == "__main__":
