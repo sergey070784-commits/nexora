@@ -407,4 +407,4 @@ while True:
             e
         )
 
-    time.sleep(10)
+    time.sleep(15)

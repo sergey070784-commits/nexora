@@ -790,7 +790,7 @@ def check_file_messages():
                     response.text
                 )
 
-                time.sleep(5)
+                time.sleep(10)
                 continue
 
             rows = response.json()
@@ -962,7 +962,7 @@ def check_file_messages():
                 e
             )
 
-        time.sleep(5)
+        time.sleep(10)
 
 threading.Thread(
 
@@ -1021,6 +1021,6 @@ while True:
 
         print("🔴 ERROR:", e)
 
-        time.sleep(10)
+        time.sleep(15)
 
 

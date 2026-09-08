@@ -386,7 +386,7 @@ def main():
             )
 
 
-        time.sleep(10)
+        time.sleep(15)
 
 
 if __name__ == "__main__":

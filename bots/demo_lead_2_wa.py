@@ -412,7 +412,7 @@ def check_contact_navigation():
                     response.text
                 )
 
-                time.sleep(5)
+                time.sleep(10)
                 continue
 
             rows = response.json()
@@ -522,7 +522,7 @@ def check_contact_navigation():
                 e
             )
 
-        time.sleep(5)
+        time.sleep(10)
 def check_file_messages():
 
     global file_last_id
@@ -559,7 +559,7 @@ def check_file_messages():
                     response.text
                 )
 
-                time.sleep(5)
+                time.sleep(10)
 
                 continue
 
@@ -730,7 +730,7 @@ def check_file_messages():
                 e
             )
 
-        time.sleep(5)
+        time.sleep(10)
 
 
 def send_file(
@@ -802,7 +802,7 @@ while True:
           
         if not notification:
 
-            time.sleep(5)
+            time.sleep(10)
 
             continue
 
@@ -1580,7 +1580,7 @@ while True:
             receipt_id
         )
 
-        time.sleep(5)
+        time.sleep(15)
 
     except Exception as e:
 

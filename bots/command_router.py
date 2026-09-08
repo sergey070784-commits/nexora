@@ -251,7 +251,7 @@ while True:
                 response.status_code
             )
 
-            time.sleep(10)
+            time.sleep(15)
 
             continue
 
@@ -306,4 +306,4 @@ while True:
 
         print("ERROR:", e)
 
-    time.sleep(10)
+    time.sleep(15)

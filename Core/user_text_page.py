@@ -76,7 +76,7 @@ def check_user_text_page(
                     response.text[:300]
                 )
 
-                time.sleep(10)
+                time.sleep(15)
 
                 continue
 
@@ -174,4 +174,4 @@ def check_user_text_page(
                 e
             )
 
-        time.sleep(10)
+        time.sleep(15)
