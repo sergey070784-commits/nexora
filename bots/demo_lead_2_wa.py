@@ -1580,7 +1580,7 @@ while True:
             receipt_id
         )
 
-        time.sleep(15)
+        time.sleep(5)
 
     except Exception as e:
 

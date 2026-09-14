@@ -1021,6 +1021,6 @@ while True:
 
         print("🔴 ERROR:", e)
 
-        time.sleep(15)
+        time.sleep(5)
 
 
