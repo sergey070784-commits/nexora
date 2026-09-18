@@ -136,7 +136,7 @@ def get_pending_result1():
     params = {
         "select": (
             "id,message_id,session_id,"
-            "answer,status"
+            "message_text,answer,status"
         ),
         "status": "eq.pending",
         "order": "id.asc",
@@ -201,6 +201,7 @@ def build_page(
             ""
         ),
         "messages": [
+            result1["message_text"], 
             result1["answer"]
         ],
         "buttons": []

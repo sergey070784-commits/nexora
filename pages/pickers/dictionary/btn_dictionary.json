@@ -1,124 +1,103 @@
 {
   "BTN_00006": {
     "field": "business type ",
-    "value": "Agency"
+    "value": "Agency",
+    "order": 1
   },
 
   "BTN_00007": {
     "field": "business type ",
-    "value": "Law Firm"
+    "value": "Law Firm",
+    "order": 1
   },
 
   "BTN_00008": {
     "field": "business type ",
-    "value": "Healthcare"
+    "value": "Healthcare",
+    "order": 1
   },
 
   "BTN_00009": {
     "field": "business type ",
-    "value": "Real Estate"
+    "value": "Real Estate",
+    "order": 1
   },
 
   "BTN_00010": {
     "field": "business type ",
-    "value": "E-commerce"
+    "value": "E-commerce",
+    "order": 1
   },
 
   "BTN_00011": {
     "field": "primary goal ",
-    "value": "AI Lead Qualification"
+    "value": "AI Lead Qualification",
+    "order": 2
   },
 
   "BTN_00012": {
     "field": "primary goal ",
-    "value": "Appointment Booking"
+    "value": "Appointment Booking",
+    "order": 2
   },
 
   "BTN_00013": {
     "field": "primary goal ",
-    "value": "Document Collection"
+    "value": "Document Collection",
+    "order": 2
   },
 
   "BTN_00014": {
     "field": "primary goal ",
-    "value": "Customer Support"
+    "value": "Customer Support",
+    "order": 2
   },
 
   "BTN_00015": {
     "field": "primary goal ",
-    "value": "Complete Business Automation"
+    "value": "Complete Business Automation",
+    "order": 2
   },
    "BTN_00016": {
     "field": "monthly inquiries ",
-    "value": "1–20"
+    "value": "1–20",
+    "order": 3
   },
 
   "BTN_00017": {
     "field": "monthly inquiries ",
-    "value": "20–100"
+    "value": "20–100",
+    "order": 3
   },
 
   "BTN_00018": {
     "field": "monthly inquiries ",
-    "value": "100–500"
+    "value": "100–500",
+    "order": 3
   },
 
   "BTN_00019": {
     "field": "monthly inquiries ",
-    "value": "500+"
+    "value": "500+",
+    "order": 3
   },
 
   "BTN_00029": {
     "field": "📄 Document Submission",
-    "value": "The client has uploaded a document for processing."
+    "value": "The client has uploaded a document for processing.",
+    "order": 1
   },
   "BTN_00040": {
     "field": "📋 Client Intake Received",
-    "value": "✅ New Client Created"
+    "value": "✅ New Client Created",
+    "order": 1
   },
   
   "BTN_00049": {
     "field": "✅ פגישה נקבעה",
-    "value": "✅ איש קשר נוצר"
-  },
-   "BTN_00400": {
-    "field": "יעד",
-    "value": "מתל אביב לנתב״ג",
+    "value": "✅ איש קשר נוצר",
     "order": 1
-  },
-  "BTN_00401": {
-    "field": "פרטי לקוח",
-    "value": "[פרטי הנסיעה / יצירת קשר]",
-    "order": 2
-  },
-  
-  "BTN_00412": {
-    "field": "Определён",
-    "value": "ответу 1"
-  },
-  "BTN_00413": {
-    "field": "Определён",
-    "value": "ответу 2"
-  },
-  "BTN_00414": {
-    "field": "Определён",
-    "value": "ответу 3"
-  },
-  "BTN_00415": {
-    "field": "Определён",
-    "value": "ответу 4"
-  },
-  "BTN_00416": {
-    "field": "Определён",
-    "value": "ответу 5"
-  },
-  "BTN_00417": {
-    "field": "Определён",
-    "value": "ответу 6"
-  },
-  "BTN_00418": {
-    "field": "Определён",
-    "value": "ответу 7"
   }
+   
   
 }

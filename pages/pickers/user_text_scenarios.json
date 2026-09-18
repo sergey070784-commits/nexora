@@ -24,11 +24,6 @@
             "id": "nx_xplace_meeting",
             "start_btn": "BTN_00045",
             "end_btn": "BTN_00051"
-        },
-        {
-            "id": "nx_fb_0",
-            "start_btn": "BTN_00400",
-            "end_btn": "BTN_00405"
-        }
+        } 
     ]
 }
