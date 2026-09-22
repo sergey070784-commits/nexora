@@ -26,6 +26,19 @@ from io import BytesIO
 from Core.text_logger import send_user_text
 from Core.user_text_page import check_user_text_page
 TOKEN = "8826512307:AAG5TzfQEDIC1Q5W8YSiS-GWDI95wucnunY"
+try:
+    response = requests.post(
+        f"https://api.telegram.org/bot{TOKEN}/deleteWebhook",
+        data={
+            "drop_pending_updates": False
+        },
+        timeout=10
+    )
+
+    print("🔧 Telegram webhook removed:", response.json())
+
+except Exception as e:
+    print("🔴 Telegram webhook error:", e)
 
 bot = telebot.TeleBot(TOKEN)
 
