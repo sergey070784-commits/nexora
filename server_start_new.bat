@@ -102,4 +102,3 @@ echo       USER TEXT SPECIALISTS 1-6 ENABLED
 echo ========================================
 echo.
 
-pause
