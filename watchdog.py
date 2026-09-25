@@ -17,7 +17,7 @@ CONFIG_URL = (
 
 LOCAL_CONFIG = "Core/config.json"
 
-CHECK_INTERVAL = 6 * 60 * 60       # 6 hours
+CHECK_INTERVAL = 3 * 60 * 60       # 3 hours
 RECHECK_DELAY = 5 * 60             # 5 minutes
 EVENT_SILENCE = 5 * 60             # 5 minutes
 
@@ -215,7 +215,7 @@ def check_once():
 
 print()
 print("🛡️ NEXORA WATCHDOG STARTED")
-print("⏱️ CHECK EVERY 6 HOURS")
+print("⏱️ CHECK EVERY 3 HOURS")
 print()
 
 # Manual one-time check
@@ -235,7 +235,7 @@ while True:
     check_once()
 
     print()
-    print("💤 NEXT CHECK IN 6 HOURS")
+    print("💤 NEXT CHECK IN 3 HOURS")
     print()
 
     time.sleep(CHECK_INTERVAL)
