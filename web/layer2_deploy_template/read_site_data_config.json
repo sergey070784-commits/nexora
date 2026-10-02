@@ -1,0 +1,10 @@
+{
+  "version": 1,
+
+  "table": "site_data",
+
+  "filter": {
+    "session_id": "session_id",
+    "status": 1
+  }
+}
