@@ -1,0 +1,38 @@
+{
+  "name": "DAVID COHEN",
+  "nav_about": "About",
+  "nav_services": "Services",
+  "nav_contact": "Contact",
+  "profession": "ATTORNEY AT LAW",
+  "headline": "Trusted legal representation.",
+  "headline_first": "Trusted legal",
+  "headline_emphasis": "representation.",
+  "hero_text": "Personal, clear and professional legal guidance tailored to your situation.",
+  "cta": "Contact Me",
+  "photo": "",
+  "experience": "12",
+  "about_heading": "Legal advice with a personal approach.",
+  "about_text_1": "Every legal matter is different. I work closely with my clients to understand their situation, explain their options clearly, and build a practical path forward.",
+  "about_text_2": "My goal is simple: professional representation without unnecessary complexity.",
+  "services_heading": "Areas of practice.",
+  "service_1": {
+    "title": "Civil Law",
+    "description": "Professional advice and representation in civil matters."
+  },
+  "service_2": {
+    "title": "Commercial Law",
+    "description": "Contracts, business matters and legal support."
+  },
+  "service_3": {
+    "title": "Litigation",
+    "description": "Strategic representation before courts and tribunals."
+  },
+  "quote": "“Good legal representation begins with understanding the person behind the case.”",
+  "contact_heading": "Let's discuss your situation.",
+  "contact_cta": "Start on WhatsApp",
+  "phone": "+972 50 000 0000",
+  "email": "hello@example.com",
+  "location": "Tel Aviv, Israel",
+  "whatsapp_url": "https://wa.me/972500000000",
+  "year": 2026
+}

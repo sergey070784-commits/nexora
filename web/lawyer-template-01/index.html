@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Personal Lawyer — Editable Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="editor-hint" aria-live="polite">Click any highlighted element to edit it.</div>
+
+  <header class="site-header">
+    <button class="editable brand" data-edit="text" data-key="name" data-label="Lawyer name">DAVID <span>COHEN</span></button>
+    <nav aria-label="Primary navigation">
+      <a class="nav-link" href="#about" data-nav-key="about">About</a>
+      <a class="nav-link" href="#services" data-nav-key="services">Services</a>
+      <a class="nav-link" href="#contact" data-nav-key="contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <button class="editable eyebrow" data-edit="text" data-key="profession" data-label="Profession">ATTORNEY AT LAW</button>
+        <button class="editable heading-edit" data-edit="text" data-key="headline" data-label="Main headline">
+          Trusted legal<br><em>representation.</em>
+        </button>
+        <button class="editable hero-text" data-edit="textarea" data-key="hero_text" data-label="Introduction">
+          Personal, clear and professional legal guidance tailored to your situation.
+        </button>
+        <button class="editable primary-cta" data-edit="text" data-key="cta" data-label="Main CTA">Contact Me <span>↗</span></button>
+      </div>
+
+      <div class="hero-visual">
+        <button class="editable portrait" data-edit="image" data-key="photo" data-label="Lawyer photo">
+          <span class="portrait-placeholder">ATTORNEY<br><strong>PHOTO</strong></span>
+        </button>
+        <div class="experience">
+          <button class="editable experience-number" style="display:inline-block;width:auto;padding:0" data-edit="experience-number" data-key="experience" data-label="Experience number"><strong>12+</strong></button>
+          <button class="editable experience-label" style="display:inline-block;width:auto;padding:0" data-edit="experience-label" data-key="experience_text" data-label="Experience label"><span>Years of<br>experience</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="about section">
+      <button class="editable section-label section-label-edit" data-edit="section-name" data-section="about" data-key="section_about" data-label="About section name"><span class="section-number">01</span><span class="section-separator"> / </span><span class="section-name">ABOUT</span></button>
+      <div class="section-content">
+        <button class="editable section-heading" data-edit="text" data-key="about_heading" data-label="About heading">
+          Legal advice with<br><em>a personal approach.</em>
+        </button>
+        <button class="editable about-text" data-edit="textarea" data-key="about_text_1" data-label="About text">
+          Every legal matter is different. I work closely with my clients to understand their situation, explain their options clearly, and build a practical path forward.
+        </button>
+        <button class="editable about-text" data-edit="textarea" data-key="about_text_2" data-label="About second paragraph">
+          My goal is simple: professional representation without unnecessary complexity.
+        </button>
+      </div>
+    </section>
+
+    <section id="services" class="services section">
+      <button class="editable section-label section-label-edit" data-edit="section-name" data-section="services" data-key="section_services" data-label="Services section name"><span class="section-number">02</span><span class="section-separator"> / </span><span class="section-name">SERVICES</span></button>
+      <div class="section-content">
+        <button class="editable section-heading" data-edit="text" data-key="services_heading" data-label="Services heading">
+          Areas of <em>practice.</em>
+        </button>
+
+        <div class="service-grid">
+          <button class="editable service-card" data-edit="service" data-key="service_1" data-label="Service 1">
+            <span>01</span>
+            <h3>Civil Law</h3>
+            <p>Professional advice and representation in civil matters.</p>
+            <b>↗</b>
+          </button>
+          <button class="editable service-card" data-edit="service" data-key="service_2" data-label="Service 2">
+            <span>02</span>
+            <h3>Commercial Law</h3>
+            <p>Contracts, business matters and legal support.</p>
+            <b>↗</b>
+          </button>
+          <button class="editable service-card" data-edit="service" data-key="service_3" data-label="Service 3">
+            <span>03</span>
+            <h3>Litigation</h3>
+            <p>Strategic representation before courts and tribunals.</p>
+            <b>↗</b>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="statement">
+      <button class="editable quote" data-edit="textarea" data-key="quote" data-label="Quote">
+        “Good legal representation begins with understanding the person behind the case.”
+      </button>
+    </section>
+
+    <section id="contact" class="contact section">
+      <button class="editable section-label section-label-edit" data-edit="section-name" data-section="contact" data-key="section_contact" data-label="Contact section name"><span class="section-number">03</span><span class="section-separator"> / </span><span class="section-name">CONTACT</span></button>
+      <div class="section-content contact-layout">
+        <div>
+          <button class="editable section-heading" data-edit="text" data-key="contact_heading" data-label="Contact heading">
+            Let's discuss<br><em>your situation.</em>
+          </button>
+          <button class="editable primary-cta contact-cta" data-edit="text" data-key="contact_cta" data-label="Contact CTA">Start on WhatsApp <span>↗</span></button>
+        </div>
+        <div class="contact-details">
+          <button class="editable contact-item" data-edit="phone" data-key="phone" data-label="Phone">+972 50 000 0000</button>
+          <button class="editable contact-item" data-edit="email" data-key="email" data-label="Email">hello@example.com</button>
+          <button class="editable contact-item" data-edit="text" data-key="location" data-label="Location">Tel Aviv, Israel</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>DAVID COHEN — ATTORNEY AT LAW</span>
+    <span>© 2026</span>
+  </footer>
+
+  <div class="editor-overlay" id="editorOverlay" hidden>
+    <div class="editor-panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+      <div class="editor-panel-head">
+        <div>
+          <p class="editor-kicker">EDIT ELEMENT</p>
+          <h2 id="editorTitle">Edit</h2>
+        </div>
+        <button type="button" class="editor-close" id="editorClose" aria-label="Close editor">×</button>
+      </div>
+      <div id="editorBody"></div>
+      <div class="editor-actions">
+        <button type="button" class="editor-cancel" id="editorCancel">Cancel</button>
+        <button type="button" class="editor-save" id="editorSave">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" id="imageInput" accept="image/*" hidden>
+
+  <!-- FINALIZE / STAGE 2 -->
+  <div class="setup-finish-bar" id="setupFinishBar" dir="rtl">
+    <button type="button" id="setupFinishButton">סיום הקמה, לקבלת קישור לחץ כאן</button>
+  </div>
+
+  <div class="finish-overlay" id="finishOverlay" hidden dir="rtl">
+    <div class="finish-modal" role="dialog" aria-modal="true" aria-labelledby="finishTitle">
+      <button type="button" class="finish-close" id="finishClose" aria-label="סגירה">×</button>
+      <div class="finish-step">שלב 2 מתוך 3</div>
+      <h2 id="finishTitle">האתר מוכן</h2>
+      <p>בלחיצת כפתור הסכם אתם מקבלים קישור לאתר שלכם. אתר לרשותכם למשך 7 ימים ללא עלות וללא התחייבות</p>
+      <div class="finish-actions">
+        <button type="button" class="finish-agree" id="finishAgree">הסכם</button>
+        <button type="button" class="finish-change" id="finishChange">שינוי</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const sessionId = crypto.randomUUID();
+      const overlay = document.getElementById("editorOverlay");
+      const body = document.getElementById("editorBody");
+      const title = document.getElementById("editorTitle");
+      const save = document.getElementById("editorSave");
+      const close = document.getElementById("editorClose");
+      const cancel = document.getElementById("editorCancel");
+      const imageInput = document.getElementById("imageInput");
+
+      let active = null;
+      let pendingImage = null;
+      let pendingImageFile = null;
+
+      const sectionState = {
+        about: { name: "ABOUT", nav: "About" },
+        services: { name: "SERVICES", nav: "Services" },
+        contact: { name: "CONTACT", nav: "Contact" }
+      };
+
+      function syncSection(sectionId) {
+        const state = sectionState[sectionId];
+        if (!state) return;
+        const sectionLabel = document.querySelector(`[data-section="${sectionId}"]`);
+        if (sectionLabel) {
+          const nameNode = sectionLabel.querySelector(".section-name");
+          if (nameNode) nameNode.textContent = state.name.toUpperCase();
+        }
+        const nav = document.querySelector(`[data-nav-key="${sectionId}"]`);
+        if (nav) nav.textContent = state.nav;
+      }
+
+      function openEditor(element) {
+        active = element;
+        pendingImage = null;
+
+        const label = element.dataset.label || "Edit element";
+        const type = element.dataset.edit;
+        title.textContent = label;
+        body.innerHTML = "";
+
+        if (type === "section-name") {
+          const sectionId = element.dataset.section;
+          const current = sectionState[sectionId]?.name || element.querySelector(".section-name")?.textContent || "";
+          body.innerHTML = `
+            <label class="editor-label" for="editorInput">Section name</label>
+            <input class="editor-input" id="editorInput" type="text" maxlength="40" value="${escapeAttr(current)}">
+            <p class="editor-description">This name updates both the section label and the matching top navigation item.</p>
+          `;
+        } else if (type === "image") {
+          body.innerHTML = `
+            <p class="editor-description">Choose a local photo. This is only a local preview for now. Cloudinary comes later.</p>
+            <button type="button" class="upload-button" id="chooseImage">Choose photo</button>
+            <div class="image-preview" id="imagePreview">
+              ${element.querySelector("img") ? '<img src="' + element.querySelector("img").src + '" alt="Current photo">' : '<span>No photo selected</span>'}
+            </div>
+          `;
+          document.getElementById("chooseImage").addEventListener("click", () => imageInput.click());
+          imageInput.onchange = () => {
+            const file = imageInput.files && imageInput.files[0];
+            if (!file) return;
+            pendingImageFile = file;
+            const reader = new FileReader();
+            reader.onload = () => {
+              pendingImage = reader.result;
+              document.getElementById("imagePreview").innerHTML = `<img src="${pendingImage}" alt="Selected lawyer photo">`;
+            };
+            reader.readAsDataURL(file);
+          };
+        } else if (type === "experience-label") {
+          const current = element.querySelector("span").innerText.trim();
+          body.innerHTML = `
+            <label class="editor-label" for="editorInput">Experience label</label>
+            <textarea class="editor-textarea" id="editorInput" maxlength="80">${escapeHtml(current)}</textarea>
+          `;
+        } else if (type === "experience-number") {
+          const current = element.querySelector("strong").textContent.replace("+", "");
+          body.innerHTML = `
+            <label class="editor-label" for="editorInput">Experience number</label>
+            <input class="editor-input" id="editorInput" type="number" min="0" max="99" value="${current}">
+          `;
+        } else if (type === "service") {
+          const h3 = element.querySelector("h3").textContent;
+          const p = element.querySelector("p").textContent;
+          body.innerHTML = `
+            <label class="editor-label" for="serviceTitle">Service name</label>
+            <input class="editor-input" id="serviceTitle" type="text" maxlength="60" value="${escapeAttr(h3)}">
+            <label class="editor-label" for="serviceDescription">Description</label>
+            <textarea class="editor-textarea" id="serviceDescription" maxlength="180">${escapeHtml(p)}</textarea>
+          `;
+        } else {
+          const current = element.innerText.replace("↗", "").trim();
+          const input = type === "textarea" ? "textarea" : "input";
+          body.innerHTML = `
+            <label class="editor-label" for="editorInput">${label}</label>
+            <${input} class="${type === "textarea" ? "editor-textarea" : "editor-input"}" id="editorInput" ${input === "input" ? 'type="text"' : ""}>${input === "textarea" ? escapeHtml(current) : ""}</${input}>
+          `;
+          if (input === "input") document.getElementById("editorInput").value = current;
+        }
+
+        overlay.hidden = false;
+        document.body.classList.add("editing");
+        const first = body.querySelector("input, textarea, button");
+        if (first) first.focus();
+      }
+
+      function applyChanges() {
+        if (!active) return;
+        const type = active.dataset.edit;
+
+        if (type === "section-name") {
+          const value = document.getElementById("editorInput").value.trim();
+          if (!value) return;
+          const sectionId = active.dataset.section;
+          if (sectionState[sectionId]) {
+            sectionState[sectionId].name = value.toUpperCase();
+            sectionState[sectionId].nav = value.replace(/\s+/g, " ").trim();
+            syncSection(sectionId);
+          }
+        } else if (type === "image") {
+          if (!pendingImage) {
+            closeEditor();
+            return;
+          }
+          active.innerHTML = `<img src="${pendingImage}" alt="Lawyer portrait">`;
+          active.classList.add("has-image");
+        } else if (type === "experience-number") {
+          const value = Math.max(0, Math.min(99, Number(document.getElementById("editorInput").value) || 0));
+          active.querySelector("strong").textContent = value + "+";
+        } else if (type === "experience-label") {
+          const value = document.getElementById("editorInput").value.trim();
+          if (!value) return;
+          active.querySelector("span").innerHTML = value
+            .split(/\r?\n/)
+            .map(line => escapeHtml(line))
+            .join("<br>");
+        } else if (type === "service") {
+          active.querySelector("h3").textContent = document.getElementById("serviceTitle").value.trim() || "Service";
+          active.querySelector("p").textContent = document.getElementById("serviceDescription").value.trim() || "Professional legal services.";
+        } else {
+          const value = document.getElementById("editorInput").value.trim();
+          if (!value) return;
+          if (active.dataset.key === "name") {
+            const parts = value.split(/\s+/);
+            const first = parts.shift() || "";
+            const last = parts.join(" ");
+            active.innerHTML = `${escapeHtml(first)} <span>${escapeHtml(last)}</span>`;
+          } else if (active.dataset.key === "headline" || active.dataset.key.includes("heading")) {
+            const words = value.split(/\s+/);
+            const breakAt = Math.max(1, Math.floor(words.length / 2));
+            active.innerHTML = `${escapeHtml(words.slice(0, breakAt).join(" "))}<br><em>${escapeHtml(words.slice(breakAt).join(" "))}</em>`;
+          } else if (active.dataset.key === "cta" || active.dataset.key === "contact_cta" || active.dataset.key === "whatsapp_label") {
+            active.innerHTML = `${escapeHtml(value)} <span>↗</span>`;
+          } else {
+            active.textContent = value;
+          }
+        }
+
+        closeEditor();
+      }
+
+      function closeEditor() {
+        overlay.hidden = true;
+        document.body.classList.remove("editing");
+        active = null;
+        pendingImage = null;
+        imageInput.value = "";
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, char => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+        }[char]));
+      }
+
+      function escapeAttr(value) {
+        return escapeHtml(value);
+      }
+
+      document.querySelectorAll(".editable").forEach(element => {
+        element.addEventListener("click", event => {
+          event.preventDefault();
+          openEditor(element);
+        });
+      });
+
+      save.addEventListener("click", applyChanges);
+      close.addEventListener("click", closeEditor);
+      cancel.addEventListener("click", closeEditor);
+
+      overlay.addEventListener("click", event => {
+        if (event.target === overlay) closeEditor();
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && !overlay.hidden) closeEditor();
+        if (event.key === "Escape" && !document.getElementById("finishOverlay").hidden) closeFinish();
+      });
+
+      // Stage 2 visual flow — the real link-generation action is connected later.
+      const finishOverlay = document.getElementById("finishOverlay");
+      const finishButton = document.getElementById("setupFinishButton");
+      const finishClose = document.getElementById("finishClose");
+      const finishChange = document.getElementById("finishChange");
+      const finishAgree = document.getElementById("finishAgree");
+
+      function openFinish() {
+        finishOverlay.hidden = false;
+        document.body.classList.add("finish-open");
+        finishAgree.focus();
+      }
+
+      function closeFinish() {
+        finishOverlay.hidden = true;
+        document.body.classList.remove("finish-open");
+      }
+
+      finishButton.addEventListener("click", openFinish);
+      finishClose.addEventListener("click", closeFinish);
+      finishChange.addEventListener("click", closeFinish);
+      finishAgree.addEventListener("click", async () => {
+        const originalButtonText = finishAgree.textContent;
+        finishAgree.disabled = true;
+        finishAgree.textContent = "שומר...";
+        const experienceValue =
+            document.querySelector('[data-key="experience"] strong')?.innerText.trim() || "";
+
+        const experienceLabel =
+            document.querySelector('[data-key="experience_text"]')?.innerText.trim() || "";
+
+        const siteData = {
+          schema_version: "1",
+          template_id: "lawyer-template-01",
+          status: "new",
+          session_id: sessionId,
+
+          site: {
+            name: document.querySelector('[data-key="name"]')?.innerText.trim() || "",
+            profession: document.querySelector('[data-key="profession"]')?.innerText.trim() || "",
+            headline: document.querySelector('[data-key="headline"]')?.innerText.trim() || "",
+            hero_text: document.querySelector('[data-key="hero_text"]')?.innerText.trim() || "",
+            cta: document.querySelector('[data-key="cta"]')?.innerText.replace("↗", "").trim() || "",
+            photo: "",
+            experience: experienceValue,
+            experience_text: experienceLabel,
+
+            section_about: document.querySelector('[data-key="section_about"] .section-name')?.innerText.trim() || "",
+            about_heading: document.querySelector('[data-key="about_heading"]')?.innerText.trim() || "",
+            about_text_1: document.querySelector('[data-key="about_text_1"]')?.innerText.trim() || "",
+            about_text_2: document.querySelector('[data-key="about_text_2"]')?.innerText.trim() || "",
+
+            section_services: document.querySelector('[data-key="section_services"] .section-name')?.innerText.trim() || "",
+            services_heading: document.querySelector('[data-key="services_heading"]')?.innerText.trim() || "",
+
+            service_1: {
+              title: document.querySelector('[data-key="service_1"] h3')?.innerText.trim() || "",
+              description: document.querySelector('[data-key="service_1"] p')?.innerText.trim() || ""
+            },
+
+            service_2: {
+              title: document.querySelector('[data-key="service_2"] h3')?.innerText.trim() || "",
+              description: document.querySelector('[data-key="service_2"] p')?.innerText.trim() || ""
+            },
+
+            service_3: {
+              title: document.querySelector('[data-key="service_3"] h3')?.innerText.trim() || "",
+              description: document.querySelector('[data-key="service_3"] p')?.innerText.trim() || ""
+            },
+
+            quote: document.querySelector('[data-key="quote"]')?.innerText.trim() || "",
+
+            section_contact: document.querySelector('[data-key="section_contact"] .section-name')?.innerText.trim() || "",
+            contact_heading: document.querySelector('[data-key="contact_heading"]')?.innerText.trim() || "",
+            contact_cta: document.querySelector('[data-key="contact_cta"]')?.innerText.replace("↗", "").trim() || "",
+            phone: document.querySelector('[data-key="phone"]')?.innerText.trim() || "",
+            email: document.querySelector('[data-key="email"]')?.innerText.trim() || "",
+            location: document.querySelector('[data-key="location"]')?.innerText.trim() || ""
+          }
+        };
+
+        try {
+          // 1) If a new photo was selected, upload it first.
+          // Cloudinary Worker returns the hosted image URL.
+          if (pendingImageFile) {
+            finishAgree.textContent = "מעלה תמונה...";
+
+            const imageForm = new FormData();
+            imageForm.append("session_id", sessionId);
+            imageForm.append("file", pendingImageFile);
+
+            const imageResponse = await fetch(
+              "https://site-data-cloudinary-worker.sergey070784.workers.dev/",
+              {
+                method: "POST",
+                body: imageForm
+              }
+            );
+
+            const imageResponseText = await imageResponse.text();
+            let imageResult;
+
+            try {
+              imageResult = JSON.parse(imageResponseText);
+            } catch {
+              throw new Error(`Cloudinary Worker returned a non-JSON response (HTTP ${imageResponse.status}).`);
+            }
+
+            if (!imageResponse.ok || !imageResult.success || !imageResult.secure_url) {
+              const message = imageResult.details || imageResult.error || `HTTP ${imageResponse.status}`;
+              throw new Error(`Photo upload failed: ${message}`);
+            }
+
+            siteData.site.photo = imageResult.secure_url;
+            console.log("PHOTO UPLOADED:", imageResult.secure_url);
+          }
+
+          // 2) Save the complete site JSON, including the Cloudinary URL.
+          finishAgree.textContent = "שומר נתונים...";
+
+          const response = await fetch(
+            "https://site-data-worker.sergey070784.workers.dev/",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(siteData)
+            }
+          );
+
+          const responseText = await response.text();
+          let result;
+
+          try {
+            result = JSON.parse(responseText);
+          } catch {
+            throw new Error(`Worker returned a non-JSON response (HTTP ${response.status}).`);
+          }
+
+          if (!response.ok || !result.success) {
+            const message = result.details || result.error || `HTTP ${response.status}`;
+            throw new Error(message);
+          }
+
+          console.log("SITE DATA SAVED:", result);
+          console.log("SESSION ID:", sessionId);
+          console.log("PHOTO FILE (separate Cloudinary flow):", pendingImageFile);
+
+          closeFinish();
+          alert("הנתונים והתמונה נשמרו בהצלחה. יצירת קישור האתר תתבצע בשלב הבא.");
+
+        } catch (error) {
+          console.error("SITE DATA SAVE FAILED:", error);
+          alert(`שמירת הנתונים נכשלה. נסה שוב.\n\n${error.message}`);
+        } finally {
+          finishAgree.disabled = false;
+          finishAgree.textContent = originalButtonText;
+        }
+      });
+
+      finishOverlay.addEventListener("click", event => {
+        if (event.target === finishOverlay) closeFinish();
+      });
+    })();
+  </script>
+</body>
+</html>

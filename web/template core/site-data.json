@@ -1,0 +1,39 @@
+{
+  "schema_version": "",
+  "template_id": "",
+  "session_id": "",
+  "site": {
+    "name": "",
+    "profession": "",
+    "headline": "",
+    "hero_text": "",
+    "cta": "",
+    "photo": "",
+    "experience": "",
+    "section_about": "",
+    "about_heading": "",
+    "about_text_1": "",
+    "about_text_2": "",
+    "section_services": "",
+    "services_heading": "",
+    "service_1": {
+      "title": "",
+      "description": ""
+    },
+    "service_2": {
+      "title": "",
+      "description": ""
+    },
+    "service_3": {
+      "title": "",
+      "description": ""
+    },
+    "quote": "",
+    "section_contact": "",
+    "contact_heading": "",
+    "contact_cta": "",
+    "phone": "",
+    "email": "",
+    "location": ""
+  }
+}
