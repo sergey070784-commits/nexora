@@ -13,9 +13,13 @@ import requests
 # ==========================================================
 # NEXORA - PYTHON 1
 # ==========================================================
+config = requests.get(
+    BASE + "Core/config.json",
+    timeout=10
+).json()
 
-SUPABASE_URL = os.environ["SUPABASE_URL"].rstrip("/")
-SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+SUPABASE_URL = config["supabase_url"].rstrip("/")
+SUPABASE_KEY = config["supabase_key"]
 
 GITHUB_SLOTS_URL = (
     "https://raw.githubusercontent.com/"
