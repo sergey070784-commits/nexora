@@ -138,7 +138,8 @@
 
   <input type="file" id="imageInput" accept="image/*" hidden>
 
-  <!-- FINALIZE / STAGE 2 -->
+  
+<!-- FINALIZE / STAGE 2 -->
   <div class="setup-finish-bar" id="setupFinishBar" dir="rtl">
     <button type="button" id="setupFinishButton">סיום הקמה, לקבלת קישור לחץ כאן</button>
   </div>
@@ -149,14 +150,102 @@
       <div class="finish-step">שלב 2 מתוך 3</div>
       <h2 id="finishTitle">האתר מוכן</h2>
       <p>בלחיצת כפתור הסכם אתם מקבלים קישור לאתר שלכם. אתר לרשותכם למשך 7 ימים ללא עלות וללא התחייבות</p>
+
       <div class="finish-actions">
         <button type="button" class="finish-agree" id="finishAgree">הסכם</button>
         <button type="button" class="finish-change" id="finishChange">שינוי</button>
       </div>
+
+      <!-- PROCESSING STATE -->
+      <div class="finish-processing" id="finishProcessing" hidden>
+        <h2>האתר שלכם בהכנה</h2>
+
+        <p>
+          הנתונים שלכם נמצאים בתהליך עיבוד.
+          אנחנו מכינים עבורכם את האתר.
+        </p>
+
+        <div class="processing-loader">
+          <div class="processing-loader-bar"></div>
+        </div>
+
+        <div class="processing-status">
+          <span class="processing-spinner"></span>
+          <span>מכינים את האתר שלכם...</span>
+        </div>
+
+        <div class="processing-notice">
+          אנא אל תעזבו את האתר עד לסיום התהליך
+        </div>
+      </div>
+
+      
+<!-- STEP 4 — RESULT STATE -->
+<div class="finish-result" id="finishResult" hidden>
+
+  <div class="finish-step">שלב 4 מתוך 4</div>
+
+  <h2>האתר שלכם מוכן!</h2>
+
+  <p class="finish-result-subtitle">
+    האתר שלכם זמין למשך 7 ימים, ללא עלות וללא התחייבות.
+  </p>
+
+  <div class="finish-url-section">
+    <div class="finish-url-label">קישור לאתר שלכם</div>
+
+    <div class="finish-url-row">
+      <div class="finish-url-value" id="finishSiteUrl" dir="ltr">
+        https://your-site-url.com
+      </div>
+
+      <button type="button" class="finish-copy" id="finishCopyUrl">
+        העתק קישור
+      </button>
+    </div>
+  </div>
+
+  <div class="finish-admin-section">
+
+    <h3>לקבלת קישור מנהל (Admin Link)</h3>
+
+    <p>
+      מלאו את הפרטים הבאים כדי לקבל קישור לניהול האתר:
+    </p>
+
+    <div class="finish-form">
+
+      <div class="finish-field">
+        <label for="finishName">שם מלא</label>
+        <input type="text" id="finishName" placeholder="הזינו שם מלא">
+      </div>
+
+      <div class="finish-field">
+        <label for="finishPhone">מספר טלפון</label>
+        <input type="tel" id="finishPhone" placeholder="הזינו מספר טלפון">
+      </div>
+
+      <div class="finish-field">
+        <label for="finishEmail">כתובת אימייל</label>
+        <input type="email" id="finishEmail" placeholder="הזינו כתובת אימייל">
+      </div>
+
+    </div>
+
+    <button type="button" class="finish-submit" id="finishSubmit">
+      שלח
+    </button>
+
+  </div>
+
+</div>
+<!-- END STEP 4 -->
+
     </div>
   </div>
 
   <script>
+
     (() => {
       const sessionId = crypto.randomUUID();
       const overlay = document.getElementById("editorOverlay");
@@ -362,6 +451,72 @@
       const finishClose = document.getElementById("finishClose");
       const finishChange = document.getElementById("finishChange");
       const finishAgree = document.getElementById("finishAgree");
+      const finishProcessing = document.getElementById("finishProcessing");
+      const finishModal = document.querySelector(".finish-modal");
+      const finishResult = document.getElementById("finishResult");
+      const finishSiteUrl = document.getElementById("finishSiteUrl");
+
+      let isProcessing = false;
+      let statusPollingTimer = null;
+      let statusPollingActive = false;
+
+      async function checkSiteStatus() {
+        if (!statusPollingActive) return;
+
+        try {
+          const response = await fetch(
+            `https://site-data-worker.sergey070784.workers.dev/?session_id=${encodeURIComponent(sessionId)}`
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+
+          const result = await response.json();
+
+          if (!result.success) {
+            throw new Error(result.error || "Status check failed");
+          }
+
+          const status = result.status;
+          console.log("SITE STATUS:", status);
+
+          // Python 1 has not finished assigning the slot yet.
+          if (status === "new" || status === "1" || status === "pair") {
+            return;
+          }
+
+          // Python 2 has returned the assigned site URL.
+          if (typeof status === "string" && /^https?:\/\//i.test(status)) {
+            statusPollingActive = false;
+
+            if (statusPollingTimer !== null) {
+              clearInterval(statusPollingTimer);
+              statusPollingTimer = null;
+            }
+
+            finishSiteUrl.textContent = status;
+            finishProcessing.hidden = true;
+            finishResult.hidden = false;
+            console.log("SITE READY:", status);
+          }
+        } catch (error) {
+          console.error("STATUS CHECK FAILED:", error);
+        }
+      }
+
+      async function startStatusPolling() {
+        if (statusPollingActive) return;
+
+        statusPollingActive = true;
+
+        // Check immediately. Start the interval only if the URL was not received.
+        await checkSiteStatus();
+
+        if (statusPollingActive) {
+          statusPollingTimer = setInterval(checkSiteStatus, 60 * 1000);
+        }
+      }
 
       function openFinish() {
         finishOverlay.hidden = false;
@@ -370,8 +525,30 @@
       }
 
       function closeFinish() {
-        finishOverlay.hidden = true;
-        document.body.classList.remove("finish-open");
+          if (isProcessing) return;
+
+          finishOverlay.hidden = true;
+          document.body.classList.remove("finish-open");
+      }
+
+      function showFinishProcessing() {
+          isProcessing = true;
+
+          finishModal.querySelector(".finish-step").hidden = true;
+          finishModal.querySelector("#finishTitle").hidden = true;
+          finishModal.querySelector(":scope > p").hidden = true;
+
+          const finishActions = finishModal.querySelector(".finish-actions");
+
+          finishAgree.disabled = true;
+          finishChange.disabled = true;
+
+          finishActions.hidden = true;
+          finishActions.style.display = "none";
+
+          finishClose.hidden = true;
+
+          finishProcessing.hidden = false;
       }
 
       finishButton.addEventListener("click", openFinish);
@@ -505,8 +682,8 @@
           console.log("SESSION ID:", sessionId);
           console.log("PHOTO FILE (separate Cloudinary flow):", pendingImageFile);
 
-          closeFinish();
-          alert("הנתונים והתמונה נשמרו בהצלחה. יצירת קישור האתר תתבצע בשלב הבא.");
+          showFinishProcessing();
+          startStatusPolling();
 
         } catch (error) {
           console.error("SITE DATA SAVE FAILED:", error);
