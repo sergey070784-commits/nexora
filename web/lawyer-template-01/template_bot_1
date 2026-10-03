@@ -1,0 +1,296 @@
+
+import os
+import sys
+import time
+import json
+import logging
+import subprocess
+from pathlib import Path
+
+import requests
+
+
+# ==========================================================
+# NEXORA - PYTHON 1
+# ==========================================================
+
+SUPABASE_URL = os.environ["SUPABASE_URL"].rstrip("/")
+SUPABASE_KEY = os.environ["SUPABASE_SERVICE_ROLE_KEY"]
+
+GITHUB_SLOTS_URL = (
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/"
+    "web/template%20core/site-slot.json"
+)
+
+SOURCE_TABLE = "site_data"
+USER_SLOTS_TABLE = "site_data_users"
+
+POLL_INTERVAL = 10
+
+FREE_STATUS = "free"
+OCCUPIED_STATUS = "occupied"
+SOURCE_NEXT_STATUS = "pair"
+
+NEXT_PROCESS = "site_asset_check"
+NEXT_PROCESS_FILE = "site_asset_check.py"
+
+BASE_DIR = Path(__file__).resolve().parent
+
+HEADERS = {
+    "apikey": SUPABASE_KEY,
+    "Authorization": f"Bearer {SUPABASE_KEY}",
+    "Content-Type": "application/json",
+}
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | PY1 | %(levelname)s | %(message)s"
+)
+
+
+# ==========================================================
+# SUPABASE
+# ==========================================================
+
+def supabase_get(table, params):
+    url = f"{SUPABASE_URL}/rest/v1/{table}"
+
+    response = requests.get(
+        url,
+        headers=HEADERS,
+        params=params,
+        timeout=30
+    )
+
+    response.raise_for_status()
+    return response.json()
+
+
+def supabase_patch(table, params, data):
+    url = f"{SUPABASE_URL}/rest/v1/{table}"
+
+    headers = {
+        **HEADERS,
+        "Prefer": "return=representation"
+    }
+
+    response = requests.patch(
+        url,
+        headers=headers,
+        params=params,
+        json=data,
+        timeout=30
+    )
+
+    response.raise_for_status()
+    return response.json()
+
+
+# ==========================================================
+# FIND SOURCE DATA
+# ==========================================================
+
+def get_pending_site_data():
+    rows = supabase_get(
+        SOURCE_TABLE,
+        {
+            "select": "*",
+            "status": "eq.1",
+            "order": "created_at.asc",
+            "limit": "1"
+        }
+    )
+
+    return rows[0] if rows else None
+
+
+# ==========================================================
+# FIND FREE USER SLOT
+# ==========================================================
+
+def get_free_slot():
+    rows = supabase_get(
+        USER_SLOTS_TABLE,
+        {
+            "select": "slot,status",
+            "status": f"eq.{FREE_STATUS}",
+            "order": "slot.asc",
+            "limit": "25"
+        }
+    )
+
+    return rows[0] if rows else None
+
+
+# ==========================================================
+# LOAD SLOT URLS FROM GITHUB
+# ==========================================================
+
+def get_slot_urls():
+    response = requests.get(
+        GITHUB_SLOTS_URL,
+        timeout=30
+    )
+
+    response.raise_for_status()
+    return response.json()
+
+
+# ==========================================================
+# SAVE DATA TO USER SLOT
+# ==========================================================
+
+def save_to_user_slot(slot_name, site_data):
+    image_url = site_data.get("photo") or ""
+
+    result = supabase_patch(
+        USER_SLOTS_TABLE,
+        {
+            "slot": f"eq.{slot_name}",
+            "status": f"eq.{FREE_STATUS}"
+        },
+        {
+            "text-site-data": site_data,
+            "image": image_url,
+            "status": OCCUPIED_STATUS
+        }
+    )
+
+    if not result:
+        raise RuntimeError(
+            f"Slot {slot_name} is no longer free"
+        )
+
+    return image_url
+
+
+# ==========================================================
+# UPDATE SOURCE STATUS
+# ==========================================================
+
+def mark_source_as_pair(site_data):
+    result = supabase_patch(
+        SOURCE_TABLE,
+        {
+            "id": f"eq.{site_data['id']}",
+            "status": "eq.1"
+        },
+        {
+            "status": SOURCE_NEXT_STATUS
+        }
+    )
+
+    if not result:
+        raise RuntimeError(
+            "Could not change source status to pair"
+        )
+
+
+# ==========================================================
+# START NEXT PROCESS
+# ==========================================================
+
+def start_next_process(site_url):
+    next_script = BASE_DIR / NEXT_PROCESS_FILE
+
+    if not next_script.exists():
+        logging.warning(
+            "%s is not created yet. URL is ready: %s",
+            NEXT_PROCESS,
+            site_url
+        )
+        return
+
+    subprocess.Popen(
+        [
+            sys.executable,
+            str(next_script),
+            site_url
+        ],
+        cwd=str(BASE_DIR)
+    )
+
+    logging.info(
+        "Next process started: %s | URL: %s",
+        NEXT_PROCESS,
+        site_url
+    )
+
+
+# ==========================================================
+# PROCESS ONE SITE
+# ==========================================================
+
+def process_site(site_data):
+    logging.info(
+        "Found site_data id=%s, session_id=%s",
+        site_data.get("id"),
+        site_data.get("session_id")
+    )
+
+    free_slot = get_free_slot()
+
+    if not free_slot:
+        logging.warning("No free slots available")
+        return
+
+    slot_name = free_slot["slot"]
+
+    logging.info("Free slot found: %s", slot_name)
+
+    slot_urls = get_slot_urls()
+
+    slot_config = slot_urls.get(slot_name)
+
+    if not slot_config or not slot_config.get("url"):
+        raise RuntimeError(
+            f"URL not found in GitHub JSON for {slot_name}"
+        )
+
+    site_url = slot_config["url"]
+
+    logging.info("Slot URL: %s", site_url)
+
+    # Copy the complete source JSON into the user slot.
+    save_to_user_slot(slot_name, site_data)
+
+    logging.info(
+        "Data saved to site_data_users: %s",
+        slot_name
+    )
+
+    # Change the original site_data status.
+    mark_source_as_pair(site_data)
+
+    logging.info(
+        "Source site_data id=%s status changed to pair",
+        site_data["id"]
+    )
+
+    # Give the URL to the next process.
+    start_next_process(site_url)
+
+
+# ==========================================================
+# MAIN POLLING LOOP
+# ==========================================================
+
+def main():
+    logging.info("NEXORA PYTHON 1 STARTED")
+
+    while True:
+        try:
+            site_data = get_pending_site_data()
+
+            if site_data:
+                process_site(site_data)
+
+        except Exception:
+            logging.exception("Python 1 processing error")
+
+        time.sleep(POLL_INTERVAL)
+
+
+if __name__ == "__main__":
+    main()
