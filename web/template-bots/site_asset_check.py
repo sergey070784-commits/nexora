@@ -175,7 +175,7 @@ complete = requests.patch(
     },
     json={
     "status": site_url
-}
+    },
     timeout=10
 )
 
