@@ -117,5 +117,199 @@ Let's discuss<br/><em>your situation.</em>
 <span>© 2026</span>
 </footer>
 
+<script>
+document.addEventListener("DOMContentLoaded", async () => {
+
+  const READ_WORKER =
+    "https://read-site-data.sergey070784.workers.dev/";
+
+  // Получаем session_id из URL
+  const params = new URLSearchParams(window.location.search);
+  const sessionId = params.get("session_id");
+
+  // Без session_id оставляем демонстрационную страницу
+  if (!sessionId) {
+    console.log("Layer 2: session_id not found");
+    return;
+  }
+
+  try {
+
+    // Запрашиваем данные через READ Worker
+    const response = await fetch(
+      `${READ_WORKER}?session_id=${encodeURIComponent(sessionId)}`
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success || !result.data) {
+      throw new Error(result.error || "Unable to load site data");
+    }
+
+    const site = result.data;
+
+    // Обычный текст
+    function setText(selector, value) {
+      const element = document.querySelector(selector);
+
+      if (element && value !== null && value !== undefined && value !== "") {
+        element.textContent = value;
+      }
+    }
+
+    // Текст кнопки: сохраняем существующую стрелку
+    function setButtonText(element, value) {
+      if (!element || !value) return;
+
+      const arrow = element.querySelector("span");
+
+      element.textContent = value;
+
+      if (arrow) {
+        element.appendChild(arrow);
+      }
+    }
+
+    // Заголовок: сохраняем перенос строки и курсивное выделение
+    function setHeading(selector, value) {
+      const element = document.querySelector(selector);
+
+      if (!element || !value) return;
+
+      const italic = document.createElement("em");
+      const lineBreak = document.createElement("br");
+
+      let firstPart;
+      let secondPart;
+
+      if (value.includes("\n")) {
+        const parts = value.split("\n", 2);
+        firstPart = parts[0];
+        secondPart = parts[1] || "";
+      } else {
+        const lastSpace = value.lastIndexOf(" ");
+
+        if (lastSpace > 0) {
+          firstPart = value.substring(0, lastSpace + 1);
+          secondPart = value.substring(lastSpace + 1);
+        } else {
+          firstPart = value;
+          secondPart = "";
+        }
+      }
+
+      italic.textContent = secondPart;
+
+      element.replaceChildren(
+        document.createTextNode(firstPart),
+        ...(secondPart ? [lineBreak, italic] : [])
+      );
+    }
+
+    // BRAND
+    if (site.name) {
+      const brand = document.querySelector(".brand");
+
+      if (brand) {
+        const parts = site.name.trim().split(/\s+/);
+        const firstName = parts.shift();
+        const lastName = parts.join(" ");
+
+        const span = document.createElement("span");
+        span.textContent = lastName;
+
+        brand.replaceChildren(
+          document.createTextNode(firstName + " "),
+          span
+        );
+      }
+    }
+
+    // HERO
+    setText(".eyebrow", site.profession);
+    setHeading(".heading-edit", site.headline);
+    setText(".hero-text", site.hero_text);
+
+    setButtonText(
+      document.querySelector(".hero-copy .primary-cta"),
+      site.cta
+    );
+
+    setText(".experience strong", site.experience);
+    setText(".experience span", site.experience_text);
+
+    // ABOUT
+    setText("#about .section-name", site.section_about);
+    setHeading("#about .section-heading", site.about_heading);
+
+    const aboutTexts = document.querySelectorAll("#about .about-text");
+
+    if (aboutTexts[0] && site.about_text_1) {
+      aboutTexts[0].textContent = site.about_text_1;
+    }
+
+    if (aboutTexts[1] && site.about_text_2) {
+      aboutTexts[1].textContent = site.about_text_2;
+    }
+
+    // SERVICES
+    setText("#services .section-name", site.section_services);
+    setHeading("#services .section-heading", site.services_heading);
+
+    const services = [
+      [site.service_1_title, site.service_1_description],
+      [site.service_2_title, site.service_2_description],
+      [site.service_3_title, site.service_3_description]
+    ];
+
+    const serviceCards = document.querySelectorAll(".service-card");
+
+    serviceCards.forEach((card, index) => {
+      const service = services[index];
+
+      if (!service) return;
+
+      const title = card.querySelector("h3");
+      const description = card.querySelector("p");
+
+      if (title && service[0]) title.textContent = service[0];
+      if (description && service[1]) description.textContent = service[1];
+    });
+
+    // STATEMENT
+    setText(".quote", site.quote);
+
+    // CONTACT
+    setText("#contact .section-name", site.section_contact);
+    setHeading("#contact .section-heading", site.contact_heading);
+
+    setButtonText(
+      document.querySelector(".contact-cta"),
+      site.contact_cta
+    );
+
+    const contactItems = document.querySelectorAll(".contact-item");
+
+    const contacts = [
+      site.phone,
+      site.email,
+      site.location
+    ];
+
+    contactItems.forEach((element, index) => {
+      if (contacts[index]) {
+        element.textContent = contacts[index];
+      }
+    });
+
+    console.log("Layer 2: site data loaded successfully", site);
+
+  } catch (error) {
+    console.error("Layer 2 loading error:", error);
+  }
+
+});
+</script>
+
 </body>
 </html>
