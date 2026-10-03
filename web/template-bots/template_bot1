@@ -1,8 +1,6 @@
-
-import os
+```python
 import sys
 import time
-import json
 import logging
 import subprocess
 from pathlib import Path
@@ -13,6 +11,13 @@ import requests
 # ==========================================================
 # NEXORA - PYTHON 1
 # ==========================================================
+
+BASE = (
+    "https://raw.githubusercontent.com/"
+    "sergey070784-commits/nexora/main/"
+)
+
+# Existing Nexora configuration
 config = requests.get(
     BASE + "Core/config.json",
     timeout=10
@@ -22,9 +27,7 @@ SUPABASE_URL = config["supabase_url"].rstrip("/")
 SUPABASE_KEY = config["supabase_key"]
 
 GITHUB_SLOTS_URL = (
-    "https://raw.githubusercontent.com/"
-    "sergey070784-commits/nexora/main/"
-    "web/template%20core/site-slot.json"
+    BASE + "web/template%20core/site-slot.json"
 )
 
 SOURCE_TABLE = "site_data"
@@ -58,10 +61,8 @@ logging.basicConfig(
 # ==========================================================
 
 def supabase_get(table, params):
-    url = f"{SUPABASE_URL}/rest/v1/{table}"
-
     response = requests.get(
-        url,
+        f"{SUPABASE_URL}/rest/v1/{table}",
         headers=HEADERS,
         params=params,
         timeout=30
@@ -72,15 +73,13 @@ def supabase_get(table, params):
 
 
 def supabase_patch(table, params, data):
-    url = f"{SUPABASE_URL}/rest/v1/{table}"
-
     headers = {
         **HEADERS,
         "Prefer": "return=representation"
     }
 
     response = requests.patch(
-        url,
+        f"{SUPABASE_URL}/rest/v1/{table}",
         headers=headers,
         params=params,
         json=data,
@@ -119,9 +118,12 @@ def get_free_slot():
         {
             "select": "slot,status",
             "status": f"eq.{FREE_STATUS}",
-            "order": "slot.asc",
             "limit": "25"
         }
+    )
+
+    rows.sort(
+        key=lambda row: int(row["slot"].split("_")[1])
     )
 
     return rows[0] if rows else None
@@ -167,6 +169,27 @@ def save_to_user_slot(slot_name, site_data):
         )
 
     return image_url
+
+
+# ==========================================================
+# RELEASE SLOT IF PROCESS FAILS
+# ==========================================================
+
+def release_slot(slot_name):
+    supabase_patch(
+        USER_SLOTS_TABLE,
+        {
+            "slot": f"eq.{slot_name}",
+            "status": f"eq.{OCCUPIED_STATUS}"
+        },
+        {
+            "text-site-data": None,
+            "image": None,
+            "status": FREE_STATUS
+        }
+    )
+
+    logging.info("Slot released: %s", slot_name)
 
 
 # ==========================================================
@@ -256,7 +279,7 @@ def process_site(site_data):
 
     logging.info("Slot URL: %s", site_url)
 
-    # Copy the complete source JSON into the user slot.
+    # Save complete source JSON into user slot.
     save_to_user_slot(slot_name, site_data)
 
     logging.info(
@@ -264,15 +287,24 @@ def process_site(site_data):
         slot_name
     )
 
-    # Change the original site_data status.
-    mark_source_as_pair(site_data)
+    try:
+        # Change original source status.
+        mark_source_as_pair(site_data)
+
+    except Exception:
+        logging.exception(
+            "Source status update failed. Releasing slot."
+        )
+
+        release_slot(slot_name)
+        raise
 
     logging.info(
         "Source site_data id=%s status changed to pair",
         site_data["id"]
     )
 
-    # Give the URL to the next process.
+    # Pass URL to next process.
     start_next_process(site_url)
 
 
@@ -298,3 +330,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
