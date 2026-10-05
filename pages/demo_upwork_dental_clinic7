@@ -1,0 +1,22 @@
+{
+  "engine": "popup",
+
+  "title": "In the live version, these buttons will connect directly to the clinic’s real contact channels.",
+  
+  "image": "https://res.cloudinary.com/dbbkpk3ed/image/upload/q_auto/f_auto/v1791236664/dental_clinic_2_hjwk7p.png",
+
+  "messages": [
+    ""
+  ],
+
+  "buttons": [
+    {
+      "id": "BTN_00001",
+      "text": "Other Demos"
+    },
+    {
+      "id": "BTN_00060",
+      "text": "🏠 Main Menu"
+    }
+  ]
+}
