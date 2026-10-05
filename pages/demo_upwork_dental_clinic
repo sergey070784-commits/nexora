@@ -1,10 +1,9 @@
 {
   "engine": "page",
   
-  "title": "Welcome",
+  "title": "BrightSmile Dental Clinic 🦷",
 
-  "messages": [
-    "BrightSmile Dental Clinic 🦷", 
+  "messages": [ 
     "We’re here to help with appointments,",
     "treatment information",
     "and any questions you may have.",
@@ -22,7 +21,7 @@
   },
   {
     "id": "BTN_00063",
-    "text": "Treatment Information"
+    "text": "Treatments&Services"
   }
 ]
 }
