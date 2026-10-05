@@ -123,7 +123,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // У каждого Netlify-сайта свой номер слота.
   // При создании нового сайта меняется только это значение: "slot_2", "slot_27" и т.д.
-  const SLOT_ID = "slot_1";
+  const SLOT_ID = "slot_3";
 
   try {
     const configResponse = await fetch(CONFIG_URL);
@@ -212,7 +212,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     setText(".eyebrow", site.profession);
     setHeading(".heading-edit", site.headline);
     setText(".hero-text", site.hero_text);
-    setButtonText(document.querySelector(".hero-copy .primary-cta"), site.cta);
+    // CTA из Layer 2 показываем только после нажатия на Contact Me.
+    const heroCta = document.querySelector(".hero-copy .primary-cta");
+    if (heroCta && site.cta) {
+      const showLayer2Cta = () => setButtonText(heroCta, site.cta);
+      heroCta.setAttribute("role", "button");
+      heroCta.setAttribute("tabindex", "0");
+      heroCta.setAttribute("aria-label", "Contact Me");
+      heroCta.addEventListener("click", showLayer2Cta);
+      heroCta.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          showLayer2Cta();
+        }
+      });
+    }
     setText(".experience strong", site.experience);
     setText(".experience span", site.experience_text);
 
@@ -232,6 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // О нас.
     setText("#about .section-name", site.section_about);
+    setText('.nav-link[data-nav-key="about"]', site.section_about);
     setHeading("#about .section-heading", site.about_heading);
     const aboutTexts = document.querySelectorAll("#about .about-text");
     if (aboutTexts[0] && site.about_text_1) aboutTexts[0].textContent = site.about_text_1;
@@ -239,6 +254,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Услуги.
     setText("#services .section-name", site.section_services);
+    setText('.nav-link[data-nav-key="services"]', site.section_services);
     setHeading("#services .section-heading", site.services_heading);
     const services = [
       [site.service_1_title, site.service_1_description],
@@ -259,6 +275,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Контакты.
     setText("#contact .section-name", site.section_contact);
+    setText('.nav-link[data-nav-key="contact"]', site.section_contact);
     setHeading("#contact .section-heading", site.contact_heading);
     setButtonText(document.querySelector(".contact-cta"), site.contact_cta);
     const contactItems = document.querySelectorAll(".contact-item");

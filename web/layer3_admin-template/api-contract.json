@@ -1,0 +1,11 @@
+{
+  "login": "/api/admin/login",
+  "login_request": {
+    "name": "optional string; currently may be empty",
+    "email": "required string",
+    "phone": "optional string; currently empty"
+  },
+  "login_response_requires": ["success", "slot_id", "site"],
+  "editor": "opens only after Python returns the resolved slot_id and the site's existing data",
+  "save": "intentionally inactive in this stage; enable only after OTP verification is implemented"
+}

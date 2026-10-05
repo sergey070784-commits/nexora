@@ -1,0 +1,30 @@
+{
+  "engine": "page",
+  
+  "title": "Welcome",
+
+  "messages": [
+    "BrightSmile Dental Clinic 🦷", 
+    "",
+    "We’re here to help with appointments,",
+    "treatment information",
+    "and any questions you may have.",
+    "",
+    "How can we help you today?"
+
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00061",
+    "text": "Book an Appointment"
+  },
+  {
+    "id": "BTN_00062",
+    "text": "💬 Ask a Question"
+  },
+  {
+    "id": "BTN_00063",
+    "text": "Treatment Information"
+  }
+]
+}
