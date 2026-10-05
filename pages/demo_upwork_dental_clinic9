@@ -1,0 +1,25 @@
+{
+  "engine": "page",
+  
+  "title": "Treatments & Services",
+
+  "messages": [
+    "This demo focuses on the complete appointment automation workflow.", 
+    "See how AI can:",
+    "Treatment information can be connected to the clinic’s services,",
+    "pricing, FAQs, and other business information.",
+    "In the live version, patients can explore treatments",
+    "and continue directly to appointment booking."
+    
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00061",
+    "text": "Book an Appointment"
+  },
+  {
+      "id": "BTN_00060",
+      "text": "🏠 Main Menu"
+    }
+]
+}

@@ -1,0 +1,24 @@
+{
+  "engine": "page",
+  
+  "title": "💬 Ask a Question",
+
+  "messages": [
+    "This demo focuses on the complete appointment automation workflow.", 
+    "The current demo showcases:",
+    "WhatsApp → Lead → Appointment → Calendar → Follow-up → Google Review",
+    "In the live version, this section can be connected to an AI assistant",
+    "or clinic-specific knowledge base to answer patient questions automatically."
+   
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00061",
+    "text": "Book an Appointment"
+  },
+  {
+      "id": "BTN_00060",
+      "text": "🏠 Main Menu"
+    }
+]
+}

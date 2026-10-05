@@ -27,7 +27,11 @@
   {
     "id": "BTN_00003",
     "text": "💬 AI Customer Support & FAQ"
-  }
+  },
+  {
+      "id": "BTN_00060",
+      "text": "Dental Clinic 🦷"
+    }
   
 ]
 }
