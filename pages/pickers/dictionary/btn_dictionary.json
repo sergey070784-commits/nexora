@@ -97,6 +97,26 @@
     "field": "✅ פגישה נקבעה",
     "value": "✅ איש קשר נוצר",
     "order": 1
+  },
+  "BTN_00064": {
+    "field": "TYPE OF APPOINTMENTה",
+    "value": "Dental Check-up",
+    "order": 1
+  },
+  "BTN_00065": {
+    "field": "TYPE OF APPOINTMENTה",
+    "value": "Cleaning & Hygiene",
+    "order": 1
+  },
+  "BTN_00066": {
+    "field": "TYPE OF APPOINTMENTה",
+    "value": "Cosmetic Dentistry",
+    "order": 1
+  },
+  "BTN_00067": {
+    "field": "TYPE OF APPOINTMENTה",
+    "value": "Emergency Visit",
+    "order": 1
   }
    
   

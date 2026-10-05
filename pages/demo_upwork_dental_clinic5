@@ -1,0 +1,26 @@
+{
+  "engine": "page",
+  
+  "title": "Hi! 👋",
+
+  "messages": [
+    "Thank you for visiting BrightSmile Dental Clinic.",
+    "We hope you had a great experience.",
+    "",
+    "How was your visit?"
+
+  ],
+  "buttons": [
+  
+    {
+      "id": "BTN_00070",
+      "text": "Google Review?"
+    },
+    {
+      "id": "BTN_00071",
+      "text": "Contact the Clinic"
+    }
+    
+  ]
+  
+}

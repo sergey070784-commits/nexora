@@ -1,0 +1,16 @@
+{
+  "engine": "command",
+  "events": [
+        "📅",
+        "🕐"
+    ],
+  
+  "title": "Your appointment has been successfully booked.",
+
+  "buttons": [
+    {
+      "text": "🏠 Main Menu",
+      "id": "BTN_00069"
+    }
+  ]
+}

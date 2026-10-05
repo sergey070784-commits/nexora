@@ -1,0 +1,29 @@
+{
+  "engine": "page",
+  
+  "title": "Great! Let’s get your appointment started. 📅",
+
+  "messages": [ 
+    "",
+    "What type of appointment are you looking for?"
+   
+  ],
+  "buttons": [
+  {
+    "id": "BTN_00064",
+    "text": "🦷 Dental Check-up"
+  },
+  {
+    "id": "BTN_00065",
+    "text": "✨ Cleaning & Hygiene"
+  },
+  {
+    "id": "BTN_00066",
+    "text": "😁 Cosmetic Dentistry"
+  },
+  {
+    "id": "BTN_00067",
+    "text": "🚨 Emergency Visit"
+  }
+]
+}

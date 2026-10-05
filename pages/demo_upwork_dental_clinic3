@@ -1,0 +1,22 @@
+{
+  "engine": "page",
+  
+  "title": "Appointment Confirmed! 🎉",
+
+  "messages": [
+    "Your appointment has been successfully booked.",
+    "",
+    "We’ll send you a reminder before your visit.",
+    "See you at BrightSmile Dental Clinic! 🦷"
+
+  ],
+  "buttons": [
+ 
+    {
+      "id": "BTN_00069",
+      "text": "🏠 Main Menu"
+    }
+    
+  ]
+  
+}
